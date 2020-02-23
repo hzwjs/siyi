@@ -56,4 +56,14 @@ public interface UserService {
      */
     List<User> selectAllUsers();
 
+    /**
+     * description: 通过主键查询用户信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/23 14:20 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param id
+     * @return siyi.game.dao.entity.User
+     */
+    User selectById(Long id);
 }

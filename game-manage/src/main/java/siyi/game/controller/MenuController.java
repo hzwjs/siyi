@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.Menu;
 import siyi.game.dao.model.MenuInfo;
 import siyi.game.service.menu.MenuService;
+import siyi.game.service.token.CheckToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ public class MenuController extends BaseController {
      * @return java.util.List<siyi.game.dao.model.MenuInfo>
      */
     @GetMapping("getAll")
+    @CheckToken
     public List<MenuInfo> getAllMenu() {
         List<Menu> menus = menuService.selectAll();
         List<MenuInfo> rootMenu = getMenuInfo(menus);

@@ -3,6 +3,7 @@ package siyi.game.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.User;
+import siyi.game.service.token.TokenService;
 import siyi.game.service.user.UserService;
 import siyi.game.utill.Dictionary;
 
@@ -23,6 +24,9 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TokenService tokenService;
+
     /**
      * description: 登录 <br>
      * version: 1.0 <br>
@@ -37,6 +41,8 @@ public class UserController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         User findUser = userService.selectByUserBean(user);
         if (findUser != null) {
+            String token = tokenService.getToken(findUser);
+            resultMap.put("token", token);
             getSuccessResult(resultMap);
         } else {
             getFailResult(resultMap, "账号或密码错误");
