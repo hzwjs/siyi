@@ -66,4 +66,17 @@ public interface UserService {
      * @return siyi.game.dao.entity.User
      */
     User selectById(Long id);
+
+    /**
+     * description: 分页查询用户信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/23 23:44 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param pageNum  当前页码
+     * @param pageSize 每页显示条数
+     * @param user 查询用户参数
+     * @return java.util.List<siyi.game.dao.entity.User>
+     */
+    List<User> selectAllPageInfo(int pageNum, int pageSize, User user);
 }

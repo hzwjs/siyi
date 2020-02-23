@@ -1,5 +1,6 @@
 package siyi.game.service.impl.user;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import siyi.game.dao.UserMapper;
@@ -46,5 +47,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectById(Long id) {
         return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<User> selectAllPageInfo(int pageNum, int pageSize, User user) {
+        PageHelper.startPage(pageNum, pageSize);
+        return userMapper.select(user);
     }
 }

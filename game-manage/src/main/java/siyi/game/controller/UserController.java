@@ -1,5 +1,6 @@
 package siyi.game.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.User;
@@ -74,8 +75,14 @@ public class UserController extends BaseController {
     }
 
     @GetMapping(value = "getAll")
-    public List<User> getAll() {
-        List<User> users = userService.selectAllUsers();
-        return users;
+    public Map<String, Object> getAll(int pageNum, int pageSize, String userName) {
+        User user = new User();
+        user.setUserName(userName);
+        List<User> users =  userService.selectAllPageInfo(pageNum, pageSize, user);
+        Map<String, Object> resultMap = new HashMap<>();
+        getSuccessResult(resultMap);
+        PageInfo<User> page = new PageInfo<>(users);
+        resultMap.put("page", page);
+        return resultMap;
     }
 }
