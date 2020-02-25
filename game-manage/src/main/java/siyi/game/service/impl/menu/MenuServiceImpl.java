@@ -1,5 +1,6 @@
 package siyi.game.service.impl.menu;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import siyi.game.dao.MenuMapper;
@@ -45,5 +46,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public int updateByIdSelective(Menu menu) {
         return menuMapper.updateByPrimaryKeySelective(menu);
+    }
+
+    @Override
+    public List<Menu> selectMenuListPage(Menu menu, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return menuMapper.select(menu);
     }
 }

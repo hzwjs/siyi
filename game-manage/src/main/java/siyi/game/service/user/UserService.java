@@ -79,4 +79,26 @@ public interface UserService {
      * @return java.util.List<siyi.game.dao.entity.User>
      */
     List<User> selectAllPageInfo(int pageNum, int pageSize, User user);
+
+    /**
+     * description: 通过主键更新用户信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/24 22:21 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param user 用户id
+     * @return int
+     */
+    int updateUserById(User user);
+
+    /**
+     * description: 通过id逻辑删除用户 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/25 23:53 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param id 用户id
+     * @return int
+     */
+    int deleteById(Long id);
 }

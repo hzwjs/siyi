@@ -51,7 +51,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> selectAllPageInfo(int pageNum, int pageSize, User user) {
+        user.setIsDeleted("0");
         PageHelper.startPage(pageNum, pageSize);
         return userMapper.select(user);
+    }
+
+    @Override
+    public int updateUserById(User user) {
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public int deleteById(Long id) {
+        User user = new User();
+        user.setId(id);
+        user.setIsDeleted("1");
+        return userMapper.updateByPrimaryKeySelective(user);
     }
 }

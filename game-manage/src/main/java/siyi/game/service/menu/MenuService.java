@@ -66,4 +66,17 @@ public interface MenuService {
      * @return int
      */
     int updateByIdSelective(Menu menu);
+
+    /**
+     * description: 分页查询目录信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/26 0:12 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param menu
+     * @param pageNum
+     * @param pageSize
+     * @return java.util.List<siyi.game.dao.entity.Menu>
+     */
+    List<Menu> selectMenuListPage(Menu menu, int pageNum, int pageSize);
 }

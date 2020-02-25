@@ -1,5 +1,6 @@
 package siyi.game.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -58,6 +59,26 @@ public class MenuController extends BaseController {
             menuInfo.setChildrenMenus(getChild(menuInfo.getId(), rootMenu));
         }
         return menuList;
+    }
+
+    /**
+     * description: 获取菜单结构 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/20 21:24 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @GetMapping("getMenuList")
+    public Map<String, Object> getMenuList(String menuName, int pageNum, int pageSize) {
+        Menu menu = new Menu();
+        menu.setMenuName(menuName);
+        List<Menu> menuList = menuService.selectMenuListPage(menu, pageNum, pageSize);
+        PageInfo<Menu> page = new PageInfo<>(menuList);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("page", page);
+        return resultMap;
     }
 
     /**

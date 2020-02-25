@@ -50,6 +50,18 @@ public class User implements Serializable {
     @Column(name = "CREATE_TIME")
     private Date createTime;
 
+    /**
+     * 邮箱
+     */
+    @Column(name = "USER_EMAIL")
+    private String userEmail;
+
+    /**
+     * 手机号
+     */
+    @Column(name = "USER_PHONE")
+    private String userPhone;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -176,5 +188,41 @@ public class User implements Serializable {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取邮箱
+     *
+     * @return USER_EMAIL - 邮箱
+     */
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    /**
+     * 设置邮箱
+     *
+     * @param userEmail 邮箱
+     */
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail == null ? null : userEmail.trim();
+    }
+
+    /**
+     * 获取手机号
+     *
+     * @return USER_PHONE - 手机号
+     */
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    /**
+     * 设置手机号
+     *
+     * @param userPhone 手机号
+     */
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone == null ? null : userPhone.trim();
     }
 }
