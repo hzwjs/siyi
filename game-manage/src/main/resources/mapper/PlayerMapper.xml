@@ -15,4 +15,25 @@
     <result column="player_hp" jdbcType="VARCHAR" property="playerHp" />
     <result column="game_code" jdbcType="VARCHAR" property="gameCode" />
   </resultMap>
+
+  <select id="selectAreaReportByGameCode" resultType="java.util.Map" parameterType="string">
+    SELECT
+        player_area 'name',
+        COUNT(player_area) 'value'
+    FROM
+        tb_player
+    WHERE
+        game_code = #{gameCode}
+    GROUP BY
+        player_area
+  </select>
+
+    <select id="selectCountByGameCode" parameterType="string" resultType="long">
+        SELECT
+            COUNT(1)
+        FROM
+            tb_player
+        WHERE
+            game_code = #{gameCode}
+    </select>
 </mapper>

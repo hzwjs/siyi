@@ -3,6 +3,7 @@ package siyi.game.service.player;
 import siyi.game.dao.entity.Player;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: PlayerService <br>
@@ -46,4 +47,26 @@ public interface PlayerService {
      * @return java.util.List<siyi.game.dao.entity.Player>
      */
     List<Player> selectPlayerPageInfo(Player player, int pageNum, int pageSize);
+
+    /**
+     * description: 通过游戏编码查询玩家地域统计信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/27 22:55 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param gameCode
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    List<Map<String, Object>> selectAreaReportByGameCode(String gameCode);
+
+    /**
+     * description: 根据游戏编码计算该游戏玩家人数 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/28 0:51 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param gameCode
+     * @return long
+     */
+    long selectCountByGameCode(String gameCode);
 }

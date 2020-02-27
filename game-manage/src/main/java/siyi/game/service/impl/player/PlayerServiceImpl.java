@@ -8,6 +8,7 @@ import siyi.game.dao.entity.Player;
 import siyi.game.service.player.PlayerService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: PlayerServiceImpl <br>
@@ -37,5 +38,15 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> selectPlayerPageInfo(Player player, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return playerMapper.select(player);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectAreaReportByGameCode(String gameCode) {
+        return playerMapper.selectAreaReportByGameCode(gameCode);
+    }
+
+    @Override
+    public long selectCountByGameCode(String gameCode) {
+        return playerMapper.selectCountByGameCode(gameCode);
     }
 }
