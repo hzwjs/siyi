@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import siyi.game.dao.entity.Game;
 import siyi.game.dao.entity.Item;
+import siyi.game.service.game.GameService;
 import siyi.game.service.item.ItemService;
 
 import java.util.HashMap;
@@ -26,6 +28,9 @@ public class ItemController extends BaseController {
     @Autowired
     private ItemService itemService;
 
+    @Autowired
+    private GameService gameService;
+
     @GetMapping("getAll")
     public Map<String, Object> getItemPageList(@RequestParam(name = "itemName", required = false, defaultValue = "") String itemName,
                                                @RequestParam(name = "itemNo", required = false, defaultValue = "") String itemNo,
@@ -41,6 +46,8 @@ public class ItemController extends BaseController {
         PageInfo<Item> page = new PageInfo<>(items);
         getSuccessResult(resultMap);
         resultMap.put("page", page);
+        List<Game> gameList = gameService.selectAllGame();
+        resultMap.put("gameList", gameList);
         return resultMap;
     }
 }
