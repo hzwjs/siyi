@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.GamelevelConfigMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.GamelevelConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="GAME_LEVEL_ID" jdbcType="VARCHAR" property="gameLevelId" />
+    <result column="TIME" jdbcType="VARCHAR" property="time" />
+    <result column="Q_TIANZI" jdbcType="VARCHAR" property="qTianzi" />
+    <result column="Q_TIANZI_WRONG" jdbcType="VARCHAR" property="qTianziWrong" />
+    <result column="Q_XUANZE" jdbcType="VARCHAR" property="qXuanze" />
+    <result column="Q_XUANZE_WRONG" jdbcType="VARCHAR" property="qXuanzeWrong" />
+    <result column="Q_DUICUO" jdbcType="VARCHAR" property="qDuicuo" />
+    <result column="Q_DUICUO_WRONG" jdbcType="VARCHAR" property="qDuicuoWrong" />
+    <result column="JIANGLI_GOLD" jdbcType="VARCHAR" property="jiangliGold" />
+    <result column="JIANGLI_EXP" jdbcType="VARCHAR" property="jiangliExp" />
+    <result column="JIANG_LI_TIME" jdbcType="VARCHAR" property="jiangLiTime" />
+    <result column="ITEM_SHU_LIANG" jdbcType="VARCHAR" property="itemShuLiang" />
+    <result column="JIANG_LI_GAI_LV" jdbcType="VARCHAR" property="jiangLiGaiLv" />
+    <result column="DOUBLE_GAI_LV" jdbcType="VARCHAR" property="doubleGaiLv" />
+    <result column="GUANG_GAO" jdbcType="VARCHAR" property="guangGao" />
+    <result column="XUAN_ZHUAN_GAI_LV" jdbcType="VARCHAR" property="xuanZhuanGaiLv" />
+    <result column="BIAN_HEI_GAI_LV" jdbcType="VARCHAR" property="bianHeiGaiLv" />
+    <result column="JIAO_HUAN_GAI_LV" jdbcType="VARCHAR" property="jiaoHuanGaiLv" />
+    <result column="TAP_GAI_LV" jdbcType="VARCHAR" property="tapGaiLv" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="SPEED" jdbcType="VARCHAR" property="speed" />
+    <result column="CD" jdbcType="VARCHAR" property="cd" />
+    <result column="W_GAI_LV" jdbcType="VARCHAR" property="wGaiLv" />
+    <result column="REVISION" jdbcType="INTEGER" property="revision" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+</mapper>
