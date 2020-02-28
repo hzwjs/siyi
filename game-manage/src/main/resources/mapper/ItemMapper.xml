@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.ItemMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.Item">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_no" jdbcType="VARCHAR" property="itemNo" />
+    <result column="item_affect" jdbcType="VARCHAR" property="itemAffect" />
+    <result column="game_code" jdbcType="VARCHAR" property="gameCode" />
+    <result column="item_status" jdbcType="CHAR" property="itemStatus" />
+  </resultMap>
+</mapper>
