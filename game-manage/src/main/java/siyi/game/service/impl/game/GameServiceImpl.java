@@ -1,5 +1,6 @@
 package siyi.game.service.impl.game;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import siyi.game.dao.GameMapper;
@@ -32,5 +33,11 @@ public class GameServiceImpl implements GameService {
         Game game = new Game();
         game.setGameCode(gameCode);
         return gameMapper.selectOne(game);
+    }
+
+    @Override
+    public List<Game> selectGamePageList(Game game, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return gameMapper.select(game);
     }
 }

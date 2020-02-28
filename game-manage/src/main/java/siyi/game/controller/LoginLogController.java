@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import siyi.game.dao.entity.Game;
 import siyi.game.dao.model.LoginLogInfo;
+import siyi.game.service.game.GameService;
 import siyi.game.service.loginLog.LoginLogService;
 import siyi.game.utill.DateUtil;
 
@@ -29,6 +31,9 @@ public class LoginLogController extends BaseController {
     @Autowired
     private LoginLogService loginLogService;
 
+    @Autowired
+    private GameService gameService;
+
     @GetMapping("getAll")
     public Map<String, Object> getLoginLogPageInfo(@RequestParam(name = "playerId", required = false, defaultValue = "") String playerId,
                                                    @RequestParam(name = "playerName", required = false, defaultValue = "") String playerName,
@@ -48,6 +53,8 @@ public class LoginLogController extends BaseController {
         PageInfo<LoginLogInfo> pageInfo = new PageInfo<>(playerInfoList);
         getSuccessResult(resultMap);
         resultMap.put("page", pageInfo);
+        List<Game> gameList = gameService.selectAllGame();
+        resultMap.put("gameList", gameList);
         return resultMap;
     }
 }

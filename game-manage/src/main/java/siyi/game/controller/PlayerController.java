@@ -3,7 +3,9 @@ package siyi.game.controller;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import siyi.game.dao.entity.Game;
 import siyi.game.dao.entity.Player;
+import siyi.game.service.game.GameService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.utill.UUIDUtil;
 
@@ -23,6 +25,9 @@ public class PlayerController extends BaseController {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GameService gameService;
 
     @PostMapping("login")
     public Map<String, Object> login(@RequestBody Player player) {
@@ -74,6 +79,8 @@ public class PlayerController extends BaseController {
         PageInfo<Player> page = new PageInfo<>(playerList);
         getSuccessResult(resultMap);
         resultMap.put("page", page);
+        List<Game> gameList = gameService.selectAllGame();
+        resultMap.put("gameList", gameList);
         return resultMap;
     }
 }
