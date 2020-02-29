@@ -2,15 +2,14 @@ package siyi.game.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.ItemConfigMapper;
-import siyi.game.dao.ItemMapper;
 import siyi.game.dao.entity.Game;
-import siyi.game.dao.entity.GamelevelConfig;
 import siyi.game.dao.entity.Item;
 import siyi.game.dao.entity.ItemConfig;
-import siyi.game.manager.excel.read.GameLevelConfigDataListener;
 import siyi.game.manager.excel.read.ItemDataListener;
 import siyi.game.service.game.GameService;
 import siyi.game.service.item.ItemService;
@@ -29,6 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("item")
 public class ItemController extends BaseController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemController.class);
 
     @Autowired
     private ItemService itemService;
@@ -84,7 +84,7 @@ public class ItemController extends BaseController {
             EasyExcel.read(filePath, ItemConfig.class, new ItemDataListener(itemConfigMapper)).sheet().doRead();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("读取道具配置信息错误：{}", e);
         }
     }
 }

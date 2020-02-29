@@ -1,7 +1,10 @@
 package siyi.game.dao.entity;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
-import javax.persistence.*;
 
 @Table(name = "tb_item_config")
 public class ItemConfig implements Serializable {
