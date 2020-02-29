@@ -1,6 +1,8 @@
 package siyi.game.bo.gamelevel;
 
-
+/**
+ * 填字题型问题矩阵对象
+ */
 public class QuestionTianzi {
     private String quId;
 

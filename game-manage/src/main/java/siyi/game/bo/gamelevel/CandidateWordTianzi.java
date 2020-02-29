@@ -1,5 +1,8 @@
 package siyi.game.bo.gamelevel;
 
+/**
+ * 填字题型的待选答案矩阵对象
+ */
 public class CandidateWordTianzi {
     private String quId;
 
