@@ -46,4 +46,15 @@ public interface GameService {
      * @return java.util.List<siyi.game.dao.entity.Game>
      */
     List<Game> selectGamePageList(Game game, int pageNum, int pageSize);
+
+    /**
+     * description: 根据主键进行更新游戏信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/29 14:37 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param game
+     * @return int
+     */
+    int updateByIdSelective(Game game);
 }

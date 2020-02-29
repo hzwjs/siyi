@@ -50,4 +50,19 @@ public class ItemController extends BaseController {
         resultMap.put("gameList", gameList);
         return resultMap;
     }
+
+    @GetMapping("changeItemStatus")
+    public Map<String, Object> changeItemStatus(String id, String status) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Item item = new Item();
+        item.setId(Long.valueOf(id));
+        item.setItemStatus(status);
+        int i = itemService.updateByIdSelective(item);
+        if (i <= 0) {
+            getFailResult(resultMap, "道具状态更新失败");
+            return resultMap;
+        }
+        getSuccessResult(resultMap);
+        return resultMap;
+    }
 }

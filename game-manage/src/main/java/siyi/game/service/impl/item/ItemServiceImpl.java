@@ -26,4 +26,9 @@ public class ItemServiceImpl implements ItemService {
         PageHelper.startPage(pageNum, pageSize);
         return itemMapper.select(item);
     }
+
+    @Override
+    public int updateByIdSelective(Item item) {
+        return itemMapper.updateByPrimaryKeySelective(item);
+    }
 }

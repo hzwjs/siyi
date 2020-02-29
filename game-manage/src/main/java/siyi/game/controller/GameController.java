@@ -45,4 +45,19 @@ public class GameController extends BaseController {
         return resultMap;
     }
 
+    @GetMapping("changeGameStatus")
+    public Map<String, Object> changeGameStatus(String id, String status) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Game game = new Game();
+        game.setId(Long.valueOf(id));
+        game.setIsOnSale(status);
+        int i = gameService.updateByIdSelective(game);
+        if (i <= 0) {
+            getFailResult(resultMap, "游戏状态更新失败");
+            return resultMap;
+        }
+        getSuccessResult(resultMap);
+        return resultMap;
+    }
+
 }

@@ -24,4 +24,15 @@ public interface ItemService {
      * @return java.util.List<siyi.game.dao.entity.Item>
      */
     List<Item> getItemPageList(Item item, int pageNum, int pageSize);
+
+    /**
+     * description: 通过主键进行更新道具信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/2/29 14:32 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param item
+     * @return int
+     */
+    int updateByIdSelective(Item item);
 }

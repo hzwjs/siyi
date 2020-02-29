@@ -40,4 +40,9 @@ public class GameServiceImpl implements GameService {
         PageHelper.startPage(pageNum, pageSize);
         return gameMapper.select(game);
     }
+
+    @Override
+    public int updateByIdSelective(Game game) {
+        return gameMapper.updateByPrimaryKeySelective(game);
+    }
 }
