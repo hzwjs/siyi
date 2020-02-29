@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.QuTianziMapper;
 import siyi.game.dao.entity.QuTianzi;
-import siyi.game.manager.excel.read.QutianciDataListener;
+import siyi.game.manager.excel.read.QutianziDataListener;
 import siyi.game.service.gamelevel.GameLevelService;
 
 import java.io.File;
@@ -47,7 +47,7 @@ public class GameLevelController {
             String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
             String filePath = fileDir + "question_bank" + File.separator + "question_01.xlsx";
             System.out.println(filePath);
-            EasyExcel.read(filePath, QuTianzi.class, new QutianciDataListener(quTianziMapper)).sheet().doRead();
+            EasyExcel.read(filePath, QuTianzi.class, new QutianziDataListener(quTianziMapper)).sheet().doRead();
 
         } catch (Exception e) {
             e.printStackTrace();
