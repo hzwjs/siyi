@@ -1,16 +1,21 @@
 package siyi.game.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import siyi.game.dao.ItemConfigMapper;
+import siyi.game.dao.ItemMapper;
 import siyi.game.dao.entity.Game;
+import siyi.game.dao.entity.GamelevelConfig;
 import siyi.game.dao.entity.Item;
+import siyi.game.dao.entity.ItemConfig;
+import siyi.game.manager.excel.read.GameLevelConfigDataListener;
+import siyi.game.manager.excel.read.ItemDataListener;
 import siyi.game.service.game.GameService;
 import siyi.game.service.item.ItemService;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +35,9 @@ public class ItemController extends BaseController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private ItemConfigMapper itemConfigMapper;
 
     @GetMapping("getAll")
     public Map<String, Object> getItemPageList(@RequestParam(name = "itemName", required = false, defaultValue = "") String itemName,
@@ -64,5 +72,19 @@ public class ItemController extends BaseController {
         }
         getSuccessResult(resultMap);
         return resultMap;
+    }
+
+    @RequestMapping(value = "fileAnalysis")
+    @ResponseBody
+    public void fileAnalysis(){
+        try {
+            String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
+            String filePath = fileDir + "biz_config" + File.separator + "item_config.xlsx";
+            System.out.println(filePath);
+            EasyExcel.read(filePath, ItemConfig.class, new ItemDataListener(itemConfigMapper)).sheet().doRead();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

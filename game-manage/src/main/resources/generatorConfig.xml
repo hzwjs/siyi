@@ -40,7 +40,7 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_item" domainObjectName="Item">
+        <table tableName="tb_item_config" domainObjectName="ItemConfig">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
