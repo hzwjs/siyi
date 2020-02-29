@@ -1,5 +1,7 @@
 package siyi.game.bo.gamelevel;
 
+import siyi.game.dao.entity.GamelevelConfig;
+
 /**
  * 关卡业务对象
  * @auther hzw
@@ -11,6 +13,7 @@ public class GameLevel {
     private QuestionTianzi questionTianzi;
     private CandidateWordTianzi candidate;
     private AnswerTianzi answerTianzi;
+    private GamelevelConfig levelConfig;
 
     public String getLevel() {
         return level;
@@ -50,5 +53,13 @@ public class GameLevel {
 
     public void setCandidate(CandidateWordTianzi candidate) {
         this.candidate = candidate;
+    }
+
+    public GamelevelConfig getLevelConfig() {
+        return levelConfig;
+    }
+
+    public void setLevelConfig(GamelevelConfig levelConfig) {
+        this.levelConfig = levelConfig;
     }
 }
