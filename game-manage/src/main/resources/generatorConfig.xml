@@ -40,7 +40,7 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_level_up_config" domainObjectName="LevelUpConfig">
+        <table tableName="tb_q_duicuo_config" domainObjectName="DuiCuoConfig">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
