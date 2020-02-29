@@ -67,6 +67,19 @@
         <version>1.2.47</version>
     </dependency>
 
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>easyexcel</artifactId>
+        <version>2.1.6</version>
+    </dependency>
+
+    <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib</artifactId>
+        <version>3.2.5</version>
+    </dependency>
+
+
     <!--添加热部署-->
     <dependency>
         <groupId>org.springframework.boot</groupId>
