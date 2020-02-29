@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * description: ItemDataListener <br>
+ * description: 道具配置信息读取类 <br>
  * date: 2020/2/29 15:22 <br>
  * author: zhengzhiqiang <br>
  * version: 1.0 <br>
