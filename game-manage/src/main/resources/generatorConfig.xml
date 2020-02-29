@@ -40,7 +40,7 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_q_duicuo_config" domainObjectName="DuiCuoConfig">
+        <table tableName="tb_q_xuanze_config" domainObjectName="XuanZeConfig">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
