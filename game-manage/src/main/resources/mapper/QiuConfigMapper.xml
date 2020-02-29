@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.QiuConfigMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.QiuConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="beizinum" jdbcType="VARCHAR" property="beizinum" />
+    <result column="beiziquanzhong" jdbcType="VARCHAR" property="beiziquanzhong" />
+    <result column="qiunum" jdbcType="VARCHAR" property="qiunum" />
+    <result column="qiuquanzhong" jdbcType="VARCHAR" property="qiuquanzhong" />
+    <result column="spend" jdbcType="VARCHAR" property="spend" />
+    <result column="jiaohuannum" jdbcType="VARCHAR" property="jiaohuannum" />
+    <result column="cd" jdbcType="VARCHAR" property="cd" />
+    <result column="wrong" jdbcType="VARCHAR" property="wrong" />
+    <result column="jianglitime" jdbcType="VARCHAR" property="jianglitime" />
+    <result column="gold" jdbcType="VARCHAR" property="gold" />
+    <result column="exp" jdbcType="VARCHAR" property="exp" />
+    <result column="zongtime" jdbcType="VARCHAR" property="zongtime" />
+    <result column="item" jdbcType="VARCHAR" property="item" />
+    <result column="itemnum" jdbcType="VARCHAR" property="itemnum" />
+    <result column="itemgailv" jdbcType="VARCHAR" property="itemgailv" />
+    <result column="double_rate" jdbcType="VARCHAR" property="doubleRate" />
+    <result column="guanggao" jdbcType="VARCHAR" property="guanggao" />
+  </resultMap>
+</mapper>

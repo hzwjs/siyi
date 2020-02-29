@@ -40,7 +40,7 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_k_fanpai_config" domainObjectName="FanPaiConfig">
+        <table tableName="tb_k_qiu_config" domainObjectName="QiuConfig">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
