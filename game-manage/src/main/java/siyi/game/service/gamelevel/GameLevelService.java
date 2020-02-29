@@ -1,8 +1,6 @@
 package siyi.game.service.gamelevel;
 
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import siyi.game.bo.GameLevel;
+import siyi.game.bo.gamelevel.GameLevel;
 
 /**
  * 与关卡相关的服务类

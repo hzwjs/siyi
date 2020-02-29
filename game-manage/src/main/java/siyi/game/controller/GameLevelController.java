@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import siyi.game.bo.GameLevel;
+import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.QuTianziMapper;
 import siyi.game.dao.entity.QuTianzi;
 import siyi.game.manager.excel.read.QutianciDataListener;
@@ -33,12 +33,6 @@ public class GameLevelController {
     public GameLevel queryGameLevelInfo(){
         try {
             return gameLevelService.queryGameLevelInfo("");
-
-//            String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
-//            String filePath = fileDir + "question_bank" + File.separator + "question_01.xlsx";
-//            System.out.println(filePath);
-//            EasyExcel.read(filePath, QuTianzi.class, new QutianciDataListener(quTianziMapper)).sheet().doRead();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
