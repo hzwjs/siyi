@@ -79,7 +79,7 @@ public class ItemController extends BaseController {
     public void fileAnalysis(){
         try {
             String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
-            String filePath = fileDir + "biz_config" + File.separator + "item_config.xlsx";
+            String filePath = fileDir + "biz_config" + File.separator + "item.xlsx";
             System.out.println(filePath);
             EasyExcel.read(filePath, ItemConfig.class, new ItemDataListener(itemConfigMapper)).sheet().doRead();
 

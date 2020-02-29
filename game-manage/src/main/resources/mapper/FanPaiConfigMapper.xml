@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.FanPaiConfigMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.FanPaiConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="num" jdbcType="VARCHAR" property="num" />
+    <result column="quanzhong" jdbcType="VARCHAR" property="quanzhong" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="jianglitime" jdbcType="VARCHAR" property="jianglitime" />
+    <result column="gold" jdbcType="VARCHAR" property="gold" />
+    <result column="exp" jdbcType="VARCHAR" property="exp" />
+    <result column="zongtime" jdbcType="VARCHAR" property="zongtime" />
+    <result column="item" jdbcType="VARCHAR" property="item" />
+    <result column="itemnum" jdbcType="VARCHAR" property="itemnum" />
+    <result column="itemgailv" jdbcType="VARCHAR" property="itemgailv" />
+    <result column="double_rate" jdbcType="VARCHAR" property="doubleRate" />
+    <result column="guanggao" jdbcType="VARCHAR" property="guanggao" />
+    <result column="zi1" jdbcType="VARCHAR" property="zi1" />
+    <result column="zi2" jdbcType="VARCHAR" property="zi2" />
+    <result column="zi3" jdbcType="VARCHAR" property="zi3" />
+    <result column="zi4" jdbcType="VARCHAR" property="zi4" />
+    <result column="zi5" jdbcType="VARCHAR" property="zi5" />
+    <result column="zi6" jdbcType="VARCHAR" property="zi6" />
+    <result column="zi7" jdbcType="VARCHAR" property="zi7" />
+    <result column="zi8" jdbcType="VARCHAR" property="zi8" />
+    <result column="zi9" jdbcType="VARCHAR" property="zi9" />
+    <result column="zi10" jdbcType="VARCHAR" property="zi10" />
+    <result column="zi11" jdbcType="VARCHAR" property="zi11" />
+    <result column="zi12" jdbcType="VARCHAR" property="zi12" />
+    <result column="zi13" jdbcType="VARCHAR" property="zi13" />
+    <result column="zi14" jdbcType="VARCHAR" property="zi14" />
+    <result column="zi15" jdbcType="VARCHAR" property="zi15" />
+    <result column="zi16" jdbcType="VARCHAR" property="zi16" />
+    <result column="zi17" jdbcType="VARCHAR" property="zi17" />
+    <result column="zi18" jdbcType="VARCHAR" property="zi18" />
+    <result column="zi19" jdbcType="VARCHAR" property="zi19" />
+    <result column="zi20" jdbcType="VARCHAR" property="zi20" />
+  </resultMap>
+</mapper>

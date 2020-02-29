@@ -30,7 +30,7 @@ public class DabaController {
         try {
 
             String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
-            String filePath = fileDir + "biz_config" + File.separator + "daba_config.xlsx";
+            String filePath = fileDir + "biz_config" + File.separator + "K_daba.xlsx";
             System.out.println(filePath);
             EasyExcel.read(filePath, DaBaConfig.class, new DabaConfigDataListener(daBaConfigMapper)).sheet().doRead();
 
