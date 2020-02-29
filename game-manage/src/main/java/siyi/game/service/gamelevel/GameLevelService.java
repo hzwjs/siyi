@@ -11,4 +11,6 @@ public interface GameLevelService {
 
     GameLevel queryGameLevelInfo(String userId);
 
+    GameLevel queryWenGameLevelInfo();
+
 }

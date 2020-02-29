@@ -7,7 +7,9 @@ import siyi.game.bo.gamelevel.AnswerTianzi;
 import siyi.game.bo.gamelevel.CandidateWordTianzi;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.bo.gamelevel.QuestionTianzi;
+import siyi.game.dao.GamelevelConfigMapper;
 import siyi.game.dao.QuTianziMapper;
+import siyi.game.dao.entity.GamelevelConfig;
 import siyi.game.dao.entity.QuTianzi;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.utill.RandomGeneratorWord;
@@ -17,9 +19,19 @@ import java.lang.reflect.Field;
 public class GameLevelImpl implements GameLevelService {
     @Autowired
     QuTianziMapper quTianziMapper;
+    @Autowired
+    GamelevelConfigMapper configMapper;
 
     @Override
     public GameLevel queryGameLevelInfo(String userId) {
+        return null;
+    }
+
+    @Override
+    public GameLevel queryWenGameLevelInfo() {
+        /* 查询当前关数 */
+        /* 读取关卡配置信息 */
+        GamelevelConfig gamelevelConfig = configMapper.selectByPrimaryKey("1");
         /* 选择题型 */
 
         /* 读取题目和答案 */
@@ -27,7 +39,7 @@ public class GameLevelImpl implements GameLevelService {
         QuTianzi quTianzi = new QuTianzi();
         quTianzi.setQuId("Q_tianzi_1");
         quTianzi = quTianziMapper.selectOne(quTianzi);
-        // 拆分题目和答案
+        /* 拆分题目和答案 */
         QuestionTianzi question = new QuestionTianzi();
         CandidateWordTianzi candidate = new CandidateWordTianzi();
         AnswerTianzi answer = new AnswerTianzi();
@@ -41,7 +53,6 @@ public class GameLevelImpl implements GameLevelService {
         gameLevel.setQuestionTianzi(question);
         gameLevel.setAnswerTianzi(answer);
         gameLevel.setLevel("1");
-
         return gameLevel;
     }
 

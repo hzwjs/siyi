@@ -3,8 +3,12 @@ package siyi.game.utill;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
+/**
+ * 随机生成汉子
+ *
+ * @Author hzw
+ */
 public class RandomGeneratorWord {
-    //随机生成常见汉字
     public static String getRandomChar() {
         String str = "";
         int highCode;

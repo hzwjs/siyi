@@ -23,18 +23,63 @@ public class GamelevelConfig implements Serializable {
     @Column(name = "Q_TIANZI")
     private String qTianzi;
 
+    /**
+     * 允许错误的次数
+     */
     @Column(name = "Q_TIANZI_WRONG")
-    private String qTianziWrong;
+    private Integer qTianziWrong;
+
+    /**
+     * 旋转概率
+     */
+    @Column(name = "XUAN_ZHUAN_GAI_LV")
+    private String xuanZhuanGaiLv;
+
+    /**
+     * 交换概率
+     */
+    @Column(name = "JIAO_HUAN_GAI_LV")
+    private String jiaoHuanGaiLv;
+
+    /**
+     * 变黑概率
+     */
+    @Column(name = "BIAN_HEI_GAI_LV")
+    private String bianHeiGaiLv;
+
+    /**
+     * 点击变亮
+     */
+    @Column(name = "TAP_GAI_LV")
+    private String tapGaiLv;
+
+    /**
+     * 类型(0,同步全部调用；1,异步全部调用；2,同步部分调用；3,异步部分调用)
+     */
+    @Column(name = "TYPE")
+    private String type;
 
     @Column(name = "Q_XUANZE")
     private String qXuanze;
 
+    /**
+     * 允许错误的次数
+     */
     @Column(name = "Q_XUANZE_WRONG")
     private String qXuanzeWrong;
+
+    /**
+     * 选择题型变黑的概率
+     */
+    @Column(name = "BIAN_HEI_GAI_LV2")
+    private String bianHeiGaiLv2;
 
     @Column(name = "Q_DUICUO")
     private String qDuicuo;
 
+    /**
+     * 允许错误的次数
+     */
     @Column(name = "Q_DUICUO_WRONG")
     private String qDuicuoWrong;
 
@@ -69,46 +114,16 @@ public class GamelevelConfig implements Serializable {
     private String jiangLiGaiLv;
 
     /**
-     * 翻倍概率
+     * 双倍按钮出现的概率
      */
     @Column(name = "DOUBLE_GAI_LV")
     private String doubleGaiLv;
 
     /**
-     * 广告
+     * 复活按钮出现的概率
      */
-    @Column(name = "GUANG_GAO")
-    private String guangGao;
-
-    /**
-     * 旋转概率
-     */
-    @Column(name = "XUAN_ZHUAN_GAI_LV")
-    private String xuanZhuanGaiLv;
-
-    /**
-     * 变黑概率
-     */
-    @Column(name = "BIAN_HEI_GAI_LV")
-    private String bianHeiGaiLv;
-
-    /**
-     * 交换概率
-     */
-    @Column(name = "JIAO_HUAN_GAI_LV")
-    private String jiaoHuanGaiLv;
-
-    /**
-     * 上下对换概率
-     */
-    @Column(name = "TAP_GAI_LV")
-    private String tapGaiLv;
-
-    /**
-     * 类型
-     */
-    @Column(name = "TYPE")
-    private String type;
+    @Column(name = "FU_HUO")
+    private String fuHuo;
 
     /**
      * 速率
@@ -123,7 +138,7 @@ public class GamelevelConfig implements Serializable {
     private String cd;
 
     /**
-     * W_GAI_LV
+     * 武关出现的概率
      */
     @Column(name = "W_GAI_LV")
     private String wGaiLv;
@@ -211,17 +226,111 @@ public class GamelevelConfig implements Serializable {
     }
 
     /**
-     * @return Q_TIANZI_WRONG
+     * 获取允许错误的次数
+     *
+     * @return Q_TIANZI_WRONG - 允许错误的次数
      */
-    public String getqTianziWrong() {
+    public Integer getqTianziWrong() {
         return qTianziWrong;
     }
 
     /**
-     * @param qTianziWrong
+     * 设置允许错误的次数
+     *
+     * @param qTianziWrong 允许错误的次数
      */
-    public void setqTianziWrong(String qTianziWrong) {
-        this.qTianziWrong = qTianziWrong == null ? null : qTianziWrong.trim();
+    public void setqTianziWrong(Integer qTianziWrong) {
+        this.qTianziWrong = qTianziWrong;
+    }
+
+    /**
+     * 获取旋转概率
+     *
+     * @return XUAN_ZHUAN_GAI_LV - 旋转概率
+     */
+    public String getXuanZhuanGaiLv() {
+        return xuanZhuanGaiLv;
+    }
+
+    /**
+     * 设置旋转概率
+     *
+     * @param xuanZhuanGaiLv 旋转概率
+     */
+    public void setXuanZhuanGaiLv(String xuanZhuanGaiLv) {
+        this.xuanZhuanGaiLv = xuanZhuanGaiLv == null ? null : xuanZhuanGaiLv.trim();
+    }
+
+    /**
+     * 获取交换概率
+     *
+     * @return JIAO_HUAN_GAI_LV - 交换概率
+     */
+    public String getJiaoHuanGaiLv() {
+        return jiaoHuanGaiLv;
+    }
+
+    /**
+     * 设置交换概率
+     *
+     * @param jiaoHuanGaiLv 交换概率
+     */
+    public void setJiaoHuanGaiLv(String jiaoHuanGaiLv) {
+        this.jiaoHuanGaiLv = jiaoHuanGaiLv == null ? null : jiaoHuanGaiLv.trim();
+    }
+
+    /**
+     * 获取变黑概率
+     *
+     * @return BIAN_HEI_GAI_LV - 变黑概率
+     */
+    public String getBianHeiGaiLv() {
+        return bianHeiGaiLv;
+    }
+
+    /**
+     * 设置变黑概率
+     *
+     * @param bianHeiGaiLv 变黑概率
+     */
+    public void setBianHeiGaiLv(String bianHeiGaiLv) {
+        this.bianHeiGaiLv = bianHeiGaiLv == null ? null : bianHeiGaiLv.trim();
+    }
+
+    /**
+     * 获取点击变亮
+     *
+     * @return TAP_GAI_LV - 点击变亮
+     */
+    public String getTapGaiLv() {
+        return tapGaiLv;
+    }
+
+    /**
+     * 设置点击变亮
+     *
+     * @param tapGaiLv 点击变亮
+     */
+    public void setTapGaiLv(String tapGaiLv) {
+        this.tapGaiLv = tapGaiLv == null ? null : tapGaiLv.trim();
+    }
+
+    /**
+     * 获取类型(0,同步全部调用；1,异步全部调用；2,同步部分调用；3,异步部分调用)
+     *
+     * @return TYPE - 类型(0,同步全部调用；1,异步全部调用；2,同步部分调用；3,异步部分调用)
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * 设置类型(0,同步全部调用；1,异步全部调用；2,同步部分调用；3,异步部分调用)
+     *
+     * @param type 类型(0,同步全部调用；1,异步全部调用；2,同步部分调用；3,异步部分调用)
+     */
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 
     /**
@@ -239,17 +348,39 @@ public class GamelevelConfig implements Serializable {
     }
 
     /**
-     * @return Q_XUANZE_WRONG
+     * 获取允许错误的次数
+     *
+     * @return Q_XUANZE_WRONG - 允许错误的次数
      */
     public String getqXuanzeWrong() {
         return qXuanzeWrong;
     }
 
     /**
-     * @param qXuanzeWrong
+     * 设置允许错误的次数
+     *
+     * @param qXuanzeWrong 允许错误的次数
      */
     public void setqXuanzeWrong(String qXuanzeWrong) {
         this.qXuanzeWrong = qXuanzeWrong == null ? null : qXuanzeWrong.trim();
+    }
+
+    /**
+     * 获取选择题型变黑的概率
+     *
+     * @return BIAN_HEI_GAI_LV2 - 选择题型变黑的概率
+     */
+    public String getBianHeiGaiLv2() {
+        return bianHeiGaiLv2;
+    }
+
+    /**
+     * 设置选择题型变黑的概率
+     *
+     * @param bianHeiGaiLv2 选择题型变黑的概率
+     */
+    public void setBianHeiGaiLv2(String bianHeiGaiLv2) {
+        this.bianHeiGaiLv2 = bianHeiGaiLv2 == null ? null : bianHeiGaiLv2.trim();
     }
 
     /**
@@ -267,14 +398,18 @@ public class GamelevelConfig implements Serializable {
     }
 
     /**
-     * @return Q_DUICUO_WRONG
+     * 获取允许错误的次数
+     *
+     * @return Q_DUICUO_WRONG - 允许错误的次数
      */
     public String getqDuicuoWrong() {
         return qDuicuoWrong;
     }
 
     /**
-     * @param qDuicuoWrong
+     * 设置允许错误的次数
+     *
+     * @param qDuicuoWrong 允许错误的次数
      */
     public void setqDuicuoWrong(String qDuicuoWrong) {
         this.qDuicuoWrong = qDuicuoWrong == null ? null : qDuicuoWrong.trim();
@@ -371,129 +506,39 @@ public class GamelevelConfig implements Serializable {
     }
 
     /**
-     * 获取翻倍概率
+     * 获取双倍按钮出现的概率
      *
-     * @return DOUBLE_GAI_LV - 翻倍概率
+     * @return DOUBLE_GAI_LV - 双倍按钮出现的概率
      */
     public String getDoubleGaiLv() {
         return doubleGaiLv;
     }
 
     /**
-     * 设置翻倍概率
+     * 设置双倍按钮出现的概率
      *
-     * @param doubleGaiLv 翻倍概率
+     * @param doubleGaiLv 双倍按钮出现的概率
      */
     public void setDoubleGaiLv(String doubleGaiLv) {
         this.doubleGaiLv = doubleGaiLv == null ? null : doubleGaiLv.trim();
     }
 
     /**
-     * 获取广告
+     * 获取复活按钮出现的概率
      *
-     * @return GUANG_GAO - 广告
+     * @return FU_HUO - 复活按钮出现的概率
      */
-    public String getGuangGao() {
-        return guangGao;
+    public String getFuHuo() {
+        return fuHuo;
     }
 
     /**
-     * 设置广告
+     * 设置复活按钮出现的概率
      *
-     * @param guangGao 广告
+     * @param fuHuo 复活按钮出现的概率
      */
-    public void setGuangGao(String guangGao) {
-        this.guangGao = guangGao == null ? null : guangGao.trim();
-    }
-
-    /**
-     * 获取旋转概率
-     *
-     * @return XUAN_ZHUAN_GAI_LV - 旋转概率
-     */
-    public String getXuanZhuanGaiLv() {
-        return xuanZhuanGaiLv;
-    }
-
-    /**
-     * 设置旋转概率
-     *
-     * @param xuanZhuanGaiLv 旋转概率
-     */
-    public void setXuanZhuanGaiLv(String xuanZhuanGaiLv) {
-        this.xuanZhuanGaiLv = xuanZhuanGaiLv == null ? null : xuanZhuanGaiLv.trim();
-    }
-
-    /**
-     * 获取变黑概率
-     *
-     * @return BIAN_HEI_GAI_LV - 变黑概率
-     */
-    public String getBianHeiGaiLv() {
-        return bianHeiGaiLv;
-    }
-
-    /**
-     * 设置变黑概率
-     *
-     * @param bianHeiGaiLv 变黑概率
-     */
-    public void setBianHeiGaiLv(String bianHeiGaiLv) {
-        this.bianHeiGaiLv = bianHeiGaiLv == null ? null : bianHeiGaiLv.trim();
-    }
-
-    /**
-     * 获取交换概率
-     *
-     * @return JIAO_HUAN_GAI_LV - 交换概率
-     */
-    public String getJiaoHuanGaiLv() {
-        return jiaoHuanGaiLv;
-    }
-
-    /**
-     * 设置交换概率
-     *
-     * @param jiaoHuanGaiLv 交换概率
-     */
-    public void setJiaoHuanGaiLv(String jiaoHuanGaiLv) {
-        this.jiaoHuanGaiLv = jiaoHuanGaiLv == null ? null : jiaoHuanGaiLv.trim();
-    }
-
-    /**
-     * 获取上下对换概率
-     *
-     * @return TAP_GAI_LV - 上下对换概率
-     */
-    public String getTapGaiLv() {
-        return tapGaiLv;
-    }
-
-    /**
-     * 设置上下对换概率
-     *
-     * @param tapGaiLv 上下对换概率
-     */
-    public void setTapGaiLv(String tapGaiLv) {
-        this.tapGaiLv = tapGaiLv == null ? null : tapGaiLv.trim();
-    }
-
-    /**
-     * 获取类型
-     *
-     * @return TYPE - 类型
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * 设置类型
-     *
-     * @param type 类型
-     */
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setFuHuo(String fuHuo) {
+        this.fuHuo = fuHuo == null ? null : fuHuo.trim();
     }
 
     /**
@@ -533,18 +578,18 @@ public class GamelevelConfig implements Serializable {
     }
 
     /**
-     * 获取W_GAI_LV
+     * 获取武关出现的概率
      *
-     * @return W_GAI_LV - W_GAI_LV
+     * @return W_GAI_LV - 武关出现的概率
      */
     public String getwGaiLv() {
         return wGaiLv;
     }
 
     /**
-     * 设置W_GAI_LV
+     * 设置武关出现的概率
      *
-     * @param wGaiLv W_GAI_LV
+     * @param wGaiLv 武关出现的概率
      */
     public void setwGaiLv(String wGaiLv) {
         this.wGaiLv = wGaiLv == null ? null : wGaiLv.trim();
