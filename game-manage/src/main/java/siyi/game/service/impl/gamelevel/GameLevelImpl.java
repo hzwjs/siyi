@@ -665,6 +665,21 @@ public class GameLevelImpl implements GameLevelService {
         /* 是否出现武关 */
         String wgPercent = config.getWuGaiLv();
         configWen.setWuguan(RandomUtil.isHit(wgPercent));
+        /* 金币 */
+        String gold = config.getJiangliGold();
+        String[] goldArr = time.split(";");
+        int jiangliGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(goldArr[0]), Integer.parseInt(goldArr[1]));
+        configWen.setJiangliGold(jiangliGold + "");
+        /* 经验 */
+        String exp = config.getJiangliExp();
+        String[] expArr = time.split(";");
+        int jiangliExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(expArr[0]), Integer.parseInt(expArr[1]));
+        configWen.setJiangliExp(jiangliExp + "");
+        /* CD */
+        String cd = config.getCd();
+        String[] cdArr = time.split(";");
+        int cdInt = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(cdArr[0]), Integer.parseInt(cdArr[1]));
+        configWen.setJiangliExp(cdInt + "");
         /* 如果当前关卡题型为填字 */
         if (qType[0].equals(configWen.getQType())) {
             /* 是否有旋转效果 */
