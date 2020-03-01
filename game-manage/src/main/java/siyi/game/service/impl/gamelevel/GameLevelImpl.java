@@ -49,7 +49,7 @@ public class GameLevelImpl implements GameLevelService {
         copier2.copy(quTianzi, candidate, null);
         BeanCopier copier3 = BeanCopier.create(candidate.getClass(), answer.getClass(), false);
         copier3.copy(candidate, answer, null);
-        gameLevel.setCandidate((CandidateWordTianzi)padWord(candidate)); // 补充候选矩阵
+        gameLevel.setCandidate((CandidateWordTianzi) padWord(candidate)); // 补充候选矩阵
         gameLevel.setQuestionTianzi(question);
         gameLevel.setAnswerTianzi(answer);
         return gameLevel;
@@ -67,7 +67,7 @@ public class GameLevelImpl implements GameLevelService {
         selectQuestionTypeByWeight(map, configWen);
         /* 关卡限时 */
         String time = config.getTime();
-        String[] limit= time.split(";");
+        String[] limit = time.split(";");
         int limitTime = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
         configWen.setLimitTime(limitTime);
         /* 是否出现双倍按钮 */
@@ -110,6 +110,7 @@ public class GameLevelImpl implements GameLevelService {
 
     /**
      * 根据权重选择题型
+     *
      * @param weightMap
      * @param configWen
      */
@@ -134,9 +135,9 @@ public class GameLevelImpl implements GameLevelService {
         Set<String> keys2 = weightMapTemp.keySet();
         int index = 0;
         for (String key : keys2) {
-            Double value =  Double.valueOf(weightMapTemp.get(key));
+            Double value = Double.valueOf(weightMapTemp.get(key));
             DecimalFormat df = new DecimalFormat("0.00");
-            String percent = (int)(Double.valueOf(df.format(value/amount))*100) + "%";
+            String percent = (int) (Double.valueOf(df.format(value / amount)) * 100) + "%";
             boolean hit = RandomUtil.isHit(percent);
             flag = flag && hit;
             if (flag) {
@@ -155,6 +156,7 @@ public class GameLevelImpl implements GameLevelService {
 
     /**
      * 补全待选矩阵：不足10，补到10;大于10小于20，补到20
+     *
      * @param answer
      * @return
      */
@@ -171,13 +173,13 @@ public class GameLevelImpl implements GameLevelService {
                 e.printStackTrace();
             }
         }
-        int index =0;
+        int index = 0;
         if (notNUllCount < 10) {
             index = 10;
-        } else if (notNUllCount > 10 && notNUllCount < 20){
+        } else if (notNUllCount > 10 && notNUllCount < 20) {
             index = 20;
         }
-        for (int j=notNUllCount; j <= index; j++){
+        for (int j = notNUllCount; j <= index; j++) {
             try {
                 fields[j].setAccessible(true);
                 fields[j].set(answer, RandomUtil.getRandomChar());
