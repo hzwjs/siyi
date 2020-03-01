@@ -1,5 +1,7 @@
 package siyi.game.service.impl.gamelevel;
 
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import net.sf.cglib.beans.BeanCopier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,12 +45,15 @@ public class GameLevelImpl implements GameLevelService {
         QuestionTianzi question = new QuestionTianzi();
         CandidateWordTianzi candidate = new CandidateWordTianzi();
         AnswerTianzi answer = new AnswerTianzi();
+        // 题目
         BeanCopier copier = BeanCopier.create(quTianzi.getClass(), question.getClass(), false);
         copier.copy(quTianzi, question, null);
+        // 候选答案
         BeanCopier copier2 = BeanCopier.create(quTianzi.getClass(), candidate.getClass(), false);
         copier2.copy(quTianzi, candidate, null);
-        BeanCopier copier3 = BeanCopier.create(candidate.getClass(), answer.getClass(), false);
-        copier3.copy(candidate, answer, null);
+        // 拷贝答案
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        answer = mapper.map(candidate, AnswerTianzi.class);
         gameLevel.setCandidate((CandidateWordTianzi) padWord(candidate)); // 补充候选矩阵
         gameLevel.setQuestionTianzi(question);
         gameLevel.setAnswerTianzi(answer);
