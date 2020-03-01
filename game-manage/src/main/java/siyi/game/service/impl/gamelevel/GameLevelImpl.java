@@ -641,6 +641,9 @@ public class GameLevelImpl implements GameLevelService {
     public ConfigWen handleConfigInfo(GamelevelConfig config) {
         ConfigWen configWen = new ConfigWen();
         String[] qType = {"tianzi", "duicuo", "xuanze"};
+        /* 属性复制 */
+        BeanCopier copier = BeanCopier.create(config.getClass(), configWen.getClass(), false);
+        copier.copy(config, configWen, null);
         /* 选择题型 */
         List<Map<String, String>> weightList = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
@@ -667,19 +670,24 @@ public class GameLevelImpl implements GameLevelService {
         configWen.setWuguan(RandomUtil.isHit(wgPercent));
         /* 金币 */
         String gold = config.getJiangliGold();
-        String[] goldArr = time.split(";");
+        String[] goldArr = gold.split(";");
         int jiangliGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(goldArr[0]), Integer.parseInt(goldArr[1]));
         configWen.setJiangliGold(jiangliGold + "");
         /* 经验 */
         String exp = config.getJiangliExp();
-        String[] expArr = time.split(";");
+        String[] expArr = exp.split(";");
         int jiangliExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(expArr[0]), Integer.parseInt(expArr[1]));
         configWen.setJiangliExp(jiangliExp + "");
         /* CD */
         String cd = config.getCd();
-        String[] cdArr = time.split(";");
+        String[] cdArr = cd.split(";");
         int cdInt = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(cdArr[0]), Integer.parseInt(cdArr[1]));
-        configWen.setJiangliExp(cdInt + "");
+        configWen.setCd(cdInt + "");
+        /* 速度 */
+        String speed = config.getSpeed();
+        String[] speedArr = speed.split(";");
+        int speedInt = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(speedArr[0]), Integer.parseInt(speedArr[1]));
+        configWen.setSpeed(speedInt + "");
         /* 如果当前关卡题型为填字 */
         if (qType[0].equals(configWen.getQType())) {
             /* 是否有旋转效果 */
@@ -700,9 +708,7 @@ public class GameLevelImpl implements GameLevelService {
             String bh2Percent = config.getBianHeiGaiLv2();
             configWen.setBianHeiXuanze(RandomUtil.isHit(bh2Percent));
         }
-        /* 不需要处理的属性原样复制 */
-        BeanCopier copier = BeanCopier.create(config.getClass(), configWen.getClass(), false);
-        copier.copy(config, configWen, null);
+
         return configWen;
     }
 
