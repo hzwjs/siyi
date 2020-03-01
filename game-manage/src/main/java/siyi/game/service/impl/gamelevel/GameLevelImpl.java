@@ -337,7 +337,80 @@ public class GameLevelImpl implements GameLevelService {
      * @return void
      */
     private void setDianjiTypeConfig(DianJiConfig dianJiConfig, ConfigWu configWu) {
-        // TODO 获取点击类型武关配置信息
+        // 规则1权重
+        String guize1quanzhong = dianJiConfig.getGuize1quanzhong();
+
+        // 根据规则的权重判断命中哪一个规则
+        Map<String, String> guizeWeight = new HashMap<>();
+        guizeWeight.put("rule1", guize1quanzhong);
+        String rule = selectRuleByWeight(guizeWeight);
+        // 数量给具体值
+        String baseNumStr = dianJiConfig.getNum();
+        String[] limit = baseNumStr.split(";");
+        int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
+        String baseNum = String.valueOf(limitNum);
+        configWu.setBaseNum(baseNum);
+        Integer num = 0;
+        // hp
+        String hp = dianJiConfig.getHp();
+        configWu.setHp(hp);
+
+        // 奖励金币
+        String baseGold = dianJiConfig.getGold();
+        String[] limitGoldArray = baseGold.split(";");
+        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
+        configWu.setGold(String.valueOf(limitGold));
+        // 奖励经验
+        String baseExp = dianJiConfig.getExp();
+        String[] limitExpArray = baseExp.split(";");
+        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
+        configWu.setExp(String.valueOf(limitExp));
+        // 总时间
+        String zongTime = dianJiConfig.getZongtime();
+        configWu.setZongTime(zongTime);
+        // 是否有道具奖励
+        String itemPercent = dianJiConfig.getItemgailv();
+        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
+        configWu.setHaveItem(isHaveItem);
+        if (isHaveItem) {
+            // 道具
+            String item = dianJiConfig.getItem();
+            configWu.setItem(item);
+            // 道具数量
+            String baseItemNum = dianJiConfig.getItemnum();
+            String[] limitItemArray = baseItemNum.split(";");
+            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
+            configWu.setItemNum(String.valueOf(limitItem));
+        } else {
+            configWu.setItem("-1");
+            configWu.setItemNum("-1");
+        }
+        // 是否展示广告
+        String guanggaoPercent = dianJiConfig.getGuanggao();
+        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
+        configWu.setGuangGao(isGuanggao);
+        // 奖励是否翻倍
+        String doubleRate = dianJiConfig.getDoubleRate();
+        boolean isDouble = RandomUtil.isHit(doubleRate);
+        configWu.setDouble(isDouble);
+
+        String time = "";
+        String jiangliTime = "";
+        if ("rule1".equals(rule)) {
+            // 采用规则1
+            String guize1num = dianJiConfig.getGuize1num();
+            String[] limitguize1numArray = guize1num.split(";");
+            int limitguize1num = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitguize1numArray[0]), Integer.parseInt(limitguize1numArray[1]));
+            configWu.setTotalNum(String.valueOf(limitguize1num));
+            // 总时间
+            time = dianJiConfig.getTime1();
+            // 奖励时间
+            jiangliTime = dianJiConfig.getJiangli1time();
+        }
+        // 总时间
+        configWu.setTotalTime(String.valueOf(time));
+        // 奖励时间
+        configWu.setJiangliTime(jiangliTime);
     }
 
     /**
