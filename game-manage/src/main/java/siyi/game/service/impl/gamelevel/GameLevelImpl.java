@@ -151,7 +151,7 @@ public class GameLevelImpl implements GameLevelService {
         String[] limit = baseNumStr.split(";");
         int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
         String baseNum = String.valueOf(limitNum);
-        String num = "";
+        Double num = 0D;
         // cd 原值
         String cd = zhuiLuoConfig.getCd();
         configWu.setCd(cd);
@@ -206,7 +206,10 @@ public class GameLevelImpl implements GameLevelService {
             // 采用规则1
             // 出现道具数量
             String guize1num = zhuiLuoConfig.getGuize1num();
-            num = String.valueOf(Integer.valueOf(baseNum) * Integer.valueOf(guize1num));
+            if (guize1num.contains("%")) {
+                guize1num = guize1num.substring(0, guize1num.length() - 1);
+            }
+            num = Integer.valueOf(baseNum) * Integer.valueOf(guize1num) * 0.01;
             // 总时间
             time = zhuiLuoConfig.getTime1();
             // 奖励时间
@@ -215,7 +218,10 @@ public class GameLevelImpl implements GameLevelService {
             // 采用规则2
             // 出现道具数量
             String guize2num = zhuiLuoConfig.getGuize2num();
-            num = String.valueOf(Integer.valueOf(baseNum) * Integer.valueOf(guize2num));
+            if (guize2num.contains("%")) {
+                guize2num = guize2num.substring(0, guize2num.length() - 1);
+            }
+            num = Integer.valueOf(baseNum) * Integer.valueOf(guize2num) * 0.01;
             // 总时间
             time = zhuiLuoConfig.getTime2();
             // 奖励时间
@@ -223,16 +229,19 @@ public class GameLevelImpl implements GameLevelService {
         } else if ("rule3".equals(rule)) {
             // 出现道具数量
             String guize3num = zhuiLuoConfig.getGuize3num();
-            num = String.valueOf(Integer.valueOf(baseNum) * Integer.valueOf(guize3num));
+            if (guize3num.contains("%")) {
+                guize3num = guize3num.substring(0, guize3num.length() - 1);
+            }
+            num = Integer.valueOf(baseNum) * Integer.valueOf(guize3num) * 0.01;
             // 总时间
             time = zhuiLuoConfig.getTime3();
             // 奖励时间
             jiangliTime = zhuiLuoConfig.getJiangli3time();
         }
 
-        int timeInt = Integer.valueOf(time) * Integer.valueOf(num);
+        Double timeInt = Double.valueOf(time) * num.intValue();
         // 道具出现数量
-        configWu.setTotalNum(num);
+        configWu.setTotalNum(String.valueOf(num.intValue()));
         // 总时间
         configWu.setTotalTime(String.valueOf(timeInt));
         // 奖励时间
