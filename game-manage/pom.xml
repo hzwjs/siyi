@@ -86,6 +86,12 @@
         <version>3.2.5</version>
     </dependency>
 
+    <dependency>
+        <groupId>com.github.dozermapper</groupId>
+        <artifactId>dozer-core</artifactId>
+        <version>6.4.0</version>
+    </dependency>
+
 
     <!--添加热部署-->
     <dependency>
