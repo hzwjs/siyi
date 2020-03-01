@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.LevelUpConfigMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.LevelUpConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="LEVEL" jdbcType="VARCHAR" property="level" />
+    <result column="jueseap" jdbcType="VARCHAR" property="jueseap" />
+    <result column="wuqiap" jdbcType="VARCHAR" property="wuqiap" />
+    <result column="chenghao" jdbcType="VARCHAR" property="chenghao" />
+    <result column="jiahceng1" jdbcType="VARCHAR" property="jiahceng1" />
+    <result column="chenghao2" jdbcType="VARCHAR" property="chenghao2" />
+    <result column="jiacheng2" jdbcType="VARCHAR" property="jiacheng2" />
+    <result column="exp" jdbcType="VARCHAR" property="exp" />
+    <result column="tilimax" jdbcType="VARCHAR" property="tilimax" />
+    <result column="tilihuifu" jdbcType="VARCHAR" property="tilihuifu" />
+    <result column="tap" jdbcType="VARCHAR" property="tap" />
+  </resultMap>
+</mapper>
