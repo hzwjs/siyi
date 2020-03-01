@@ -1,5 +1,6 @@
 package siyi.game.bo.gamelevel;
 
+import lombok.Data;
 import siyi.game.dao.entity.GamelevelConfig;
 
 /**
@@ -7,59 +8,16 @@ import siyi.game.dao.entity.GamelevelConfig;
  * @auther hzw
  * @date 2020-02-25 11：55
  */
+@Data
 public class GameLevel {
+    // 当前关卡的层级
     private String level;
-    private String questionType;
+    // 填字关卡题目
     private QuestionTianzi questionTianzi;
+    // 填字关卡待选答案关卡
     private CandidateWordTianzi candidate;
+    // 填字关卡的正确答案
     private AnswerTianzi answerTianzi;
-    private GamelevelConfig levelConfig;
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(String questionType) {
-        this.questionType = questionType;
-    }
-
-    public QuestionTianzi getQuestionTianzi() {
-        return questionTianzi;
-    }
-
-    public void setQuestionTianzi(QuestionTianzi questionTianzi) {
-        this.questionTianzi = questionTianzi;
-    }
-
-    public AnswerTianzi getAnswerTianzi() {
-        return answerTianzi;
-    }
-
-    public void setAnswerTianzi(AnswerTianzi answerTianzi) {
-        this.answerTianzi = answerTianzi;
-    }
-
-    public CandidateWordTianzi getCandidate() {
-        return candidate;
-    }
-
-    public void setCandidate(CandidateWordTianzi candidate) {
-        this.candidate = candidate;
-    }
-
-    public GamelevelConfig getLevelConfig() {
-        return levelConfig;
-    }
-
-    public void setLevelConfig(GamelevelConfig levelConfig) {
-        this.levelConfig = levelConfig;
-    }
+    // 文关配置信息
+    private ConfigWen configWen;
 }
