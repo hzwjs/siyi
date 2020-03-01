@@ -81,8 +81,8 @@ public class GameLevelImpl implements GameLevelService {
         weightLevel.put("daba", "0");
         weightLevel.put("dianji", "0");
         weightLevel.put("fanpai", "0");
-        weightLevel.put("qiu", "0");
-        weightLevel.put("zhuiluo", "100");
+        weightLevel.put("qiu", "100");
+        weightLevel.put("zhuiluo", "0");
         // 根据权重获取最终命中的武关关卡类型
         ConfigWu configWu = selectWuLevelByWeight(weightLevel);
         // 根据关卡类型获取对应关卡的配置信息
@@ -129,7 +129,7 @@ public class GameLevelImpl implements GameLevelService {
     }
 
     /**
-     * description: 杯坠落类型武关配置信息 <br>
+     * description: 坠落类型武关配置信息 <br>
      * version: 1.0 <br>
      * date: 2020/3/1 15:28 <br>
      * author: zhengzhiqiang <br>
@@ -270,9 +270,6 @@ public class GameLevelImpl implements GameLevelService {
         Set<String> keys = guizeWeight.keySet();
         for (String key : keys) {
             String value = guizeWeight.get(key);
-            if ("100".equals(value)) {
-                return key;
-            }
             if (!"0".equals(value)) {
                 weightMapTemp.put(key, value);
                 amount += Integer.parseInt(value);
@@ -309,7 +306,91 @@ public class GameLevelImpl implements GameLevelService {
      * @return void
      */
     private void setQiuTypeConfig(QiuConfig qiuConfig, ConfigWu configWu) {
-        // TODO 组装杯中藏球武关配置信息
+
+        // 杯子数量权重
+        String beizinumStr = qiuConfig.getBeizinum();
+        String beiziquanzhongStr = qiuConfig.getBeiziquanzhong();
+        String[] beiziNumArray = beizinumStr.split(";");
+        String[] beiziQuanZhongArray = beiziquanzhongStr.split(";");
+        Map<String, String> weightMap = new HashMap<>();
+
+        for (int i = 0; i < beiziNumArray.length; i++) {
+            String beiziNum = beiziNumArray[i];
+            String quanZhong = beiziQuanZhongArray[i];
+            weightMap.put(beiziNum, quanZhong);
+        }
+        // 根据规则的权重判断命中杯子数量
+        String beiziNum = selectRuleByWeight(weightMap);
+        configWu.setBeiziNum(beiziNum);
+        // 球数量权重
+        String qiunumStr = qiuConfig.getQiunum();
+        String qiuquanzhongStr = qiuConfig.getQiuquanzhong();
+        String[] qiunumArray = qiunumStr.split(";");
+        String[] qiuquanzhongArray = qiuquanzhongStr.split(";");
+        Map<String, String> qiuWeight = new HashMap<>();
+        for (int i = 0; i < qiunumArray.length; i++) {
+            String quanZhong = qiuquanzhongArray[i];
+            String qiunum = qiunumArray[i];
+            qiuWeight.put(qiunum, quanZhong);
+        }
+        // 根据规则的权重判断命中球数量
+        String qiuNum = selectRuleByWeight(qiuWeight);
+        configWu.setQiuNum(qiuNum);
+        // 速度原值
+        String spend = qiuConfig.getSpend();
+        configWu.setSpeed(spend);
+        // 交换次数
+        String jiaohuannum = qiuConfig.getJiaohuannum();
+        String[] jiaohuannumArray = jiaohuannum.split(";");
+        int limitjiaohuannum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jiaohuannumArray[0]), Integer.parseInt(jiaohuannumArray[1]));
+        configWu.setJiaohuanNum(String.valueOf(limitjiaohuannum));
+        // cd
+        String cd = qiuConfig.getCd();
+        configWu.setCd(cd);
+        // 奖励金币
+        String baseGold = qiuConfig.getGold();
+        String[] limitGoldArray = baseGold.split(";");
+        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
+        configWu.setGold(String.valueOf(limitGold));
+        // 奖励经验
+        String baseExp = qiuConfig.getExp();
+        String[] limitExpArray = baseExp.split(";");
+        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
+        configWu.setExp(String.valueOf(limitExp));
+        // 总时间
+        String zongTime = qiuConfig.getZongtime();
+        configWu.setZongTime(zongTime);
+        // 是否有道具奖励
+        String itemPercent = qiuConfig.getItemgailv();
+        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
+        configWu.setHaveItem(isHaveItem);
+        if (isHaveItem) {
+            // 道具
+            String item = qiuConfig.getItem();
+            configWu.setItem(item);
+            // 道具数量
+            String baseItemNum = qiuConfig.getItemnum();
+            String[] limitItemArray = baseItemNum.split(";");
+            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
+            configWu.setItemNum(String.valueOf(limitItem));
+        } else {
+            configWu.setItem("-1");
+            configWu.setItemNum("-1");
+        }
+        // 是否展示广告
+        String guanggaoPercent = qiuConfig.getGuanggao();
+        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
+        configWu.setGuangGao(isGuanggao);
+        // 奖励是否翻倍
+        String doubleRate = qiuConfig.getDoubleRate();
+        boolean isDouble = RandomUtil.isHit(doubleRate);
+        configWu.setDouble(isDouble);
+        // 奖励时间
+        String jianglitime = qiuConfig.getJianglitime();
+        configWu.setJiangliTime(jianglitime);
+        // 错误次数
+        String wrong = qiuConfig.getWrong();
+        configWu.setWrong(wrong);
     }
 
     /**
@@ -530,10 +611,6 @@ public class GameLevelImpl implements GameLevelService {
         Set<String> keys = weightLevel.keySet();
         for (String key : keys) {
             String value = weightLevel.get(key);
-            if ("100".equals(value)) {
-                configWu.setLevelType(key);
-                return configWu;
-            }
             if (!"0".equals(value)) {
                 weightMapTemp.put(key, value);
                 amount += Integer.parseInt(value);

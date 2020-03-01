@@ -49,5 +49,10 @@ public class ConfigWu {
     private String cishu;
     // 错误次数
     private String wrong;
-
+    // 杯子数量
+    private String beiziNum;
+    // 球数量
+    private String qiuNum;
+    // 交换次数
+    private String jiaohuanNum;
 }
