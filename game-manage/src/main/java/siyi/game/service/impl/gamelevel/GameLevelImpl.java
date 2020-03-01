@@ -81,7 +81,7 @@ public class GameLevelImpl implements GameLevelService {
         configWen.setJiangli(RandomUtil.isHit(jlPercent));
         /* 是否出现武关 */
         String wgPercent = config.getWuGaiLv();
-        configWen.setJiangli(RandomUtil.isHit(wgPercent));
+        configWen.setWuguan(RandomUtil.isHit(wgPercent));
         /* 如果当前关卡题型为填字 */
         if (qType[0].equals(configWen.getQType())) {
             /* 是否有旋转效果 */
