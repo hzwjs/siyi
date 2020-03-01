@@ -179,7 +179,7 @@ public class GameLevelImpl implements GameLevelService {
         } else if (notNUllCount > 10 && notNUllCount < 20) {
             index = 20;
         }
-        for (int j = notNUllCount; j <= index; j++) {
+        for (int j = notNUllCount; j < index; j++) {
             try {
                 fields[j].setAccessible(true);
                 fields[j].set(answer, RandomUtil.getRandomChar());
