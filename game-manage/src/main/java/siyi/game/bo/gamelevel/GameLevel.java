@@ -5,6 +5,7 @@ import siyi.game.dao.entity.GamelevelConfig;
 
 /**
  * 关卡业务对象
+ *
  * @auther hzw
  * @date 2020-02-25 11：55
  */
@@ -20,4 +21,7 @@ public class GameLevel {
     private AnswerTianzi answerTianzi;
     // 文关配置信息
     private ConfigWen configWen;
+
+    // 武关配置信息
+    private ConfigWu configWu;
 }

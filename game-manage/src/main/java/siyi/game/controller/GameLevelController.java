@@ -44,7 +44,7 @@ public class GameLevelController {
             if (Constants.GAME_LEVEL_TYPE_WEN.equals(gameLevelType)) {
                 gameLevel = gameLevelService.queryWenGameLevelInfo();
             } else if (Constants.GAME_LEVEL_TYPE_WU.equals(gameLevelType)) {
-
+                gameLevel = gameLevelService.queryWuGameLevelInfo();
             } else
                 gameLevel = null;
             return gameLevel;
