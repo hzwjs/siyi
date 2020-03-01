@@ -49,7 +49,7 @@ public class GameLevelController {
                 gameLevel = null;
             return gameLevel;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("获取关卡信息失败：{}", e);
             return null;
         } finally {
 
