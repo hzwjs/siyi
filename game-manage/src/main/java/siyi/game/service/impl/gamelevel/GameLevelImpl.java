@@ -131,7 +131,6 @@ public class GameLevelImpl implements GameLevelService {
             }
         }
         // 对新的权重列表进行处理
-        boolean flag = true;
         Set<String> keys2 = weightMapTemp.keySet();
         int index = 0;
         for (String key : keys2) {
@@ -139,10 +138,8 @@ public class GameLevelImpl implements GameLevelService {
             DecimalFormat df = new DecimalFormat("0.00");
             String percent = (int) (Double.valueOf(df.format(value / amount)) * 100) + "%";
             boolean hit = RandomUtil.isHit(percent);
-            flag = flag && hit;
-            if (flag) {
+            if (hit) {
                 configWen.setQType(key);
-                index++;
                 return;
             } else {
                 if (index == keys2.size() - 1) {
@@ -150,6 +147,7 @@ public class GameLevelImpl implements GameLevelService {
                     return;
                 }
             }
+            index++;
         }
     }
 
