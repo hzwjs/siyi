@@ -73,11 +73,11 @@ public class GameLevelImpl implements GameLevelService {
     public GameLevel queryWuGameLevelInfo() {
         // 获取武关关卡的权重配置
         Map<String, String> weightLevel = new HashMap<>();
-        weightLevel.put("daba", "0");
+        weightLevel.put("daba", "100");
         weightLevel.put("dianji", "0");
         weightLevel.put("fanpai", "0");
         weightLevel.put("qiu", "0");
-        weightLevel.put("zhuiluo", "100");
+        weightLevel.put("zhuiluo", "0");
         // 根据权重获取最终命中的武关关卡类型
         ConfigWu configWu = selectWuLevelByWeight(weightLevel);
         // 根据关卡类型获取对应关卡的配置信息
@@ -151,6 +151,8 @@ public class GameLevelImpl implements GameLevelService {
         String[] limit = baseNumStr.split(";");
         int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
         String baseNum = String.valueOf(limitNum);
+        configWu.setBaseNum(baseNum);
+
         Double num = 0D;
         // cd 原值
         String cd = zhuiLuoConfig.getCd();
@@ -238,8 +240,7 @@ public class GameLevelImpl implements GameLevelService {
             // 奖励时间
             jiangliTime = zhuiLuoConfig.getJiangli3time();
         }
-
-        Double timeInt = Double.valueOf(time) * num.intValue();
+        Double timeInt = Double.valueOf(time) * Integer.valueOf(baseNum);
         // 道具出现数量
         configWu.setTotalNum(String.valueOf(num.intValue()));
         // 总时间
@@ -345,7 +346,102 @@ public class GameLevelImpl implements GameLevelService {
      * @return void
      */
     private void setDabaTypeConfig(DaBaConfig daBaConfig, ConfigWu configWu) {
-        // TODO 获取打靶类型的武关配置信息
+        // 规则1权重
+        String guize1quanzhong = daBaConfig.getGuize1quanzhong();
+        // 规则2权重
+        String guize2quanzhong = daBaConfig.getGuize2quanzhong();
+        // 根据规则的权重判断命中哪一个规则
+        Map<String, String> guizeWeight = new HashMap<>();
+        guizeWeight.put("rule1", guize1quanzhong);
+        guizeWeight.put("rule2", guize2quanzhong);
+        String rule = selectRuleByWeight(guizeWeight);
+        // 数量给具体值
+        String baseNumStr = daBaConfig.getNum();
+        String[] limit = baseNumStr.split(";");
+        int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
+        String baseNum = String.valueOf(limitNum);
+        Integer num = 0;
+        // 出现时间
+        String chuxiantime = daBaConfig.getChuxiantime();
+        configWu.setChuxianTime(chuxiantime);
+        // 出现次数
+        String cishu = daBaConfig.getCishu();
+        configWu.setCishu(cishu);
+        // cd
+        String cd = daBaConfig.getCd();
+        configWu.setCd(cd);
+        // 错误次数
+        String wrong = daBaConfig.getWrong();
+        configWu.setWrong(wrong);
+        // 奖励金币
+        String baseGold = daBaConfig.getGold();
+        String[] limitGoldArray = baseGold.split(";");
+        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
+        configWu.setGold(String.valueOf(limitGold));
+        // 奖励经验
+        String baseExp = daBaConfig.getExp();
+        String[] limitExpArray = baseExp.split(";");
+        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
+        configWu.setExp(String.valueOf(limitExp));
+        // 总时间
+        String zongTime = daBaConfig.getZongtime();
+        configWu.setZongTime(zongTime);
+        // 是否有道具奖励
+        String itemPercent = daBaConfig.getItemgailv();
+        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
+        configWu.setHaveItem(isHaveItem);
+        if (isHaveItem) {
+            // 道具
+            String item = daBaConfig.getItem();
+            configWu.setItem(item);
+            // 道具数量
+            String baseItemNum = daBaConfig.getItemnum();
+            String[] limitItemArray = baseItemNum.split(";");
+            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
+            configWu.setItemNum(String.valueOf(limitItem));
+        } else {
+            configWu.setItem("-1");
+            configWu.setItemNum("-1");
+        }
+        // 是否展示广告
+        String guanggaoPercent = daBaConfig.getGuanggao();
+        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
+        configWu.setGuangGao(isGuanggao);
+        // 奖励是否翻倍
+        String doubleRate = daBaConfig.getDoubleRate();
+        boolean isDouble = RandomUtil.isHit(doubleRate);
+        configWu.setDouble(isDouble);
+
+        String time = "";
+        String jiangliTime = "";
+        if ("rule1".equals(rule)) {
+            // 采用规则1
+            // 出现道具数量
+            String guize1num = daBaConfig.getGuize1num();
+
+            num = Integer.valueOf(baseNum) - Integer.valueOf(guize1num);
+            // 总时间
+            time = daBaConfig.getTime1();
+            // 奖励时间
+            jiangliTime = daBaConfig.getJiangli1time();
+        } else if ("rule2".equals(rule)) {
+            // 采用规则2
+            // 出现道具数量
+            String guize2num = daBaConfig.getGuize2num();
+            num = Integer.valueOf(baseNum) - Integer.valueOf(guize2num);
+            // 总时间
+            time = daBaConfig.getTime2();
+            // 奖励时间
+            jiangliTime = daBaConfig.getJiangli2time();
+        }
+
+        Double timeInt = Double.valueOf(time) * Integer.valueOf(baseNum);
+        // 道具破坏数量
+        configWu.setTotalNum(String.valueOf(num.intValue()));
+        // 总时间
+        configWu.setTotalTime(String.valueOf(timeInt));
+        // 奖励时间
+        configWu.setJiangliTime(jiangliTime);
     }
 
     private ConfigWu selectWuLevelByWeight(Map<String, String> weightLevel) {

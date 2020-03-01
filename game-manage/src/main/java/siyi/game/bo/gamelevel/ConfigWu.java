@@ -13,7 +13,9 @@ public class ConfigWu {
 
     // 武关类型
     private String levelType;
-    // 出现道具数量
+    // 关卡出现道具数量
+    private String baseNum;
+    // 需破坏数量
     private String totalNum;
     // 坠落速度
     private String speed;
@@ -41,5 +43,11 @@ public class ConfigWu {
     private boolean isDouble;
     // 是否出现广告
     private boolean isGuangGao;
+    // 出现时间
+    private String chuxianTime;
+    // 出现次数
+    private String cishu;
+    // 错误次数
+    private String wrong;
 
 }
