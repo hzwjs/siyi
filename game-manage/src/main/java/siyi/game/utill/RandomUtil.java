@@ -66,8 +66,4 @@ public class RandomUtil {
         return str;
     }
 
-    public static void main(String[] args) {
-//        System.out.println(getRandomNumInTwoIntNum(10,12));
-        System.out.println(isHit("50%"));
-    }
 }
