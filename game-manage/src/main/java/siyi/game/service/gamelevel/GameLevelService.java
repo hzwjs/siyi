@@ -13,4 +13,14 @@ public interface GameLevelService {
 
     GameLevel queryWenGameLevelInfo();
 
+    /**
+     * description: 获取武关关卡信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/1 14:37 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param
+     * @return siyi.game.bo.gamelevel.GameLevel
+     */
+    GameLevel queryWuGameLevelInfo();
 }
