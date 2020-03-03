@@ -1,6 +1,10 @@
 package siyi.game.utill;
 
+import org.apache.poi.ss.formula.functions.T;
+
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -66,4 +70,33 @@ public class RandomUtil {
         return str;
     }
 
+    /**
+     * description: 集合中随机获取n条数据 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/3 21:40 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param resourceList 目标集合
+     * @param infoNum 获取数据条数
+     * @return java.util.List<java.lang.String>
+     */
+    public static List<String> getRandomList(List<String> resourceList, int infoNum) {
+        //把随机取得的数据存储在 listRandom 中
+        List<String> listRandom = new ArrayList<String>();
+        // 如果获取数据条数大于等于源集合，则将源集合返回
+        if (infoNum >= resourceList.size()) {
+            return resourceList;
+        }
+        //随机取出n条不重复的数据,这里我设置随机取3条数据
+        for (int i = infoNum; i >=1; i--) {
+            Random random = new Random();
+            //在数组大小之间产生一个随机数 j
+            int j = random.nextInt(resourceList.size());
+            //取得resourceList 中下标为j 的数据存储到 listRandom 中
+            listRandom.add(resourceList.get(j));
+            //把已取到的数据移除,避免下次再次取到出现重复
+            resourceList.remove(j);
+        }
+        return listRandom;
+    }
 }

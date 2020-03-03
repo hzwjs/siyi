@@ -404,7 +404,101 @@ public class GameLevelImpl implements GameLevelService {
      * @return void
      */
     private void setFanPaiTypeConfig(FanPaiConfig fanPaiConfig, ConfigWu configWu) {
-        // TODO 组装翻牌武关配置信息
+        // 获取翻牌数集合
+        String fanpaiNumStr = fanPaiConfig.getNum();
+        String[] fanpainumArray = fanpaiNumStr.split(";");
+        // 获取翻牌数权重集合
+        String quanzhongStr = fanPaiConfig.getQuanzhong();
+        String[] quanzhongNumArray = quanzhongStr.split(";");
+        // 获取翻牌数及权重对应关系
+        Map<String, String> fanpaiWeight = new HashMap<>();
+        for (int i = 0; i < fanpainumArray.length; i++) {
+            String fanpaiNum = fanpainumArray[i];
+            String quanzhong = quanzhongNumArray[i];
+            fanpaiWeight.put(fanpaiNum, quanzhong);
+        }
+        // 根据权重获取最终翻牌数
+        String finalFanpaiNum = selectRuleByWeight(fanpaiWeight);
+        configWu.setFanpainum(finalFanpaiNum);
+        // 游戏时间
+        String time = fanPaiConfig.getTime();
+        String finalTime = String.valueOf(Integer.valueOf(finalFanpaiNum) * Integer.valueOf(time));
+        configWu.setTotalTime(finalTime);
+        // 奖励时间
+        String jianglitime = fanPaiConfig.getJianglitime();
+        configWu.setJiangliTime(jianglitime);
+
+
+        // 奖励金币
+        String baseGold = fanPaiConfig.getGold();
+        String[] limitGoldArray = baseGold.split(";");
+        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
+        configWu.setGold(String.valueOf(limitGold));
+        // 奖励经验
+        String baseExp = fanPaiConfig.getExp();
+        String[] limitExpArray = baseExp.split(";");
+        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
+        configWu.setExp(String.valueOf(limitExp));
+        // 总时间
+        String zongTime = fanPaiConfig.getZongtime();
+        configWu.setZongTime(zongTime);
+        // 是否有道具奖励
+        String itemPercent = fanPaiConfig.getItemgailv();
+        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
+        configWu.setHaveItem(isHaveItem);
+        if (isHaveItem) {
+            // 道具
+            String item = fanPaiConfig.getItem();
+            configWu.setItem(item);
+            // 道具数量
+            String baseItemNum = fanPaiConfig.getItemnum();
+            String[] limitItemArray = baseItemNum.split(";");
+            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
+            configWu.setItemNum(String.valueOf(limitItem));
+        } else {
+            configWu.setItem("-1");
+            configWu.setItemNum("-1");
+        }
+        // 是否展示广告
+        String guanggaoPercent = fanPaiConfig.getGuanggao();
+        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
+        configWu.setGuangGao(isGuanggao);
+        // 奖励是否翻倍
+        String doubleRate = fanPaiConfig.getDoubleRate();
+        boolean isDouble = RandomUtil.isHit(doubleRate);
+        configWu.setDouble(isDouble);
+
+        // 获取最终翻牌文字
+        List<String> wordList = getWordList(fanPaiConfig);
+        // 根据权重判断结果返回对应数量的文字信息
+        int wordNum = Integer.valueOf(finalFanpaiNum) / 2;
+        List<String> randomList = RandomUtil.getRandomList(wordList, wordNum);
+        configWu.setWordList(randomList);
+    }
+
+    private List<String> getWordList(FanPaiConfig fanPaiConfig) {
+        List<String> wordList = new ArrayList<>();
+        wordList.add(fanPaiConfig.getZi1());
+        wordList.add(fanPaiConfig.getZi2());
+        wordList.add(fanPaiConfig.getZi3());
+        wordList.add(fanPaiConfig.getZi4());
+        wordList.add(fanPaiConfig.getZi5());
+        wordList.add(fanPaiConfig.getZi6());
+        wordList.add(fanPaiConfig.getZi7());
+        wordList.add(fanPaiConfig.getZi8());
+        wordList.add(fanPaiConfig.getZi9());
+        wordList.add(fanPaiConfig.getZi10());
+        wordList.add(fanPaiConfig.getZi11());
+        wordList.add(fanPaiConfig.getZi12());
+        wordList.add(fanPaiConfig.getZi13());
+        wordList.add(fanPaiConfig.getZi14());
+        wordList.add(fanPaiConfig.getZi15());
+        wordList.add(fanPaiConfig.getZi16());
+        wordList.add(fanPaiConfig.getZi17());
+        wordList.add(fanPaiConfig.getZi18());
+        wordList.add(fanPaiConfig.getZi19());
+        wordList.add(fanPaiConfig.getZi20());
+        return wordList;
     }
 
     /**

@@ -2,6 +2,8 @@ package siyi.game.bo.gamelevel;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * description: 武关配置信息 <br>
  * date: 2020/3/1 14:26 <br>
@@ -55,4 +57,8 @@ public class ConfigWu {
     private String qiuNum;
     // 交换次数
     private String jiaohuanNum;
+    // 翻牌数
+    private String fanpainum;
+    // 翻牌文字集合
+    private List<String> wordList;
 }
