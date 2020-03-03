@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.GamelevelConfigMapper;
 import siyi.game.dao.QuTianziMapper;
+import siyi.game.dao.QuXuanzeMapper;
 import siyi.game.dao.entity.GamelevelConfig;
+import siyi.game.dao.entity.QuXuanze;
 import siyi.game.manager.excel.read.GameLevelConfigDataListener;
+import siyi.game.manager.excel.read.QuXuanzeDataListener;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.utill.Constants;
 
@@ -32,6 +35,8 @@ public class GameLevelController {
     private QuTianziMapper quTianziMapper;
     @Autowired
     GamelevelConfigMapper configMapper;
+    @Autowired
+    private QuXuanzeMapper quXuanzeMapper;
 
     @Autowired
     private GameLevelService gameLevelService;
@@ -62,8 +67,8 @@ public class GameLevelController {
     public void fileAnalysis(){
         try {
             String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
-            String filePath = fileDir + "biz_config" + File.separator + "guanqia.xlsx";
-            EasyExcel.read(filePath, GamelevelConfig.class, new GameLevelConfigDataListener(configMapper)).sheet().doRead();
+            String filePath = fileDir + "biz_config" + File.separator + "Q_xuanze.xlsx";
+            EasyExcel.read(filePath, QuXuanze.class, new QuXuanzeDataListener(quXuanzeMapper)).sheet().doRead();
         } catch (Exception e) {
             e.printStackTrace();
         }

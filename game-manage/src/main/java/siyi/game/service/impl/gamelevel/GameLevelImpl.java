@@ -21,22 +21,22 @@ public class GameLevelImpl implements GameLevelService {
     @Autowired
     QuTianziMapper quTianziMapper;
     @Autowired
+    QuXuanzeMapper quXuanzeMapper;
+    @Autowired
     GamelevelConfigMapper configMapper;
-
     @Autowired
     private DaBaConfigMapper daBaConfigMapper;
-
     @Autowired
     private DianJiConfigMapper dianJiConfigMapper;
-
     @Autowired
     private ZhuiLuoConfigMapper zhuiLuoConfigMapper;
-
     @Autowired
     private QiuConfigMapper qiuConfigMapper;
-
     @Autowired
     private FanPaiConfigMapper fanPaiConfigMapper;
+
+    private static String[] qType = {"tianzi", "duicuo", "xuanze"};
+    private static final String STATUS_VALID = "1";
 
     @Override
     public GameLevel queryGameLevelInfo(String userId) {
@@ -50,27 +50,51 @@ public class GameLevelImpl implements GameLevelService {
         gameLevel.setLevel("1");
         /* 读取关卡配置信息&做相关的配置处理 */
         GamelevelConfig gamelevelConfig = configMapper.selectByPrimaryKey("1");
-        gameLevel.setConfigWen(handleConfigInfo(gamelevelConfig));
-        /* 读取题目和答案 */
-        QuTianzi quTianzi = new QuTianzi();
-        quTianzi.setQuId("Q_tianzi_1");
-        quTianzi = quTianziMapper.selectOne(quTianzi);
-        /* 拆分题目和答案 */
-        QuestionTianzi question = new QuestionTianzi();
-        CandidateWordTianzi candidate = new CandidateWordTianzi();
-        AnswerTianzi answer = new AnswerTianzi();
-        // 题目
-        BeanCopier copier = BeanCopier.create(quTianzi.getClass(), question.getClass(), false);
-        copier.copy(quTianzi, question, null);
-        // 候选答案
-        BeanCopier copier2 = BeanCopier.create(quTianzi.getClass(), candidate.getClass(), false);
-        copier2.copy(quTianzi, candidate, null);
-        // 拷贝答案
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-        answer = mapper.map(candidate, AnswerTianzi.class);
-        gameLevel.setCandidate((CandidateWordTianzi) padWord(candidate)); // 补充候选矩阵
-        gameLevel.setQuestionTianzi(question);
-        gameLevel.setAnswerTianzi(answer);
+        ConfigWen configWen = handleWenConfigInfo(gamelevelConfig);
+        gameLevel.setConfigWen(configWen);
+        if (qType[0].equals(configWen.getQType())) {
+            /* 读取题目和答案 */
+            QuTianzi quTianzi = new QuTianzi();
+            quTianzi.setQuId("Q_tianzi_1");
+            quTianzi.setQuStatus(STATUS_VALID);
+            quTianzi = quTianziMapper.selectOne(quTianzi);
+            /* 读取题目和答案 */
+            QuestionTianzi question = new QuestionTianzi();
+            CandidateWordTianzi candidate = new CandidateWordTianzi();
+            AnswerTianzi answer = new AnswerTianzi();
+            // 题目
+            BeanCopier copier = BeanCopier.create(quTianzi.getClass(), question.getClass(), false);
+            copier.copy(quTianzi, question, null);
+            // 候选答案
+            BeanCopier copier2 = BeanCopier.create(quTianzi.getClass(), candidate.getClass(), false);
+            copier2.copy(quTianzi, candidate, null);
+            // 拷贝答案
+            Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+            answer = mapper.map(candidate, AnswerTianzi.class);
+            gameLevel.setCandidate((CandidateWordTianzi) padWord(candidate)); // 补充候选矩阵
+            gameLevel.setQuestionTianzi(question);
+            gameLevel.setAnswerTianzi(answer);
+        }
+        if (qType[1].equals(configWen.getQType())) {
+
+        }
+        if (qType[2].equals(configWen.getQType())) {
+            /* 读取题库配置 */
+            QuXuanze quXuanze = new QuXuanze();
+            quXuanze.setQuId("Q_xuanze_2");
+            quXuanze.setQuStatus(STATUS_VALID);
+            quXuanze = quXuanzeMapper.selectOne(quXuanze);
+            /* 提取题目和答案 */
+            QuestionXuanze question = new QuestionXuanze();
+            BeanCopier copier = BeanCopier.create(quXuanze.getClass(), question.getClass(), false);
+            copier.copy(quXuanze, question, null);
+
+            AnswerXuanze answerXuanze = new AnswerXuanze();
+            String[] answer = quXuanze.getAnswer().split(",");
+            answerXuanze.setAnswer(answer);
+            gameLevel.setAnswerXuanze(answerXuanze);
+            gameLevel.setQuestionXuanze(question);
+        }
         return gameLevel;
     }
 
@@ -732,9 +756,8 @@ public class GameLevelImpl implements GameLevelService {
         return configWu;
     }
 
-    public ConfigWen handleConfigInfo(GamelevelConfig config) {
+    public ConfigWen handleWenConfigInfo(GamelevelConfig config) {
         ConfigWen configWen = new ConfigWen();
-        String[] qType = {"tianzi", "duicuo", "xuanze"};
         /* 属性复制 */
         BeanCopier copier = BeanCopier.create(config.getClass(), configWen.getClass(), false);
         copier.copy(config, configWen, null);

@@ -6,27 +6,27 @@ import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import siyi.game.dao.QuTianziMapper;
-import siyi.game.dao.entity.QuTianzi;
+import siyi.game.dao.QuXuanzeMapper;
+import siyi.game.dao.entity.QuXuanze;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 填词模板读取类
+ * 选择题库模板读取类
  *
  * @author hzw
  */
 @Component
-public class QutianziDataListener extends AnalysisEventListener<QuTianzi> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(QutianziDataListener.class);
+public class QuXuanzeDataListener extends AnalysisEventListener<QuXuanze> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuXuanzeDataListener.class);
     private static final int BATCH_COUNT = 100;
-    List<QuTianzi> list = new ArrayList<QuTianzi>();
+    List<QuXuanze> list = new ArrayList<QuXuanze>();
 
-    private QuTianziMapper quTianziMapper;
+    private QuXuanzeMapper quXuanzeMapper;
 
-    public QutianziDataListener(QuTianziMapper quTianziMapper) {
-        this.quTianziMapper = quTianziMapper;
+    public QuXuanzeDataListener(QuXuanzeMapper quXuanzeMapper) {
+        this.quXuanzeMapper = quXuanzeMapper;
     }
 
     /**
@@ -37,7 +37,7 @@ public class QutianziDataListener extends AnalysisEventListener<QuTianzi> {
      * @param context
      */
     @Override
-    public void invoke(QuTianzi data, AnalysisContext context) {
+    public void invoke(QuXuanze data, AnalysisContext context) {
         LOGGER.info("解析到一条数据:{}", JSON.toJSONString(data));
         list.add(data);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
@@ -65,7 +65,7 @@ public class QutianziDataListener extends AnalysisEventListener<QuTianzi> {
      */
     private void saveData() {
         LOGGER.info("{}条数据，开始存储数据库！", list.size());
-        list.forEach(quTianzi -> quTianziMapper.insert(quTianzi));
+        list.forEach(quXuanze -> quXuanzeMapper.insert(quXuanze));
         LOGGER.info("存储数据库成功！");
     }
 }

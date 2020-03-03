@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.QuXuanzeMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.QuXuanze">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="qu_id" jdbcType="VARCHAR" property="quId" />
+    <result column="qu_status" jdbcType="VARCHAR" property="quStatus" />
+    <result column="option1" jdbcType="VARCHAR" property="option1" />
+    <result column="option2" jdbcType="VARCHAR" property="option2" />
+    <result column="option3" jdbcType="VARCHAR" property="option3" />
+    <result column="option4" jdbcType="VARCHAR" property="option4" />
+    <result column="option5" jdbcType="VARCHAR" property="option5" />
+    <result column="option6" jdbcType="VARCHAR" property="option6" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="tips" jdbcType="VARCHAR" property="tips" />
+    <result column="REVISION" jdbcType="INTEGER" property="revision" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+</mapper>

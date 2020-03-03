@@ -1,7 +1,6 @@
 package siyi.game.bo.gamelevel;
 
 import lombok.Data;
-import siyi.game.dao.entity.GamelevelConfig;
 
 /**
  * 关卡业务对象
@@ -21,6 +20,10 @@ public class GameLevel {
     private AnswerTianzi answerTianzi;
     // 文关配置信息
     private ConfigWen configWen;
+    // 选择关卡的题目
+    private QuestionXuanze questionXuanze;
+    // 选择关卡的答案
+    private AnswerXuanze answerXuanze;
 
     // 武关配置信息
     private ConfigWu configWu;
