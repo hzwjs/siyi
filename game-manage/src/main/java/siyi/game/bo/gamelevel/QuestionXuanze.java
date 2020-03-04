@@ -38,8 +38,4 @@ public class QuestionXuanze {
      */
     private String option6;
 
-    /**
-     * 提示
-     */
-    private String tips;
 }
