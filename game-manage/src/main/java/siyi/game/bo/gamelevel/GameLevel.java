@@ -24,6 +24,8 @@ public class GameLevel {
     private QuestionXuanze questionXuanze;
     // 选择关卡的答案
     private AnswerXuanze answerXuanze;
+    // 选择关卡的提示
+    private String tips ;
 
     // 武关配置信息
     private ConfigWu configWu;

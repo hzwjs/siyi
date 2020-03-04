@@ -91,9 +91,11 @@ public class GameLevelImpl implements GameLevelService {
 
             AnswerXuanze answerXuanze = new AnswerXuanze();
             String[] answer = quXuanze.getAnswer().split(",");
+
             answerXuanze.setAnswer(answer);
             gameLevel.setAnswerXuanze(answerXuanze);
             gameLevel.setQuestionXuanze(question);
+            gameLevel.setTips(quXuanze.getTips());
         }
         return gameLevel;
     }
