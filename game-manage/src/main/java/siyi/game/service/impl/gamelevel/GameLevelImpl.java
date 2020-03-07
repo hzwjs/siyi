@@ -106,8 +106,8 @@ public class GameLevelImpl implements GameLevelService {
         Map<String, String> weightLevel = new HashMap<>();
         weightLevel.put("daba", "0");
         weightLevel.put("dianji", "0");
-        weightLevel.put("fanpai", "0");
-        weightLevel.put("qiu", "100");
+        weightLevel.put("fanpai", "100");
+        weightLevel.put("qiu", "0");
         weightLevel.put("zhuiluo", "0");
         // 根据权重获取最终命中的武关关卡类型
         ConfigWu configWu = selectWuLevelByWeight(weightLevel);
