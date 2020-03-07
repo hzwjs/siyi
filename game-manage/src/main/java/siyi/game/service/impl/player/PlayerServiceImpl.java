@@ -49,4 +49,11 @@ public class PlayerServiceImpl implements PlayerService {
     public long selectCountByGameCode(String gameCode) {
         return playerMapper.selectCountByGameCode(gameCode);
     }
+
+    @Override
+    public Player selectByPlatFormId(String platformId) {
+        Player player = new Player();
+        player.setPlatformId(platformId);
+        return playerMapper.selectOne(player);
+    }
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import siyi.game.dao.LoginLogMapper;
+import siyi.game.dao.entity.LoginLog;
 import siyi.game.dao.model.LoginLogInfo;
 import siyi.game.service.loginLog.LoginLogService;
 
@@ -25,5 +26,10 @@ public class LoginLogServiceImpl implements LoginLogService {
     public List<LoginLogInfo> getLoginLogPageInfo(String playerId, String playerName, String gameCode, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return loginLogMapper.getLoginLogPageInfo(playerId, playerName, gameCode);
+    }
+
+    @Override
+    public void insertSelective(LoginLog loginLog) {
+        loginLogMapper.insertSelective(loginLog);
     }
 }

@@ -59,6 +59,12 @@ public class Player implements Serializable {
     @Column(name = "game_code")
     private String gameCode;
 
+    /**
+     * 平台ID
+     */
+    @Column(name = " platform_id")
+    private String platformId;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -221,5 +227,21 @@ public class Player implements Serializable {
      */
     public void setGameCode(String gameCode) {
         this.gameCode = gameCode == null ? null : gameCode.trim();
+    }
+
+    /**
+     * 获取平台ID
+     */
+    public String getPlatformId() {
+        return platformId;
+    }
+
+    /**
+     * 设置平台ID
+     *
+     * @param platformId 平台ID
+     */
+    public void setPlatformId(String platformId) {
+        this.platformId = platformId;
     }
 }

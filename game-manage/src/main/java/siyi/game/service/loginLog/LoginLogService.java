@@ -1,5 +1,6 @@
 package siyi.game.service.loginLog;
 
+import siyi.game.dao.entity.LoginLog;
 import siyi.game.dao.model.LoginLogInfo;
 
 import java.util.List;
@@ -26,4 +27,15 @@ public interface LoginLogService {
      * @return java.util.List<siyi.game.dao.model.LoginLogInfo>
      */
     List<LoginLogInfo> getLoginLogPageInfo(String playerId, String playerName, String gameCode, int pageNum, int pageSize);
+
+    /**
+     * description: 插入登录信息数据 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/7 22:38 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param loginLog
+     * @return void
+     */
+    void insertSelective(LoginLog loginLog);
 }

@@ -3,7 +3,9 @@ package siyi.game.utill;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -98,5 +100,46 @@ public class RandomUtil {
             resourceList.remove(j);
         }
         return listRandom;
+    }
+
+    /**
+     * 动态生成16位不重复随机数
+     *
+     * @return
+     */
+    public synchronized static String generate16() {
+        StringBuffer stringBuffer = new StringBuffer();
+        String date = getDateyyyyMMddNone();
+        String seconds = getDateHHmmssNone();
+        stringBuffer.append(date).append(generate2()).append(seconds);
+        return stringBuffer.toString();
+    }
+
+    private static String getDateyyyyMMddNone() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String fd = sdf.format(date);
+        return fd;
+    }
+
+    private static String getDateHHmmssNone() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+        String fd = sdf.format(date);
+        return fd;
+    }
+
+    /**
+     * 随机创建2位ID
+     *
+     * @return String 2位随机数ID
+     */
+    private synchronized static String generate2() {
+        Random rad = new Random();
+        String result = rad.nextInt(100) + "";
+        if (result.length() == 1) {
+            result = "0" + result;
+        }
+        return result;
     }
 }

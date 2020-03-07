@@ -4,11 +4,15 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.Game;
+import siyi.game.dao.entity.LoginLog;
 import siyi.game.dao.entity.Player;
 import siyi.game.service.game.GameService;
+import siyi.game.service.loginLog.LoginLogService;
 import siyi.game.service.player.PlayerService;
+import siyi.game.utill.RandomUtil;
 import siyi.game.utill.UUIDUtil;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,19 +33,36 @@ public class PlayerController extends BaseController {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private LoginLogService loginLogService;
+
     @PostMapping("login")
     public Map<String, Object> login(@RequestBody Player player) {
         Map<String, Object> resultMap = new HashMap<>();
-        Player findPlayer = playerService.selectByPlayerId(player.getPlayerId());
+        Player findPlayer = playerService.selectByPlatFormId(player.getPlatformId());
         if (findPlayer == null) {
+            // 若没有玩家信息，则新增玩家
+            // 生成玩家编号
+            String playerId = RandomUtil.generate16();
+            player.setPlayerId(playerId);
             playerService.insertSelective(player);
         }
-        findPlayer = playerService.selectByPlayerId(player.getPlayerId());
-        getSuccessResult(resultMap);
+        // 查询最新玩家信息
+        findPlayer = playerService.selectByPlatFormId(player.getPlatformId());
+        // 设置登录ID，通过该值判断是哪一次登录
         String uuid32 = UUIDUtil.getUUID32();
+        // 插入玩家登录数据
+        LoginLog loginLog = new LoginLog();
+        loginLog.setGameCode(player.getGameCode());
+        loginLog.setOpenId(uuid32);
+        loginLog.setPlayerId(findPlayer.getPlayerId());
+        loginLog.setLoginTime(new Date());
+        loginLogService.insertSelective(loginLog);
+        getSuccessResult(resultMap);
+        // 返回数据组装
         resultMap.put("player", findPlayer);
         resultMap.put("openId", uuid32);
-        // TODO 插入玩家登录数据
+
         return resultMap;
     }
 

@@ -69,4 +69,15 @@ public interface PlayerService {
      * @return long
      */
     long selectCountByGameCode(String gameCode);
+
+    /**
+     * description: 根据平台ID查询玩家信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/7 22:27 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param platformId
+     * @return siyi.game.dao.entity.Player
+     */
+    Player selectByPlatFormId(String platformId);
 }
