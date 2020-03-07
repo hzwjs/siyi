@@ -7,16 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import siyi.game.bo.gamelevel.GameLevel;
-import siyi.game.dao.DuiCuoConfigMapper;
-import siyi.game.dao.GamelevelConfigMapper;
-import siyi.game.dao.QuTianziMapper;
-import siyi.game.dao.entity.DuiCuoConfig;
-import siyi.game.dao.entity.GamelevelConfig;
-import siyi.game.manager.excel.read.DuiCuoConfigDataListener;
-import siyi.game.manager.excel.read.GameLevelConfigDataListener;
-import siyi.game.service.gamelevel.GameLevelService;
-import siyi.game.utill.Constants;
+import siyi.game.dao.QuDuicuoMapper;
+import siyi.game.dao.entity.QuDuicuo;
+import siyi.game.manager.excel.read.QuDuicuoDataListener;
 
 import java.io.File;
 
@@ -33,7 +26,7 @@ public class DuiCuoController {
 
 
     @Autowired
-    DuiCuoConfigMapper configMapper;
+    QuDuicuoMapper quDuicuoMapper;
 
     @RequestMapping(value = "fileAnalysis")
     @ResponseBody
@@ -41,7 +34,7 @@ public class DuiCuoController {
         try {
             String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
             String filePath = fileDir + "biz_config" + File.separator + "Q_duicuo.xlsx";
-            EasyExcel.read(filePath, DuiCuoConfig.class, new DuiCuoConfigDataListener(configMapper)).sheet().doRead();
+            EasyExcel.read(filePath, QuDuicuo.class, new QuDuicuoDataListener(quDuicuoMapper)).sheet().doRead();
         } catch (Exception e) {
             e.printStackTrace();
         }

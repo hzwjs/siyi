@@ -1,14 +1,22 @@
 package siyi.game.dao.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
-@Table(name = "tb_q_duicuo_config")
-public class DuiCuoConfig implements Serializable {
+@Table(name = "tb_qu_duicuo")
+@Data
+public class QuDuicuo implements Serializable {
+    @Id
+    @Column(name = "qu_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private String quId;
 
-    private String onoff;
+    @Column(name = "qu_status")
+    private String quStatus;
+
+    private String point0;
 
     private String point1;
 
@@ -184,6 +192,8 @@ public class DuiCuoConfig implements Serializable {
 
     private String point87;
 
+    private String point88;
+
     private String point89;
 
     private String point90;
@@ -206,40 +216,50 @@ public class DuiCuoConfig implements Serializable {
 
     private String point99;
 
-    private String point100;
-
-    private String point101;
-
-    private String point103;
+    private String answer;
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * @return id
+     * @return qu_id
      */
-    public String getId() {
-        return id;
+    public String getQuId() {
+        return quId;
     }
 
     /**
-     * @param id
+     * @param quId
      */
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setQuId(String quId) {
+        this.quId = quId == null ? null : quId.trim();
     }
 
     /**
-     * @return onoff
+     * @return qu_status
      */
-    public String getOnoff() {
-        return onoff;
+    public String getQuStatus() {
+        return quStatus;
     }
 
     /**
-     * @param onoff
+     * @param quStatus
      */
-    public void setOnoff(String onoff) {
-        this.onoff = onoff == null ? null : onoff.trim();
+    public void setQuStatus(String quStatus) {
+        this.quStatus = quStatus == null ? null : quStatus.trim();
+    }
+
+    /**
+     * @return point0
+     */
+    public String getPoint0() {
+        return point0;
+    }
+
+    /**
+     * @param point0
+     */
+    public void setPoint0(String point0) {
+        this.point0 = point0 == null ? null : point0.trim();
     }
 
     /**
@@ -1461,6 +1481,20 @@ public class DuiCuoConfig implements Serializable {
     }
 
     /**
+     * @return point88
+     */
+    public String getPoint88() {
+        return point88;
+    }
+
+    /**
+     * @param point88
+     */
+    public void setPoint88(String point88) {
+        this.point88 = point88 == null ? null : point88.trim();
+    }
+
+    /**
      * @return point89
      */
     public String getPoint89() {
@@ -1615,44 +1649,16 @@ public class DuiCuoConfig implements Serializable {
     }
 
     /**
-     * @return point100
+     * @return answer
      */
-    public String getPoint100() {
-        return point100;
+    public String getAnswer() {
+        return answer;
     }
 
     /**
-     * @param point100
+     * @param answer
      */
-    public void setPoint100(String point100) {
-        this.point100 = point100 == null ? null : point100.trim();
-    }
-
-    /**
-     * @return point101
-     */
-    public String getPoint101() {
-        return point101;
-    }
-
-    /**
-     * @param point101
-     */
-    public void setPoint101(String point101) {
-        this.point101 = point101 == null ? null : point101.trim();
-    }
-
-    /**
-     * @return point103
-     */
-    public String getPoint103() {
-        return point103;
-    }
-
-    /**
-     * @param point103
-     */
-    public void setPoint103(String point103) {
-        this.point103 = point103 == null ? null : point103.trim();
+    public void setAnswer(String answer) {
+        this.answer = answer == null ? null : answer.trim();
     }
 }

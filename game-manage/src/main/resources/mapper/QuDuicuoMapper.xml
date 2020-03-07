@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="siyi.game.dao.DuiCuoConfigMapper">
-  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.DuiCuoConfig">
+<mapper namespace="siyi.game.dao.QuDuicuoMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.QuDuicuo">
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="id" jdbcType="VARCHAR" property="id" />
-    <result column="onoff" jdbcType="VARCHAR" property="onoff" />
+    <id column="qu_id" jdbcType="VARCHAR" property="quId" />
+    <result column="qu_status" jdbcType="VARCHAR" property="quStatus" />
+    <result column="point0" jdbcType="VARCHAR" property="point0" />
     <result column="point1" jdbcType="VARCHAR" property="point1" />
     <result column="point2" jdbcType="VARCHAR" property="point2" />
     <result column="point3" jdbcType="VARCHAR" property="point3" />
@@ -94,6 +95,7 @@
     <result column="point85" jdbcType="VARCHAR" property="point85" />
     <result column="point86" jdbcType="VARCHAR" property="point86" />
     <result column="point87" jdbcType="VARCHAR" property="point87" />
+    <result column="point88" jdbcType="VARCHAR" property="point88" />
     <result column="point89" jdbcType="VARCHAR" property="point89" />
     <result column="point90" jdbcType="VARCHAR" property="point90" />
     <result column="point91" jdbcType="VARCHAR" property="point91" />
@@ -105,8 +107,6 @@
     <result column="point97" jdbcType="VARCHAR" property="point97" />
     <result column="point98" jdbcType="VARCHAR" property="point98" />
     <result column="point99" jdbcType="VARCHAR" property="point99" />
-    <result column="point100" jdbcType="VARCHAR" property="point100" />
-    <result column="point101" jdbcType="VARCHAR" property="point101" />
-    <result column="point103" jdbcType="VARCHAR" property="point103" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
   </resultMap>
 </mapper>
