@@ -26,6 +26,10 @@ public class GameLevel {
     private AnswerXuanze answerXuanze;
     // 选择关卡的提示
     private String tips ;
+    // 对错关卡题目
+    private QuestionDuicuo questionDuicuo;
+    // 对错关卡答案
+    private String answerDuicuo;
 
     // 武关配置信息
     private ConfigWu configWu;

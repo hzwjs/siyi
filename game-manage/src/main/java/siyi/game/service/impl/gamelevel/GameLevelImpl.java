@@ -23,6 +23,8 @@ public class GameLevelImpl implements GameLevelService {
     @Autowired
     QuXuanzeMapper quXuanzeMapper;
     @Autowired
+    QuDuicuoMapper quDuicuoMapper;
+    @Autowired
     GamelevelConfigMapper configMapper;
     @Autowired
     private DaBaConfigMapper daBaConfigMapper;
@@ -76,6 +78,17 @@ public class GameLevelImpl implements GameLevelService {
             gameLevel.setAnswerTianzi(answer);
         }
         if (qType[1].equals(configWen.getQType())) {
+            QuDuicuo quDuicuo = new QuDuicuo();
+            quDuicuo.setQuId("Q_duicuo_1");
+            quDuicuo.setQuStatus(STATUS_VALID);
+            quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
+            /* 提取题目和答案 */
+            QuestionDuicuo question = new QuestionDuicuo();
+            BeanCopier copier = BeanCopier.create(quDuicuo.getClass(), question.getClass(), false);
+            copier.copy(quDuicuo, question, null);
+            String answer = quDuicuo.getAnswer();
+            gameLevel.setQuestionDuicuo(question);
+            gameLevel.setAnswerDuicuo(answer);
 
         }
         if (qType[2].equals(configWen.getQType())) {
