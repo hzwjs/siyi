@@ -114,16 +114,10 @@ public class GameLevelImpl implements GameLevelService {
     }
 
     @Override
-    public GameLevel queryWuGameLevelInfo() {
-        // 获取武关关卡的权重配置
-        Map<String, String> weightLevel = new HashMap<>();
-        weightLevel.put("daba", "0");
-        weightLevel.put("dianji", "0");
-        weightLevel.put("fanpai", "100");
-        weightLevel.put("qiu", "0");
-        weightLevel.put("zhuiluo", "0");
+    public GameLevel queryWuGameLevelInfo(String qType) {
         // 根据权重获取最终命中的武关关卡类型
-        ConfigWu configWu = selectWuLevelByWeight(weightLevel);
+        ConfigWu configWu = new ConfigWu();
+        configWu.setLevelType(qType);
         // 根据关卡类型获取对应关卡的配置信息
         if ("daba".equals(configWu.getLevelType())) {
             // 打靶类型

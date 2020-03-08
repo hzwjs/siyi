@@ -22,5 +22,5 @@ public interface GameLevelService {
      * @param
      * @return siyi.game.bo.gamelevel.GameLevel
      */
-    GameLevel queryWuGameLevelInfo();
+    GameLevel queryWuGameLevelInfo(String qType);
 }
