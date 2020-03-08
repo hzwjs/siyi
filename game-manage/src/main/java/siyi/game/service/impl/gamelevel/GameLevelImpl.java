@@ -245,7 +245,10 @@ public class GameLevelImpl implements GameLevelService {
         String doubleRate = zhuiLuoConfig.getDoubleRate();
         boolean isDouble = RandomUtil.isHit(doubleRate);
         configWu.setDouble(isDouble);
+        if (isDouble) {
+            // 判断是双倍、三倍还是四倍
 
+        }
         String time = "";
         String jiangliTime = "";
         if ("rule1".equals(rule)) {

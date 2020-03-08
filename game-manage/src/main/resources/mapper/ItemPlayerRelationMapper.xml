@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.ItemPlayerRelationMapper">
+    <resultMap id="BaseResultMap" type="siyi.game.dao.entity.ItemPlayerRelation">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="item_no" jdbcType="VARCHAR" property="itemNo"/>
+        <result column="player_id" jdbcType="VARCHAR" property="playerId"/>
+        <result column="game_code" jdbcType="VARCHAR" property="gameCode"/>
+        <result column="quantity" jdbcType="VARCHAR" property="quantity"/>
+    </resultMap>
+
+    <select id="selectByPlayerIdAndItemNoList" resultMap="BaseResultMap">
+        SELECT
+        id, player_id, item_no, quantity, game_code
+        FROM
+        tb_item_player_relation
+        <where>
+            <foreach collection="itemPlayerRelations" item="itemRelation">
+                or (player_id = #{itemRelation.playerID} AND item_no = #{itemRelation.itemNo})
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="insertListSelective">
+        insert into tb_item_player_relation(
+        item_no,
+        player_id,
+        game_code,
+        quantity)
+        values
+        <foreach collection="itemPlayerRelations" item="relation" separator=",">
+            (#{relation.itemNo},
+            #{relation.playerId},
+            #{relation.gameCode},
+            #{relation.quantity})
+        </foreach>
+    </insert>
+
+    <update id="updateQuantityListById">
+        <foreach collection="itemPlayerRelations" item="item" index="index" open="" close="" separator=";">
+            update tb_item_player_relation
+            <set>
+                <if test="item.standardFromUuid != null">
+                    quantity = #{item.quantity,jdbcType=VARCHAR},
+                </if>
+            </set>
+            where id = #{item.id,jdbcType=BIGINT}
+        </foreach>
+
+    </update>
+</mapper>

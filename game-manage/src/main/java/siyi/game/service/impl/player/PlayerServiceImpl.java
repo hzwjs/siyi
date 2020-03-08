@@ -56,4 +56,9 @@ public class PlayerServiceImpl implements PlayerService {
         player.setPlatformId(platformId);
         return playerMapper.selectOne(player);
     }
+
+    @Override
+    public void updateByIdSelective(Player findPlayer) {
+        playerMapper.updateByPrimaryKeySelective(findPlayer);
+    }
 }

@@ -80,4 +80,15 @@ public interface PlayerService {
      * @return siyi.game.dao.entity.Player
      */
     Player selectByPlatFormId(String platformId);
+
+    /**
+     * description: 根据ID更新玩家信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/8 15:51 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param findPlayer
+     * @return void
+     */
+    void updateByIdSelective(Player findPlayer);
 }

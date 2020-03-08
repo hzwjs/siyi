@@ -18,9 +18,6 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
 
         <!--jdbc driver-->
-<!--        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/baoer-test"-->
-<!--                        userId="root" password="hzw138144"/>-->
-
         <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.52.201.42:3306/scf"
                         userId="scf" password="scfisc"/>
 
@@ -43,8 +40,8 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_qu_duicuo" domainObjectName="QuDuicuo">
-            <generatedKey column="qu_id" sqlStatement="Mysql" identity="true"/>
+        <table tableName="tb_q_xuanze_config" domainObjectName="XuanZeConfig">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>

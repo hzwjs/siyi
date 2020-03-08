@@ -244,4 +244,20 @@ public class Player implements Serializable {
     public void setPlatformId(String platformId) {
         this.platformId = platformId;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + id +
+                ", playerName='" + playerName + '\'' +
+                ", playerId='" + playerId + '\'' +
+                ", experience='" + experience + '\'' +
+                ", gold='" + gold + '\'' +
+                ", playerLevel='" + playerLevel + '\'' +
+                ", gameLevel='" + gameLevel + '\'' +
+                ", playerHp='" + playerHp + '\'' +
+                ", gameCode='" + gameCode + '\'' +
+                ", platformId='" + platformId + '\'' +
+                '}';
+    }
 }
