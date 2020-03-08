@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,13 +18,16 @@ import siyi.game.dao.entity.*;
 import siyi.game.manager.excel.read.GameLevelConfigDataListener;
 import siyi.game.manager.excel.read.QuXuanzeDataListener;
 import siyi.game.service.gamelevel.GameLevelService;
+import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.utill.Constants;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +56,10 @@ public class GameLevelController {
 
     @Autowired
     private ItemPlayerRelationService itemPlayerRelationService;
+
+    @Autowired
+    private LevelUpService levelUpService;
+
 
     @RequestMapping(value = "queryGameLevelInfo")
     @ResponseBody
@@ -143,6 +151,51 @@ public class GameLevelController {
             logger.info("获取最后已有道具信息：{}", existRelations.toString());
             itemPlayerRelationService.updateQuantityListById(existRelations);
             logger.info("更新结束");
+        }
+    }
+
+    /**
+     * description: 兑换称号 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/8 23:39 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param
+     * @return void
+     */
+    @GetMapping("submitDesignation")
+    @ResponseBody
+    public Map<String, Object> submitDesignation(String playerId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Player player = playerService.selectByPlayerId(playerId);
+        String playerLevel = player.getPlayerLevel();
+        String experience = player.getExperience();
+        Integer currentExpInt = Integer.valueOf(experience);
+        Integer currentLevelInt = Integer.valueOf(playerLevel);
+        if (currentLevelInt >= 10) {
+            int nextLevel = currentLevelInt + 1;
+            LevelUpConfig levelUpConfig = levelUpService.selectByLevel(String.valueOf(nextLevel));
+            String levelUpExpStr = levelUpConfig.getExp();
+            Integer levelUpExpInt = Integer.valueOf(levelUpExpStr);
+            if (currentExpInt <= levelUpExpInt) {
+                resultMap.put("resCode", "000001");
+                resultMap.put("resMsg", "称号兑换失败，当前玩家经验不足");
+                return resultMap;
+            }
+            // 开始更新玩家数据，获取剩余经验
+            int surplusExpInt = currentLevelInt - currentExpInt;
+            player.setExperience(String.valueOf(surplusExpInt));
+            player.setPlayerLevel(String.valueOf(nextLevel));
+            playerService.updateByIdSelective(player);
+            resultMap.put("resCode", "000000");
+            resultMap.put("resMsg", "称号兑换成功");
+            resultMap.put("player", player);
+            resultMap.put("levelUp", levelUpConfig);
+            return resultMap;
+        } else {
+            resultMap.put("resCode", "000010");
+            resultMap.put("resMsg", "当前已是最高称号");
+            return resultMap;
         }
     }
 }

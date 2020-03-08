@@ -2,9 +2,11 @@ package siyi.game.service.impl.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import siyi.game.dao.ItemPlayerRelationMapper;
 import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.service.item.ItemPlayerRelationService;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -33,5 +35,19 @@ public class ItemPlayerRelationServiceImpl implements ItemPlayerRelationService 
     @Override
     public void updateQuantityListById(List<ItemPlayerRelation> existRelations) {
         itemPlayerRelationMapper.updateQuantityListById(existRelations);
+    }
+
+    @Override
+    public List<ItemPlayerRelation> selectByPlayerIdAndGameCode(String playerId, String gameCode) {
+        Example example = new Example(ItemPlayerRelation.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (!StringUtils.isEmpty(playerId)) {
+            criteria.andEqualTo("playerId", playerId);
+        }
+        if (!StringUtils.isEmpty(gameCode)) {
+            criteria.andEqualTo("gameCode", gameCode);
+        }
+
+        return itemPlayerRelationMapper.selectByExample(example);
     }
 }

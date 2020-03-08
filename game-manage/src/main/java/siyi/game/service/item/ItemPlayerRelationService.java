@@ -44,4 +44,16 @@ public interface ItemPlayerRelationService {
      * @return void
      */
     void updateQuantityListById(List<ItemPlayerRelation> existRelations);
+
+    /**
+     * description: 根据玩家ID与游戏编码查询道具关联信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/9 0:08 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param playerId
+     * @param gameCode
+     * @return java.util.List<siyi.game.dao.entity.ItemPlayerRelation>
+     */
+    List<ItemPlayerRelation> selectByPlayerIdAndGameCode(String playerId, String gameCode);
 }

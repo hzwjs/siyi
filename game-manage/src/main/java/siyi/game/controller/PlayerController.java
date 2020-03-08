@@ -2,20 +2,19 @@ package siyi.game.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import siyi.game.dao.entity.Game;
-import siyi.game.dao.entity.LoginLog;
-import siyi.game.dao.entity.Player;
+import siyi.game.dao.entity.*;
 import siyi.game.service.game.GameService;
+import siyi.game.service.gamelevel.LevelUpService;
+import siyi.game.service.item.ItemConfigService;
+import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.loginLog.LoginLogService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.utill.RandomUtil;
 import siyi.game.utill.UUIDUtil;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * description: PlayerController <br>
@@ -36,6 +35,15 @@ public class PlayerController extends BaseController {
     @Autowired
     private LoginLogService loginLogService;
 
+    @Autowired
+    private ItemPlayerRelationService itemPlayerRelationService;
+
+    @Autowired
+    private ItemConfigService itemConfigService;
+
+    @Autowired
+    private LevelUpService levelUpService;
+
     @PostMapping("login")
     public Map<String, Object> login(@RequestBody Player player) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -51,6 +59,19 @@ public class PlayerController extends BaseController {
         findPlayer = playerService.selectByPlatFormId(player.getPlatformId());
         // 设置登录ID，通过该值判断是哪一次登录
         String uuid32 = UUIDUtil.getUUID32();
+        // 查询玩家道具信息
+        List<ItemPlayerRelation> relations = itemPlayerRelationService.selectByPlayerIdAndGameCode(player.getPlayerId(), player.getGameCode());
+        List<String> itemNoList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(relations)) {
+            for (ItemPlayerRelation relation : relations) {
+                itemNoList.add(relation.getItemNo());
+            }
+        }
+        List<ItemConfig> itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
+        // 查询玩家称号信息
+        String playerLevel = player.getPlayerLevel();
+        LevelUpConfig levelUpConfig = levelUpService.selectByLevel(playerLevel);
+
         // 插入玩家登录数据
         LoginLog loginLog = new LoginLog();
         loginLog.setGameCode(player.getGameCode());
@@ -62,6 +83,8 @@ public class PlayerController extends BaseController {
         // 返回数据组装
         resultMap.put("player", findPlayer);
         resultMap.put("openId", uuid32);
+        resultMap.put("itemList", itemConfigs);
+        resultMap.put("level", levelUpConfig);
 
         return resultMap;
     }
