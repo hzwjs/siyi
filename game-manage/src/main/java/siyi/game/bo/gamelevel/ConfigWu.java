@@ -61,4 +61,6 @@ public class ConfigWu {
     private String fanpainum;
     // 翻牌文字集合
     private List<String> wordList;
+    // 命中规则
+    private String hitRule;
 }

@@ -709,6 +709,7 @@ public class GameLevelImpl implements GameLevelService {
             time = daBaConfig.getTime1();
             // 奖励时间
             jiangliTime = daBaConfig.getJiangli1time();
+            configWu.setHitRule("rule1");
         } else if ("rule2".equals(rule)) {
             // 采用规则2
             // 出现道具数量
@@ -718,6 +719,7 @@ public class GameLevelImpl implements GameLevelService {
             time = daBaConfig.getTime2();
             // 奖励时间
             jiangliTime = daBaConfig.getJiangli2time();
+            configWu.setHitRule("rule2");
         }
 
         Double timeInt = Double.valueOf(time) * Integer.valueOf(baseNum);
@@ -727,6 +729,8 @@ public class GameLevelImpl implements GameLevelService {
         configWu.setTotalTime(String.valueOf(timeInt));
         // 奖励时间
         configWu.setJiangliTime(jiangliTime);
+
+        configWu.setBaseNum(baseNum);
     }
 
     private ConfigWu selectWuLevelByWeight(Map<String, String> weightLevel) {
