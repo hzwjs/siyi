@@ -21,7 +21,7 @@
   </resultMap>
   
   <select id="queryUserCurrentQuestion" parameterType="Map" resultMap="BaseResultMap">
-    select * from tb_user_question
+    select max(serie_id), t.* from tb_user_question t
     where user_id=#{userId} and question_type=#{questionType}  and status='0' order by serie_id desc
   </select>
 </mapper>

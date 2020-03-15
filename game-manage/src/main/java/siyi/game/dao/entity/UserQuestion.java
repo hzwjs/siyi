@@ -1,6 +1,7 @@
 package siyi.game.dao.entity;
 
 import lombok.Data;
+import tk.mybatis.mapper.annotation.Order;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +12,7 @@ public class UserQuestion implements Serializable {
     /**
      * 流水号
      */
+    @Order(value = "DESC")
     @Id
     @Column(name = "serie_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
