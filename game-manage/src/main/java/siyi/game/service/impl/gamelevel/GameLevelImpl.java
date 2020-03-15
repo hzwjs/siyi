@@ -1,15 +1,18 @@
 package siyi.game.service.impl.gamelevel;
 
+import com.alibaba.excel.util.DateUtils;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import net.sf.cglib.beans.BeanCopier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import siyi.game.bo.gamelevel.*;
 import siyi.game.dao.*;
 import siyi.game.dao.entity.*;
 import siyi.game.service.gamelevel.GameLevelService;
+import siyi.game.utill.DateUtil;
 import siyi.game.utill.RandomUtil;
 
 import java.lang.reflect.Field;
@@ -48,8 +51,9 @@ public class GameLevelImpl implements GameLevelService {
     }
 
     @Override
-    public GameLevel queryWenGameLevelInfo(String userId) {
+    public GameLevel queryWenGameLevelInfo(String userId, String preQType, String preQID, String preStatus) {
         GameLevel gameLevel = new GameLevel();
+
         /* 读取关卡配置信息&做相关的配置处理 */
         GamelevelConfig gamelevelConfig = configMapper.selectByPrimaryKey("1");
         ConfigWen configWen = handleWenConfigInfo(gamelevelConfig);
@@ -65,6 +69,27 @@ public class GameLevelImpl implements GameLevelService {
             nextID = questionID.substring(0, questionID.lastIndexOf("_")+1) + (Integer.parseInt(questionID.substring(questionID.lastIndexOf("_") + 1)) + 1);
         } else {
             nextID = "Q_" + qType + "_1";
+        }
+        /* 如果上一关信息不为空保存入库 */
+        UserQuestion userq = new UserQuestion();
+        userq.setUserId(userId);
+        userq.setQuestionType(preQType);
+        userq.setQuestionId(preQID);
+        userq.setStatus(preStatus);
+        userq.setUpdatedTime(new Date());
+        UserQuestion temp = userQuestionMapper.selectOne(userq);
+        if (temp == null) {
+            userq.setAnswerNum(1);
+            userQuestionMapper.insert(userq);
+        } else {
+            nextID = preQID;
+            userq.setAnswerNum(temp.getAnswerNum() + 1);
+            if ("0".equals(preStatus)) {
+                userq.setAnswerSuccessNum(temp.getAnswerSuccessNum() + 1);
+            } else {
+                userq.setAnswerFailNum(temp.getAnswerFailNum() + 1);
+            }
+            userQuestionMapper.updateByPrimaryKey(userq);
         }
         if (qTypes[0].equals(qType)) {
             /* 读取题目和答案 */

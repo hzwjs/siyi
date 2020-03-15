@@ -11,7 +11,7 @@ public interface GameLevelService {
 
     GameLevel queryGameLevelInfo(String userId);
 
-    GameLevel queryWenGameLevelInfo(String userId);
+    GameLevel queryWenGameLevelInfo(String userId, String preQType, String preQID, String preStatus);
 
     /**
      * description: 获取武关关卡信息 <br>

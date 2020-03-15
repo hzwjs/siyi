@@ -12,6 +12,8 @@ import lombok.Data;
 public class GameLevel {
     // 当前关卡的层级
     private String level;
+    // 题目编号
+    private String questionId;
     // 填字关卡题目
     private QuestionTianzi questionTianzi;
     // 填字关卡待选答案关卡
