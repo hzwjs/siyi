@@ -40,8 +40,8 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_q_xuanze_config" domainObjectName="XuanZeConfig">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        <table tableName="tb_user_question" domainObjectName="UserQuestion">
+            <generatedKey column="serie_id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>
