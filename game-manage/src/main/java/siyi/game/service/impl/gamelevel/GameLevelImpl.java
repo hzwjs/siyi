@@ -71,25 +71,27 @@ public class GameLevelImpl implements GameLevelService {
             nextID = "Q_" + qType + "_1";
         }
         /* 如果上一关信息不为空保存入库 */
-        UserQuestion userq = new UserQuestion();
-        userq.setUserId(userId);
-        userq.setQuestionType(preQType);
-        userq.setQuestionId(preQID);
-        userq.setStatus(preStatus);
-        userq.setUpdatedTime(new Date());
-        UserQuestion temp = userQuestionMapper.selectOne(userq);
-        if (temp == null) {
-            userq.setAnswerNum(1);
-            userQuestionMapper.insert(userq);
-        } else {
-            nextID = preQID;
-            userq.setAnswerNum(temp.getAnswerNum() + 1);
-            if ("0".equals(preStatus)) {
-                userq.setAnswerSuccessNum(temp.getAnswerSuccessNum() + 1);
+        if (!StringUtils.isEmpty(preQID)){
+            UserQuestion userq = new UserQuestion();
+            userq.setUserId(userId);
+            userq.setQuestionType(preQType);
+            userq.setQuestionId(preQID);
+            userq.setStatus(preStatus);
+            userq.setUpdatedTime(new Date());
+            UserQuestion temp = userQuestionMapper.selectOne(userq);
+            if (temp == null) {
+                userq.setAnswerNum(1);
+                userQuestionMapper.insert(userq);
             } else {
-                userq.setAnswerFailNum(temp.getAnswerFailNum() + 1);
+                nextID = preQID;
+                userq.setAnswerNum(temp.getAnswerNum() + 1);
+                if ("0".equals(preStatus)) {
+                    userq.setAnswerSuccessNum(temp.getAnswerSuccessNum() + 1);
+                } else {
+                    userq.setAnswerFailNum(temp.getAnswerFailNum() + 1);
+                }
+                userQuestionMapper.updateByPrimaryKey(userq);
             }
-            userQuestionMapper.updateByPrimaryKey(userq);
         }
         if (qTypes[0].equals(qType)) {
             /* 读取题目和答案 */
@@ -118,6 +120,7 @@ public class GameLevelImpl implements GameLevelService {
             gameLevel.setCandidate((CandidateWordTianzi) padWord(candidate)); // 补充候选矩阵
             gameLevel.setQuestionTianzi(question);
             gameLevel.setAnswerTianzi(answer);
+            gameLevel.setQuestionId(quTianzi.getQuId());
         }
         if (qTypes[1].equals(qType)) {
             QuDuicuo quDuicuo = new QuDuicuo();
@@ -136,7 +139,7 @@ public class GameLevelImpl implements GameLevelService {
             String answer = quDuicuo.getAnswer();
             gameLevel.setQuestionDuicuo(question);
             gameLevel.setAnswerDuicuo(answer);
-
+            gameLevel.setQuestionId(quDuicuo.getQuId());
         }
         if (qTypes[2].equals(qType)) {
             /* 读取题库配置 */
@@ -153,14 +156,14 @@ public class GameLevelImpl implements GameLevelService {
             QuestionXuanze question = new QuestionXuanze();
             BeanCopier copier = BeanCopier.create(quXuanze.getClass(), question.getClass(), false);
             copier.copy(quXuanze, question, null);
-
             AnswerXuanze answerXuanze = new AnswerXuanze();
             String[] answer = quXuanze.getAnswer().split(",");
-
             answerXuanze.setAnswer(answer);
+
             gameLevel.setAnswerXuanze(answerXuanze);
             gameLevel.setQuestionXuanze(question);
             gameLevel.setTips(quXuanze.getTips());
+            gameLevel.setQuestionId(quXuanze.getQuId());
         }
         return gameLevel;
     }
