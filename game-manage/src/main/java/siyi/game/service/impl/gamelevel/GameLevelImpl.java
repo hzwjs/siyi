@@ -83,7 +83,7 @@ public class GameLevelImpl implements GameLevelService {
             List<UserQuestion> temp = userQuestionMapper.select(userq);
             userq.setStatus(preStatus);
             userq.setUpdatedTime(new Date());
-            if (temp == null) {
+            if (temp.size() == 0) {
                 userq.setAnswerNum(1);
                 userQuestionMapper.insert(userq);
             } else {
