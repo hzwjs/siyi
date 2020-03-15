@@ -80,19 +80,20 @@ public class GameLevelImpl implements GameLevelService {
             userq.setUserId(userId);
             userq.setQuestionType(preQType);
             userq.setQuestionId(preQID);
-            UserQuestion temp = userQuestionMapper.selectOne(userq);
+            List<UserQuestion> temp = userQuestionMapper.select(userq);
             userq.setStatus(preStatus);
             userq.setUpdatedTime(new Date());
             if (temp == null) {
                 userq.setAnswerNum(1);
                 userQuestionMapper.insert(userq);
             } else {
-                userq.setAnswerNum(temp.getAnswerNum() + 1);
+                UserQuestion tempUserQ = temp.get(0);
+                userq.setAnswerNum(tempUserQ.getAnswerNum() + 1);
                 if ("0".equals(preStatus)) {
-                    userq.setAnswerSuccessNum((temp.getAnswerSuccessNum()==null?0:temp.getAnswerSuccessNum()) + 1);
+                    userq.setAnswerSuccessNum((tempUserQ.getAnswerSuccessNum()==null?0:tempUserQ.getAnswerSuccessNum()) + 1);
                 } else {
                     nextID = preQID;
-                    userq.setAnswerFailNum((temp.getAnswerFailNum()==null?0:temp.getAnswerFailNum()) + 1);
+                    userq.setAnswerFailNum((tempUserQ.getAnswerFailNum()==null?0:tempUserQ.getAnswerFailNum()) + 1);
                 }
                 userQuestionMapper.updateByPrimaryKey(userq);
             }
