@@ -87,11 +87,11 @@ public class GameLevelImpl implements GameLevelService {
                 userq.setAnswerNum(1);
                 userQuestionMapper.insert(userq);
             } else {
-                nextID = preQID;
                 userq.setAnswerNum(temp.getAnswerNum() + 1);
                 if ("0".equals(preStatus)) {
                     userq.setAnswerSuccessNum((temp.getAnswerSuccessNum()==null?0:temp.getAnswerSuccessNum()) + 1);
                 } else {
+                    nextID = preQID;
                     userq.setAnswerFailNum((temp.getAnswerFailNum()==null?0:temp.getAnswerFailNum()) + 1);
                 }
                 userQuestionMapper.updateByPrimaryKey(userq);
@@ -121,7 +121,7 @@ public class GameLevelImpl implements GameLevelService {
             // 拷贝答案
             Mapper mapper = DozerBeanMapperBuilder.buildDefault();
             answer = mapper.map(candidate, AnswerTianzi.class);
-            gameLevel.setCandidate((CandidateWordTianzi) padWord(candidate)); // 补充候选矩阵
+            gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
             gameLevel.setQuestionTianzi(question);
             gameLevel.setAnswerTianzi(answer);
             configWen.setQuestionId(quTianzi.getQuId());
@@ -957,7 +957,7 @@ public class GameLevelImpl implements GameLevelService {
         for (int i = 0; i < fields.length; i++) {
             try {
                 fields[i].setAccessible(true);
-                if (fields[i].get(answer) != null && !"radom".equals(fields[i].get(answer).toString()))
+                if (fields[i].get(answer) != null && !"radom".equals(fields[i].get(answer).toString()) && !"null".equals(fields[i].get(answer).toString()))
                     notNUllCount++;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -976,6 +976,12 @@ public class GameLevelImpl implements GameLevelService {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+        }
+        if (notNUllCount < 10) {
+            CandidateWordTianzi10 answer10 = new CandidateWordTianzi10();
+            BeanCopier copier = BeanCopier.create(answer.getClass(), answer10.getClass(), false);
+            copier.copy(answer, answer10, null);
+            return answer10;
         }
         return answer;
     }
