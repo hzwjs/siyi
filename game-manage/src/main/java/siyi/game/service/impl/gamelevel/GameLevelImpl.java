@@ -80,8 +80,8 @@ public class GameLevelImpl implements GameLevelService {
             userq.setUserId(userId);
             userq.setQuestionType(preQType);
             userq.setQuestionId(preQID);
-            userq.setStatus(preStatus);
             UserQuestion temp = userQuestionMapper.selectOne(userq);
+            userq.setStatus(preStatus);
             userq.setUpdatedTime(new Date());
             if (temp == null) {
                 userq.setAnswerNum(1);
@@ -90,9 +90,9 @@ public class GameLevelImpl implements GameLevelService {
                 nextID = preQID;
                 userq.setAnswerNum(temp.getAnswerNum() + 1);
                 if ("0".equals(preStatus)) {
-                    userq.setAnswerSuccessNum(temp.getAnswerSuccessNum() + 1);
+                    userq.setAnswerSuccessNum((temp.getAnswerSuccessNum()==null?0:temp.getAnswerSuccessNum()) + 1);
                 } else {
-                    userq.setAnswerFailNum(temp.getAnswerFailNum() + 1);
+                    userq.setAnswerFailNum((temp.getAnswerFailNum()==null?0:temp.getAnswerFailNum()) + 1);
                 }
                 userQuestionMapper.updateByPrimaryKey(userq);
             }
