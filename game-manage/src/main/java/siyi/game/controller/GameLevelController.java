@@ -63,11 +63,11 @@ public class GameLevelController {
 
     @RequestMapping(value = "queryGameLevelInfo")
     @ResponseBody
-    public GameLevel queryGameLevelInfo(String gameLevelType, String qType) {
+    public GameLevel queryGameLevelInfo(String gameLevelType, String qType, String userId) {
         GameLevel gameLevel = new GameLevel();
         try {
             if (Constants.GAME_LEVEL_TYPE_WEN.equals(gameLevelType)) {
-                gameLevel = gameLevelService.queryWenGameLevelInfo();
+                gameLevel = gameLevelService.queryWenGameLevelInfo(userId);
             } else if (Constants.GAME_LEVEL_TYPE_WU.equals(gameLevelType)) {
                 gameLevel = gameLevelService.queryWuGameLevelInfo(qType);
             } else

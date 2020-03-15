@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.UserQuestionMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.UserQuestion">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="serie_id" jdbcType="INTEGER" property="serieId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="question_id" jdbcType="VARCHAR" property="questionId" />
+    <result column="question_type" jdbcType="VARCHAR" property="questionType" />
+    <result column="answer_num" jdbcType="INTEGER" property="answerNum" />
+    <result column="answer_success_num" jdbcType="INTEGER" property="answerSuccessNum" />
+    <result column="answer_fail_num" jdbcType="INTEGER" property="answerFailNum" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="REVISION" jdbcType="INTEGER" property="revision" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  
+  <select id="queryUserCurrentQuestion" parameterType="Map" resultMap="BaseResultMap">
+    select * from tb_user_question
+    where user_id=#{userId} and question_type=#{questionType}  and status='0' order by serie_id desc
+  </select>
+</mapper>

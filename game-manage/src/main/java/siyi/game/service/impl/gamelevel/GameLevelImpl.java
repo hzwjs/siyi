@@ -36,8 +36,10 @@ public class GameLevelImpl implements GameLevelService {
     private QiuConfigMapper qiuConfigMapper;
     @Autowired
     private FanPaiConfigMapper fanPaiConfigMapper;
+    @Autowired
+    private UserQuestionMapper userQuestionMapper;
 
-    private static String[] qType = {"tianzi", "duicuo", "xuanze"};
+    private static String[] qTypes = {"tianzi", "duicuo", "xuanze"};
     private static final String STATUS_VALID = "1";
 
     @Override
@@ -46,20 +48,35 @@ public class GameLevelImpl implements GameLevelService {
     }
 
     @Override
-    public GameLevel queryWenGameLevelInfo() {
+    public GameLevel queryWenGameLevelInfo(String userId) {
         GameLevel gameLevel = new GameLevel();
-        /* 查询当前关数 */
-        gameLevel.setLevel("1");
         /* 读取关卡配置信息&做相关的配置处理 */
         GamelevelConfig gamelevelConfig = configMapper.selectByPrimaryKey("1");
         ConfigWen configWen = handleWenConfigInfo(gamelevelConfig);
+        String qType = configWen.getQType();
         gameLevel.setConfigWen(configWen);
-        if (qType[0].equals(configWen.getQType())) {
+        /* 查询当前玩家的题型进度 */
+        Map<String, String> param = new HashMap<>();
+        param.put("userId", userId); param.put("questionType", qType);
+        UserQuestion userQuestion = userQuestionMapper.queryUserCurrentQuestion(param);
+        String nextID = "";
+        if (userQuestion != null) {
+            String questionID = userQuestion.getQuestionId();
+            nextID = questionID.substring(0, questionID.lastIndexOf("_")+1) + (Integer.parseInt(questionID.substring(questionID.lastIndexOf("_") + 1)) + 1);
+        } else {
+            nextID = "Q_" + qType + "_1";
+        }
+        if (qTypes[0].equals(qType)) {
             /* 读取题目和答案 */
             QuTianzi quTianzi = new QuTianzi();
-            quTianzi.setQuId("Q_tianzi_1");
+            quTianzi.setQuId(nextID);
             quTianzi.setQuStatus(STATUS_VALID);
             quTianzi = quTianziMapper.selectOne(quTianzi);
+            if (quTianzi == null) {
+                quTianzi.setQuId("Q_tianzi_1");
+                quTianzi.setQuStatus(STATUS_VALID);
+                quTianzi = quTianziMapper.selectOne(quTianzi);
+            }
             /* 读取题目和答案 */
             QuestionTianzi question = new QuestionTianzi();
             CandidateWordTianzi candidate = new CandidateWordTianzi();
@@ -77,11 +94,16 @@ public class GameLevelImpl implements GameLevelService {
             gameLevel.setQuestionTianzi(question);
             gameLevel.setAnswerTianzi(answer);
         }
-        if (qType[1].equals(configWen.getQType())) {
+        if (qTypes[1].equals(qType)) {
             QuDuicuo quDuicuo = new QuDuicuo();
-            quDuicuo.setQuId("Q_duicuo_1");
+            quDuicuo.setQuId(nextID);
             quDuicuo.setQuStatus(STATUS_VALID);
             quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
+            if (quDuicuo == null) {
+                quDuicuo.setQuId("Q_duicuo_1");
+                quDuicuo.setQuStatus(STATUS_VALID);
+                quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
+            }
             /* 提取题目和答案 */
             QuestionDuicuo question = new QuestionDuicuo();
             BeanCopier copier = BeanCopier.create(quDuicuo.getClass(), question.getClass(), false);
@@ -91,12 +113,17 @@ public class GameLevelImpl implements GameLevelService {
             gameLevel.setAnswerDuicuo(answer);
 
         }
-        if (qType[2].equals(configWen.getQType())) {
+        if (qTypes[2].equals(qType)) {
             /* 读取题库配置 */
             QuXuanze quXuanze = new QuXuanze();
-            quXuanze.setQuId("Q_xuanze_2");
+            quXuanze.setQuId(nextID);
             quXuanze.setQuStatus(STATUS_VALID);
             quXuanze = quXuanzeMapper.selectOne(quXuanze);
+            if (quXuanze == null) {
+                quXuanze.setQuId("Q_xuanze_1");
+                quXuanze.setQuStatus(STATUS_VALID);
+                quXuanze = quXuanzeMapper.selectOne(quXuanze);
+            }
             /* 提取题目和答案 */
             QuestionXuanze question = new QuestionXuanze();
             BeanCopier copier = BeanCopier.create(quXuanze.getClass(), question.getClass(), false);
@@ -776,9 +803,9 @@ public class GameLevelImpl implements GameLevelService {
         /* 选择题型 */
         List<Map<String, String>> weightList = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
-        map.put(qType[0], config.getQutionTianzi());
-        map.put(qType[1], config.getQutionDuicuo());
-        map.put(qType[2], config.getQutionXuanze());
+        map.put(qTypes[0], config.getQutionTianzi());
+        map.put(qTypes[1], config.getQutionDuicuo());
+        map.put(qTypes[2], config.getQutionXuanze());
         selectQuestionTypeByWeight(map, configWen);
         /* 关卡限时 */
         String time = config.getTime();
@@ -818,7 +845,7 @@ public class GameLevelImpl implements GameLevelService {
         int speedInt = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(speedArr[0]), Integer.parseInt(speedArr[1]));
         configWen.setSpeed(speedInt + "");
         /* 如果当前关卡题型为填字 */
-        if (qType[0].equals(configWen.getQType())) {
+        if (qTypes[0].equals(configWen.getQType())) {
             /* 是否有旋转效果 */
             String xzPercent = config.getXuanZhuanGaiLv();
             configWen.setXuanZhuan(RandomUtil.isHit(xzPercent));
@@ -832,7 +859,7 @@ public class GameLevelImpl implements GameLevelService {
             String tapPercent = config.getTapGaiLv();
             configWen.setTap(RandomUtil.isHit(tapPercent));
         }
-        if (qType[2].equals(configWen.getQType())) {
+        if (qTypes[2].equals(configWen.getQType())) {
             /* 是否有变黑效果 */
             String bh2Percent = config.getBianHeiGaiLv2();
             configWen.setBianHeiXuanze(RandomUtil.isHit(bh2Percent));
