@@ -4,6 +4,8 @@ import com.alibaba.excel.util.DateUtils;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import net.sf.cglib.beans.BeanCopier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -21,6 +23,7 @@ import java.util.*;
 
 @Service
 public class GameLevelImpl implements GameLevelService {
+    private final Logger log = LoggerFactory.getLogger(GameLevelImpl.class);
     @Autowired
     QuTianziMapper quTianziMapper;
     @Autowired
@@ -52,6 +55,7 @@ public class GameLevelImpl implements GameLevelService {
 
     @Override
     public GameLevel queryWenGameLevelInfo(String userId, String preQType, String preQID, String preStatus) {
+        log.info("=== userId:{}, preQType:{}, preQID:{}, preStatus:{}", userId, preQType, preQID, preStatus);
         GameLevel gameLevel = new GameLevel();
 
         /* 读取关卡配置信息&做相关的配置处理 */
@@ -120,7 +124,7 @@ public class GameLevelImpl implements GameLevelService {
             gameLevel.setCandidate((CandidateWordTianzi) padWord(candidate)); // 补充候选矩阵
             gameLevel.setQuestionTianzi(question);
             gameLevel.setAnswerTianzi(answer);
-            gameLevel.setQuestionId(quTianzi.getQuId());
+            configWen.setQuestionId(quTianzi.getQuId());
         }
         if (qTypes[1].equals(qType)) {
             QuDuicuo quDuicuo = new QuDuicuo();
@@ -139,7 +143,7 @@ public class GameLevelImpl implements GameLevelService {
             String answer = quDuicuo.getAnswer();
             gameLevel.setQuestionDuicuo(question);
             gameLevel.setAnswerDuicuo(answer);
-            gameLevel.setQuestionId(quDuicuo.getQuId());
+            configWen.setQuestionId(quDuicuo.getQuId());
         }
         if (qTypes[2].equals(qType)) {
             /* 读取题库配置 */
@@ -163,7 +167,7 @@ public class GameLevelImpl implements GameLevelService {
             gameLevel.setAnswerXuanze(answerXuanze);
             gameLevel.setQuestionXuanze(question);
             gameLevel.setTips(quXuanze.getTips());
-            gameLevel.setQuestionId(quXuanze.getQuId());
+            configWen.setQuestionId(quXuanze.getQuId());
         }
         return gameLevel;
     }

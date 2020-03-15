@@ -7,6 +7,8 @@ import lombok.Data;
  */
 @Data
 public class ConfigWen {
+    // 题目ID
+    private String questionId;
     // 题目类型
     private String qType;
     // 关卡限时
