@@ -81,8 +81,8 @@ public class GameLevelImpl implements GameLevelService {
             userq.setQuestionType(preQType);
             userq.setQuestionId(preQID);
             userq.setStatus(preStatus);
-            userq.setUpdatedTime(new Date());
             UserQuestion temp = userQuestionMapper.selectOne(userq);
+            userq.setUpdatedTime(new Date());
             if (temp == null) {
                 userq.setAnswerNum(1);
                 userQuestionMapper.insert(userq);
