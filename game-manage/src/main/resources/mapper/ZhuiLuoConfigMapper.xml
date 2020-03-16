@@ -21,13 +21,5 @@
     <result column="guize3quanzhong" jdbcType="VARCHAR" property="guize3quanzhong" />
     <result column="time3" jdbcType="VARCHAR" property="time3" />
     <result column="jiangli3time" jdbcType="VARCHAR" property="jiangli3time" />
-    <result column="gold" jdbcType="VARCHAR" property="gold" />
-    <result column="exp" jdbcType="VARCHAR" property="exp" />
-    <result column="zongtime" jdbcType="VARCHAR" property="zongtime" />
-    <result column="item" jdbcType="VARCHAR" property="item" />
-    <result column="itemnum" jdbcType="VARCHAR" property="itemnum" />
-    <result column="itemgailv" jdbcType="VARCHAR" property="itemgailv" />
-    <result column="double_rate" jdbcType="VARCHAR" property="doubleRate" />
-    <result column="guanggao" jdbcType="VARCHAR" property="guanggao" />
   </resultMap>
 </mapper>

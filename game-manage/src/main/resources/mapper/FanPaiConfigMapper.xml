@@ -9,14 +9,6 @@
     <result column="quanzhong" jdbcType="VARCHAR" property="quanzhong" />
     <result column="time" jdbcType="VARCHAR" property="time" />
     <result column="jianglitime" jdbcType="VARCHAR" property="jianglitime" />
-    <result column="gold" jdbcType="VARCHAR" property="gold" />
-    <result column="exp" jdbcType="VARCHAR" property="exp" />
-    <result column="zongtime" jdbcType="VARCHAR" property="zongtime" />
-    <result column="item" jdbcType="VARCHAR" property="item" />
-    <result column="itemnum" jdbcType="VARCHAR" property="itemnum" />
-    <result column="itemgailv" jdbcType="VARCHAR" property="itemgailv" />
-    <result column="double_rate" jdbcType="VARCHAR" property="doubleRate" />
-    <result column="guanggao" jdbcType="VARCHAR" property="guanggao" />
     <result column="zi1" jdbcType="VARCHAR" property="zi1" />
     <result column="zi2" jdbcType="VARCHAR" property="zi2" />
     <result column="zi3" jdbcType="VARCHAR" property="zi3" />

@@ -1,7 +1,5 @@
 package siyi.game.utill;
 
-import org.apache.poi.ss.formula.functions.T;
-
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +26,25 @@ public class RandomUtil {
         int cha = Math.abs(high - low);
         if (cha > 0) {
             randomNum = random.nextInt(high)%(high-low+1) + low;
+        } else if (cha == 0) {
+            randomNum = low;
+        }
+        return randomNum;
+    }
+
+    /**
+     * 随机生成[low,high]之间的随机整数
+     * @param low
+     * @param high
+     * @return
+     */
+    public static double getRandomNumInTwoDoubleNum(double low, double high) {
+        Double randomNum = 0.0;
+        Random random = new Random();
+        double cha = Math.abs(high - low);
+        if (cha > 0) {
+            randomNum = random.nextDouble() * (high-low) + low;
+            randomNum = (double) Math.round(randomNum * 100) / 100;
         } else if (cha == 0) {
             randomNum = low;
         }

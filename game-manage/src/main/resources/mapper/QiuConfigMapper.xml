@@ -14,13 +14,5 @@
     <result column="cd" jdbcType="VARCHAR" property="cd" />
     <result column="wrong" jdbcType="VARCHAR" property="wrong" />
     <result column="jianglitime" jdbcType="VARCHAR" property="jianglitime" />
-    <result column="gold" jdbcType="VARCHAR" property="gold" />
-    <result column="exp" jdbcType="VARCHAR" property="exp" />
-    <result column="zongtime" jdbcType="VARCHAR" property="zongtime" />
-    <result column="item" jdbcType="VARCHAR" property="item" />
-    <result column="itemnum" jdbcType="VARCHAR" property="itemnum" />
-    <result column="itemgailv" jdbcType="VARCHAR" property="itemgailv" />
-    <result column="double_rate" jdbcType="VARCHAR" property="doubleRate" />
-    <result column="guanggao" jdbcType="VARCHAR" property="guanggao" />
   </resultMap>
 </mapper>

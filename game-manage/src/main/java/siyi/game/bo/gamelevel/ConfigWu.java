@@ -1,6 +1,7 @@
 package siyi.game.bo.gamelevel;
 
 import lombok.Data;
+import siyi.game.dao.entity.DianJiConfig;
 
 import java.util.List;
 
@@ -12,10 +13,11 @@ import java.util.List;
  */
 @Data
 public class ConfigWu {
-
+    // 关卡数
+    private String levelId;
     // 武关类型
     private String levelType;
-    // 关卡出现道具数量
+    // 关卡配置出现道具数量
     private String baseNum;
     // 需破坏数量
     private String totalNum;
@@ -23,18 +25,20 @@ public class ConfigWu {
     private String speed;
     // 冷却时间
     private String cd;
+    // hp系数
+    private String hpXishu;
     // 道具hp
     private String hp;
     // 关卡时间
-    private String totalTime;
+    private String guanqiaTime;
     // 关卡奖励时间
     private String jiangliTime;
     // 关卡金币
     private String gold;
     // 关卡经验
     private String exp;
-    // 总时间
-    private String zongTime;
+    // 规则配置时间
+    private String guizeTime;
     // 道具id
     private String item;
     // 道具数量
@@ -42,7 +46,7 @@ public class ConfigWu {
     // 是否奖励道具
     private boolean isHaveItem;
     // 是否出现双倍
-    private boolean isDouble;
+    private boolean isFuhuo;
     // 是否出现广告
     private boolean isGuangGao;
     // 出现时间
@@ -63,4 +67,6 @@ public class ConfigWu {
     private List<String> wordList;
     // 命中规则
     private String hitRule;
+    // 点击关卡信息
+    private List<DianJiConfigInfo> dianJiConfigs;
 }

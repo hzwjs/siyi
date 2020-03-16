@@ -1,6 +1,5 @@
 package siyi.game.service.impl.gamelevel;
 
-import com.alibaba.excel.util.DateUtils;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import net.sf.cglib.beans.BeanCopier;
@@ -13,8 +12,8 @@ import org.springframework.util.StringUtils;
 import siyi.game.bo.gamelevel.*;
 import siyi.game.dao.*;
 import siyi.game.dao.entity.*;
+import siyi.game.service.config.JiangliConfigService;
 import siyi.game.service.gamelevel.GameLevelService;
-import siyi.game.utill.DateUtil;
 import siyi.game.utill.RandomUtil;
 
 import java.lang.reflect.Field;
@@ -45,6 +44,9 @@ public class GameLevelImpl implements GameLevelService {
     @Autowired
     private UserQuestionMapper userQuestionMapper;
 
+    @Autowired
+    private JiangliConfigService jiangliConfigService;
+
     private static String[] qTypes = {"tianzi", "duicuo", "xuanze"};
     private static final String STATUS_VALID = "1";
 
@@ -65,17 +67,18 @@ public class GameLevelImpl implements GameLevelService {
         gameLevel.setConfigWen(configWen);
         /* 查询当前玩家的题型进度 */
         Map<String, String> param = new HashMap<>();
-        param.put("userId", userId); param.put("questionType", qType);
+        param.put("userId", userId);
+        param.put("questionType", qType);
         UserQuestion userQuestion = userQuestionMapper.queryUserCurrentQuestion(param);
         String nextID = "";
         if (userQuestion != null) {
             String questionID = userQuestion.getQuestionId();
-            nextID = questionID.substring(0, questionID.lastIndexOf("_")+1) + (Integer.parseInt(questionID.substring(questionID.lastIndexOf("_") + 1)) + 1);
+            nextID = questionID.substring(0, questionID.lastIndexOf("_") + 1) + (Integer.parseInt(questionID.substring(questionID.lastIndexOf("_") + 1)) + 1);
         } else {
             nextID = "Q_" + qType + "_1";
         }
         /* 如果上一关信息不为空保存入库 */
-        if (!StringUtils.isEmpty(preQID)){
+        if (!StringUtils.isEmpty(preQID)) {
             UserQuestion userq = new UserQuestion();
             userq.setUserId(userId);
             userq.setQuestionType(preQType);
@@ -90,10 +93,10 @@ public class GameLevelImpl implements GameLevelService {
                 UserQuestion tempUserQ = temp.get(0);
                 userq.setAnswerNum(tempUserQ.getAnswerNum() + 1);
                 if ("0".equals(preStatus)) {
-                    userq.setAnswerSuccessNum((tempUserQ.getAnswerSuccessNum()==null?0:tempUserQ.getAnswerSuccessNum()) + 1);
+                    userq.setAnswerSuccessNum((tempUserQ.getAnswerSuccessNum() == null ? 0 : tempUserQ.getAnswerSuccessNum()) + 1);
                 } else {
                     nextID = preQID;
-                    userq.setAnswerFailNum((tempUserQ.getAnswerFailNum()==null?0:tempUserQ.getAnswerFailNum()) + 1);
+                    userq.setAnswerFailNum((tempUserQ.getAnswerFailNum() == null ? 0 : tempUserQ.getAnswerFailNum()) + 1);
                 }
                 userQuestionMapper.updateByPrimaryKey(userq);
             }
@@ -174,10 +177,20 @@ public class GameLevelImpl implements GameLevelService {
     }
 
     @Override
-    public GameLevel queryWuGameLevelInfo(String qType) {
+    public GameLevel queryWuGameLevelInfo(String preQID) {
         // 根据权重获取最终命中的武关关卡类型
         ConfigWu configWu = new ConfigWu();
-        configWu.setLevelType(qType);
+        // 获取本题题数，获取配置信息
+        String[] preQIds = preQID.split("_");
+        String preQId = preQIds[preQIds.length - 1];
+        String qId = String.valueOf(Integer.valueOf(preQId) + 1);
+        JiangliConfig jiangliConfig = jiangliConfigService.selectByGuanqia(qId);
+        if (jiangliConfig == null) {
+            jiangliConfig = jiangliConfigService.selectByGuanqia("1");
+        }
+        // 获取基本配置信息
+        getBaseConfigWu(jiangliConfig, configWu);
+
         // 根据关卡类型获取对应关卡的配置信息
         if ("daba".equals(configWu.getLevelType())) {
             // 打靶类型
@@ -190,8 +203,7 @@ public class GameLevelImpl implements GameLevelService {
             // 点击类型
             List<DianJiConfig> dianJiConfigs = dianJiConfigMapper.selectAll();
             if (!CollectionUtils.isEmpty(dianJiConfigs)) {
-                DianJiConfig dianJiConfig = dianJiConfigs.get(0);
-                setDianjiTypeConfig(dianJiConfig, configWu);
+                setDianjiTypeConfig(dianJiConfigs, configWu);
             }
         } else if ("fanpai".equals(configWu.getLevelType())) {
             // 翻牌类型
@@ -222,6 +234,93 @@ public class GameLevelImpl implements GameLevelService {
     }
 
     /**
+     * description: 获取武关基本配置信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/16 23:59 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param jiangliConfig
+     * @param configWu
+     * @return void
+     */
+    private void getBaseConfigWu(JiangliConfig jiangliConfig, ConfigWu configWu) {
+        // 关卡配置时间
+        String timeStr = jiangliConfig.getTime();
+        String[] timeLimit = timeStr.split(";");
+        int timeLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(timeLimit[0]), Integer.parseInt(timeLimit[1]));
+        String time = String.valueOf(timeLimitNum);
+        configWu.setGuanqiaTime(time);
+        // 关卡数
+        configWu.setLevelId(jiangliConfig.getGuanqia());
+
+        // 武关关卡类型
+        String wuLevelType = getWuLevelType(jiangliConfig);
+        configWu.setLevelType(wuLevelType);
+
+        // hp系数
+        String hpxishu = jiangliConfig.getHpxishu();
+        configWu.setHpXishu(hpxishu);
+
+        // 经验
+        String jiangliexpStr = jiangliConfig.getJiangliexp();
+        String[] jiangliexpLimit = jiangliexpStr.split(";");
+        int jiangliexpLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jiangliexpLimit[0]), Integer.parseInt(jiangliexpLimit[1]));
+        String jiangliexp = String.valueOf(jiangliexpLimitNum);
+        configWu.setExp(jiangliexp);
+
+        // 金币
+        String jiangligoldStr = jiangliConfig.getJiangligold();
+        String[] jiangligoldLimit = jiangligoldStr.split(";");
+        int jiangligoldLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jiangligoldLimit[0]), Integer.parseInt(jiangligoldLimit[1]));
+        String jiangligold = String.valueOf(jiangligoldLimitNum);
+        configWu.setGold(jiangligold);
+        // 道具奖励概率
+        String jiangligailv = jiangliConfig.getJiangligailv();
+        boolean isHaveItem = RandomUtil.isHit(jiangligailv);
+        configWu.setHaveItem(isHaveItem);
+        // 若出现奖励道具，则计算道具数量及道具id
+        if (isHaveItem) {
+            String jiangliitemStr = jiangliConfig.getJiangliitem();
+            String[] itemArray = jiangliitemStr.split(";");
+            int i = RandomUtil.getRandomNumInTwoIntNum(0, itemArray.length - 1);
+            configWu.setItem(itemArray[i]);
+            String itemshuliang = jiangliConfig.getItemshuliang();
+            String itemNum = getRandomString(itemshuliang);
+            configWu.setItemNum(itemNum);
+        }
+        // 广告概率
+        String guanggao = jiangliConfig.getGuanggao();
+        configWu.setGuangGao(RandomUtil.isHit(guanggao));
+        // 复活概率
+        String fuhuo = jiangliConfig.getFuhuo();
+        configWu.setFuhuo(RandomUtil.isHit(fuhuo));
+    }
+
+    /**
+     * description: 获取武关关卡类型 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/16 23:39 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param jiangliConfig
+     * @return java.lang.String
+     */
+    private String getWuLevelType(JiangliConfig jiangliConfig) {
+        String dabaWeight = jiangliConfig.getkDaba();
+        String dianjiWeight = jiangliConfig.getkDianji();
+        String fanpaiWeight = jiangliConfig.getkFanpai();
+        String qiuWeight = jiangliConfig.getkQiu();
+        String zhuiluoWeight = jiangliConfig.getkZhuiluo();
+        Map<String, String> weightMap = new HashMap<>();
+        weightMap.put("daba", dabaWeight);
+        weightMap.put("dianji", dianjiWeight);
+        weightMap.put("fanpai", fanpaiWeight);
+        weightMap.put("qiu", qiuWeight);
+        weightMap.put("zhuiluo", zhuiluoWeight);
+        return selectRuleByWeight(weightMap);
+    }
+
+    /**
      * description: 坠落类型武关配置信息 <br>
      * version: 1.0 <br>
      * date: 2020/3/1 15:28 <br>
@@ -232,6 +331,30 @@ public class GameLevelImpl implements GameLevelService {
      * @return void
      */
     private void setZhuiluoTypeConfig(ZhuiLuoConfig zhuiLuoConfig, ConfigWu configWu) {
+        String levelId = configWu.getLevelId();
+        String hpXishu = configWu.getHpXishu();
+        // 数量给具体值
+        String baseNumStr = zhuiLuoConfig.getNum();
+        String baseNum = getRandomString(baseNumStr);
+        configWu.setBaseNum(baseNum);
+        // 速度
+        String speedStr = zhuiLuoConfig.getSpend();
+        String speed = getRandomString(speedStr);
+        configWu.setSpeed(speed);
+        Double num = 0D;
+        // cd
+        String cdStr = zhuiLuoConfig.getCd();
+        String cd = getDoubleRandomString(cdStr);
+        configWu.setCd(cd);
+
+        // hp
+        String hpStr = zhuiLuoConfig.getHp();
+        String baseHp = getRandomString(hpStr);
+        Double hp = Double.valueOf(baseHp) + Double.valueOf(levelId) / Double.valueOf(hpXishu);
+        configWu.setHp(String.valueOf(hp));
+
+        String time = "";
+        String jiangliTime = "";
         // 规则1权重
         String guize1quanzhong = zhuiLuoConfig.getGuize1quanzhong();
         // 规则2权重
@@ -244,63 +367,6 @@ public class GameLevelImpl implements GameLevelService {
         guizeWeight.put("rule2", guize2quanzhong);
         guizeWeight.put("rule3", guize3quanzhong);
         String rule = selectRuleByWeight(guizeWeight);
-        // 数量给具体值
-        String baseNumStr = zhuiLuoConfig.getNum();
-        String[] limit = baseNumStr.split(";");
-        int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
-        String baseNum = String.valueOf(limitNum);
-        configWu.setBaseNum(baseNum);
-
-        Double num = 0D;
-        // cd 原值
-        String cd = zhuiLuoConfig.getCd();
-        configWu.setCd(cd);
-        // 速度原值
-        String speed = zhuiLuoConfig.getSpend();
-        configWu.setSpeed(speed);
-        // hp 原值
-        String hp = zhuiLuoConfig.getHp();
-        configWu.setHp(hp);
-        // 奖励金币
-        String baseGold = zhuiLuoConfig.getGold();
-        String[] limitGoldArray = baseGold.split(";");
-        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
-        configWu.setGold(String.valueOf(limitGold));
-        // 奖励经验
-        String baseExp = zhuiLuoConfig.getExp();
-        String[] limitExpArray = baseExp.split(";");
-        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
-        configWu.setExp(String.valueOf(limitExp));
-        // 总时间
-        String zongTime = zhuiLuoConfig.getZongtime();
-        configWu.setZongTime(zongTime);
-        // 是否有道具奖励
-        String itemPercent = zhuiLuoConfig.getItemgailv();
-        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
-        configWu.setHaveItem(isHaveItem);
-        if (isHaveItem) {
-            // 道具
-            String item = zhuiLuoConfig.getItem();
-            configWu.setItem(item);
-            // 道具数量
-            String baseItemNum = zhuiLuoConfig.getItemnum();
-            String[] limitItemArray = baseItemNum.split(";");
-            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
-            configWu.setItemNum(String.valueOf(limitItem));
-        } else {
-            configWu.setItem("-1");
-            configWu.setItemNum("-1");
-        }
-        // 是否展示广告
-        String guanggaoPercent = zhuiLuoConfig.getGuanggao();
-        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
-        configWu.setGuangGao(isGuanggao);
-        // 奖励是否翻倍
-        String doubleRate = zhuiLuoConfig.getDoubleRate();
-        boolean isDouble = RandomUtil.isHit(doubleRate);
-        configWu.setDouble(isDouble);
-        String time = "";
-        String jiangliTime = "";
         if ("rule1".equals(rule)) {
             // 采用规则1
             // 出现道具数量
@@ -338,10 +404,10 @@ public class GameLevelImpl implements GameLevelService {
             jiangliTime = zhuiLuoConfig.getJiangli3time();
         }
         Double timeInt = Double.valueOf(time) * Integer.valueOf(baseNum);
-        // 道具出现数量
+        // 道具破坏数量
         configWu.setTotalNum(String.valueOf(num.intValue()));
         // 总时间
-        configWu.setTotalTime(String.valueOf(timeInt));
+        configWu.setGuizeTime(String.valueOf(timeInt));
         // 奖励时间
         configWu.setJiangliTime(jiangliTime);
     }
@@ -398,7 +464,6 @@ public class GameLevelImpl implements GameLevelService {
      * @return void
      */
     private void setQiuTypeConfig(QiuConfig qiuConfig, ConfigWu configWu) {
-
         // 杯子数量权重
         String beizinumStr = qiuConfig.getBeizinum();
         String beiziquanzhongStr = qiuConfig.getBeiziquanzhong();
@@ -415,9 +480,8 @@ public class GameLevelImpl implements GameLevelService {
         String beiziNum = selectRuleByWeight(weightMap);
         configWu.setBeiziNum(beiziNum);
         // 球数量权重
-        String qiunumStr = qiuConfig.getQiunum();
         String qiuquanzhongStr = qiuConfig.getQiuquanzhong();
-        String[] qiunumArray = qiunumStr.split(";");
+        String[] qiunumArray = {"1", "2", "3"};
         String[] qiuquanzhongArray = qiuquanzhongStr.split(";");
         Map<String, String> qiuWeight = new HashMap<>();
         for (int i = 0; i < qiunumArray.length; i++) {
@@ -428,55 +492,18 @@ public class GameLevelImpl implements GameLevelService {
         // 根据规则的权重判断命中球数量
         String qiuNum = selectRuleByWeight(qiuWeight);
         configWu.setQiuNum(qiuNum);
-        // 速度原值
-        String spend = qiuConfig.getSpend();
-        configWu.setSpeed(spend);
+        // 速度
+        String speedStr = qiuConfig.getSpend();
+        String speed = getRandomString(speedStr);
+        configWu.setSpeed(speed);
         // 交换次数
-        String jiaohuannum = qiuConfig.getJiaohuannum();
-        String[] jiaohuannumArray = jiaohuannum.split(";");
-        int limitjiaohuannum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jiaohuannumArray[0]), Integer.parseInt(jiaohuannumArray[1]));
-        configWu.setJiaohuanNum(String.valueOf(limitjiaohuannum));
+        String jiaohuannumStr = qiuConfig.getJiaohuannum();
+        String jiaohuanNum = getRandomString(jiaohuannumStr);
+        configWu.setJiaohuanNum(String.valueOf(jiaohuanNum));
         // cd
-        String cd = qiuConfig.getCd();
+        String cdStr = qiuConfig.getCd();
+        String cd = getRandomString(cdStr);
         configWu.setCd(cd);
-        // 奖励金币
-        String baseGold = qiuConfig.getGold();
-        String[] limitGoldArray = baseGold.split(";");
-        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
-        configWu.setGold(String.valueOf(limitGold));
-        // 奖励经验
-        String baseExp = qiuConfig.getExp();
-        String[] limitExpArray = baseExp.split(";");
-        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
-        configWu.setExp(String.valueOf(limitExp));
-        // 总时间
-        String zongTime = qiuConfig.getZongtime();
-        configWu.setZongTime(zongTime);
-        // 是否有道具奖励
-        String itemPercent = qiuConfig.getItemgailv();
-        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
-        configWu.setHaveItem(isHaveItem);
-        if (isHaveItem) {
-            // 道具
-            String item = qiuConfig.getItem();
-            configWu.setItem(item);
-            // 道具数量
-            String baseItemNum = qiuConfig.getItemnum();
-            String[] limitItemArray = baseItemNum.split(";");
-            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
-            configWu.setItemNum(String.valueOf(limitItem));
-        } else {
-            configWu.setItem("-1");
-            configWu.setItemNum("-1");
-        }
-        // 是否展示广告
-        String guanggaoPercent = qiuConfig.getGuanggao();
-        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
-        configWu.setGuangGao(isGuanggao);
-        // 奖励是否翻倍
-        String doubleRate = qiuConfig.getDoubleRate();
-        boolean isDouble = RandomUtil.isHit(doubleRate);
-        configWu.setDouble(isDouble);
         // 奖励时间
         String jianglitime = qiuConfig.getJianglitime();
         configWu.setJiangliTime(jianglitime);
@@ -515,50 +542,10 @@ public class GameLevelImpl implements GameLevelService {
         // 游戏时间
         String time = fanPaiConfig.getTime();
         String finalTime = String.valueOf(Integer.valueOf(finalFanpaiNum) * Integer.valueOf(time));
-        configWu.setTotalTime(finalTime);
+        configWu.setGuizeTime(finalTime);
         // 奖励时间
         String jianglitime = fanPaiConfig.getJianglitime();
         configWu.setJiangliTime(jianglitime);
-
-
-        // 奖励金币
-        String baseGold = fanPaiConfig.getGold();
-        String[] limitGoldArray = baseGold.split(";");
-        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
-        configWu.setGold(String.valueOf(limitGold));
-        // 奖励经验
-        String baseExp = fanPaiConfig.getExp();
-        String[] limitExpArray = baseExp.split(";");
-        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
-        configWu.setExp(String.valueOf(limitExp));
-        // 总时间
-        String zongTime = fanPaiConfig.getZongtime();
-        configWu.setZongTime(zongTime);
-        // 是否有道具奖励
-        String itemPercent = fanPaiConfig.getItemgailv();
-        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
-        configWu.setHaveItem(isHaveItem);
-        if (isHaveItem) {
-            // 道具
-            String item = fanPaiConfig.getItem();
-            configWu.setItem(item);
-            // 道具数量
-            String baseItemNum = fanPaiConfig.getItemnum();
-            String[] limitItemArray = baseItemNum.split(";");
-            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
-            configWu.setItemNum(String.valueOf(limitItem));
-        } else {
-            configWu.setItem("-1");
-            configWu.setItemNum("-1");
-        }
-        // 是否展示广告
-        String guanggaoPercent = fanPaiConfig.getGuanggao();
-        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
-        configWu.setGuangGao(isGuanggao);
-        // 奖励是否翻倍
-        String doubleRate = fanPaiConfig.getDoubleRate();
-        boolean isDouble = RandomUtil.isHit(doubleRate);
-        configWu.setDouble(isDouble);
 
         // 获取最终翻牌文字
         List<String> wordList = getWordList(fanPaiConfig);
@@ -599,85 +586,44 @@ public class GameLevelImpl implements GameLevelService {
      * date: 2020/3/1 15:28 <br>
      * author: zhengzhiqiang <br>
      *
-     * @param dianJiConfig
+     * @param dianJiConfigs
      * @param configWu
      * @return void
      */
-    private void setDianjiTypeConfig(DianJiConfig dianJiConfig, ConfigWu configWu) {
-        // 规则1权重
-        String guize1quanzhong = dianJiConfig.getGuize1quanzhong();
-
-        // 根据规则的权重判断命中哪一个规则
-        Map<String, String> guizeWeight = new HashMap<>();
-        guizeWeight.put("rule1", guize1quanzhong);
-        String rule = selectRuleByWeight(guizeWeight);
-        // 数量给具体值
-        String baseNumStr = dianJiConfig.getNum();
-        String[] limit = baseNumStr.split(";");
-        int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
-        String baseNum = String.valueOf(limitNum);
-        configWu.setBaseNum(baseNum);
-        Integer num = 0;
-        // hp
-        String hp = dianJiConfig.getHp();
-        configWu.setHp(hp);
-
-        // 奖励金币
-        String baseGold = dianJiConfig.getGold();
-        String[] limitGoldArray = baseGold.split(";");
-        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
-        configWu.setGold(String.valueOf(limitGold));
-        // 奖励经验
-        String baseExp = dianJiConfig.getExp();
-        String[] limitExpArray = baseExp.split(";");
-        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
-        configWu.setExp(String.valueOf(limitExp));
-        // 总时间
-        String zongTime = dianJiConfig.getZongtime();
-        configWu.setZongTime(zongTime);
-        // 是否有道具奖励
-        String itemPercent = dianJiConfig.getItemgailv();
-        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
-        configWu.setHaveItem(isHaveItem);
-        if (isHaveItem) {
-            // 道具
-            String item = dianJiConfig.getItem();
-            configWu.setItem(item);
-            // 道具数量
-            String baseItemNum = dianJiConfig.getItemnum();
-            String[] limitItemArray = baseItemNum.split(";");
-            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
-            configWu.setItemNum(String.valueOf(limitItem));
-        } else {
-            configWu.setItem("-1");
-            configWu.setItemNum("-1");
+    private void setDianjiTypeConfig(List<DianJiConfig> dianJiConfigs, ConfigWu configWu) {
+        String hpXishu = configWu.getHpXishu();
+        String levelId = configWu.getLevelId();
+        List<DianJiConfigInfo> dianJiConfigInfos = new ArrayList<>();
+        for (DianJiConfig dianJiConfig : dianJiConfigs) {
+            DianJiConfigInfo dianJiConfigInfo = new DianJiConfigInfo();
+            // 数量给具体值
+            String baseNumStr = dianJiConfig.getNum();
+            String baseNum = getRandomString(baseNumStr);
+            dianJiConfigInfo.setNum(baseNum);
+            // hp
+            String hpStr = dianJiConfig.getHp();
+            String baseHp = getRandomString(hpStr);
+            Double hp = Double.valueOf(baseHp) + Double.valueOf(levelId) / Double.valueOf(hpXishu);
+            dianJiConfigInfo.setHp(String.valueOf(hp));
+            // 根据规则的权重判断命中哪一个规则
+            String guize1quanzhong = dianJiConfig.getGuize1quanzhong();
+            Map<String, String> guizeWeight = new HashMap<>();
+            guizeWeight.put("rule1", guize1quanzhong);
+            String rule = selectRuleByWeight(guizeWeight);
+            String time = "";
+            String jiangliTime = "";
+            if ("rule1".equals(rule)) {
+                // 总时间
+                time = dianJiConfig.getTime1();
+                // 奖励时间
+                jiangliTime = dianJiConfig.getJiangli1time();
+                dianJiConfigInfo.setRuleType("rule1");
+            }
+            dianJiConfigInfo.setTime(time);
+            dianJiConfigInfo.setJiangliTime(jiangliTime);
+            dianJiConfigInfos.add(dianJiConfigInfo);
         }
-        // 是否展示广告
-        String guanggaoPercent = dianJiConfig.getGuanggao();
-        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
-        configWu.setGuangGao(isGuanggao);
-        // 奖励是否翻倍
-        String doubleRate = dianJiConfig.getDoubleRate();
-        boolean isDouble = RandomUtil.isHit(doubleRate);
-        configWu.setDouble(isDouble);
-
-        String time = "";
-        String jiangliTime = "";
-        if ("rule1".equals(rule)) {
-            // 采用规则1
-            String guize1num = dianJiConfig.getGuize1num();
-            String[] limitguize1numArray = guize1num.split(";");
-            int limitguize1num = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitguize1numArray[0]), Integer.parseInt(limitguize1numArray[1]));
-            configWu.setTotalNum(String.valueOf(limitguize1num));
-            // 总时间
-            time = dianJiConfig.getTime1();
-            // 奖励时间
-            jiangliTime = dianJiConfig.getJiangli1time();
-        }
-        // 总时间
-        configWu.setTotalTime(String.valueOf(time));
-        // 奖励时间
-        configWu.setJiangliTime(jiangliTime);
+        configWu.setDianJiConfigs(dianJiConfigInfos);
     }
 
     /**
@@ -695,76 +641,43 @@ public class GameLevelImpl implements GameLevelService {
         String guize1quanzhong = daBaConfig.getGuize1quanzhong();
         // 规则2权重
         String guize2quanzhong = daBaConfig.getGuize2quanzhong();
+
+        // 数量给具体值
+        String baseNumStr = daBaConfig.getNum();
+        String baseNum = getRandomString(baseNumStr);
+        configWu.setBaseNum(baseNum);
+
+        Integer num = 0;
+        // 出现时间
+        String chuxiantimeStr = daBaConfig.getChuxiantime();
+        String chuxianTime = getRandomString(chuxiantimeStr);
+        configWu.setChuxianTime(chuxianTime);
+        // 出现次数
+        String cishuStr = daBaConfig.getCishu();
+        String cishu = getRandomString(cishuStr);
+        configWu.setCishu(cishu);
+
+        // cd
+        String cdStr = daBaConfig.getCd();
+        String cd = getRandomString(cdStr);
+        configWu.setCd(cd);
+
+        // 错误次数
+        String wrong = daBaConfig.getWrong();
+        configWu.setWrong(wrong);
+
         // 根据规则的权重判断命中哪一个规则
         Map<String, String> guizeWeight = new HashMap<>();
         guizeWeight.put("rule1", guize1quanzhong);
         guizeWeight.put("rule2", guize2quanzhong);
         String rule = selectRuleByWeight(guizeWeight);
-        // 数量给具体值
-        String baseNumStr = daBaConfig.getNum();
-        String[] limit = baseNumStr.split(";");
-        int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
-        String baseNum = String.valueOf(limitNum);
-        Integer num = 0;
-        // 出现时间
-        String chuxiantime = daBaConfig.getChuxiantime();
-        configWu.setChuxianTime(chuxiantime);
-        // 出现次数
-        String cishu = daBaConfig.getCishu();
-        configWu.setCishu(cishu);
-        // cd
-        String cd = daBaConfig.getCd();
-        configWu.setCd(cd);
-        // 错误次数
-        String wrong = daBaConfig.getWrong();
-        configWu.setWrong(wrong);
-        // 奖励金币
-        String baseGold = daBaConfig.getGold();
-        String[] limitGoldArray = baseGold.split(";");
-        int limitGold = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitGoldArray[0]), Integer.parseInt(limitGoldArray[1]));
-        configWu.setGold(String.valueOf(limitGold));
-        // 奖励经验
-        String baseExp = daBaConfig.getExp();
-        String[] limitExpArray = baseExp.split(";");
-        int limitExp = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitExpArray[0]), Integer.parseInt(limitExpArray[1]));
-        configWu.setExp(String.valueOf(limitExp));
-        // 总时间
-        String zongTime = daBaConfig.getZongtime();
-        configWu.setZongTime(zongTime);
-        // 是否有道具奖励
-        String itemPercent = daBaConfig.getItemgailv();
-        boolean isHaveItem  = RandomUtil.isHit(itemPercent);
-        configWu.setHaveItem(isHaveItem);
-        if (isHaveItem) {
-            // 道具
-            String item = daBaConfig.getItem();
-            configWu.setItem(item);
-            // 道具数量
-            String baseItemNum = daBaConfig.getItemnum();
-            String[] limitItemArray = baseItemNum.split(";");
-            int limitItem = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limitItemArray[0]), Integer.parseInt(limitItemArray[1]));
-            configWu.setItemNum(String.valueOf(limitItem));
-        } else {
-            configWu.setItem("-1");
-            configWu.setItemNum("-1");
-        }
-        // 是否展示广告
-        String guanggaoPercent = daBaConfig.getGuanggao();
-        boolean isGuanggao = RandomUtil.isHit(guanggaoPercent);
-        configWu.setGuangGao(isGuanggao);
-        // 奖励是否翻倍
-        String doubleRate = daBaConfig.getDoubleRate();
-        boolean isDouble = RandomUtil.isHit(doubleRate);
-        configWu.setDouble(isDouble);
-
         String time = "";
         String jiangliTime = "";
         if ("rule1".equals(rule)) {
             // 采用规则1
             // 出现道具数量
             String guize1num = daBaConfig.getGuize1num();
-
-            num = Integer.valueOf(baseNum) - Integer.valueOf(guize1num);
+            num = Integer.valueOf(baseNum) + Integer.valueOf(guize1num);
             // 总时间
             time = daBaConfig.getTime1();
             // 奖励时间
@@ -774,7 +687,7 @@ public class GameLevelImpl implements GameLevelService {
             // 采用规则2
             // 出现道具数量
             String guize2num = daBaConfig.getGuize2num();
-            num = Integer.valueOf(baseNum) - Integer.valueOf(guize2num);
+            num = Integer.valueOf(baseNum) + Integer.valueOf(guize2num);
             // 总时间
             time = daBaConfig.getTime2();
             // 奖励时间
@@ -785,12 +698,22 @@ public class GameLevelImpl implements GameLevelService {
         Double timeInt = Double.valueOf(time) * Integer.valueOf(baseNum);
         // 道具破坏数量
         configWu.setTotalNum(String.valueOf(num.intValue()));
-        // 总时间
-        configWu.setTotalTime(String.valueOf(timeInt));
+        // 规则配置总时间
+        configWu.setGuizeTime(String.valueOf(timeInt));
         // 奖励时间
         configWu.setJiangliTime(jiangliTime);
+    }
 
-        configWu.setBaseNum(baseNum);
+    private String getRandomString(String baseNumStr) {
+        String[] limit = baseNumStr.split(";");
+        int limitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
+        return String.valueOf(limitNum);
+    }
+
+    private String getDoubleRandomString(String baseNumStr) {
+        String[] limit = baseNumStr.split(";");
+        double limitNum = RandomUtil.getRandomNumInTwoDoubleNum(Double.parseDouble(limit[0]), Double.parseDouble(limit[1]));
+        return String.valueOf(limitNum);
     }
 
     private ConfigWu selectWuLevelByWeight(Map<String, String> weightLevel) {

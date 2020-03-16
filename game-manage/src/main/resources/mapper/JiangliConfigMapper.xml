@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.JiangliConfigMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.JiangliConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="guanqia" jdbcType="VARCHAR" property="guanqia" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="K_daba" jdbcType="VARCHAR" property="kDaba" />
+    <result column="K_dianji" jdbcType="VARCHAR" property="kDianji" />
+    <result column="K_fanpai" jdbcType="VARCHAR" property="kFanpai" />
+    <result column="K_guanqia" jdbcType="VARCHAR" property="kGuanqia" />
+    <result column="K_qiu" jdbcType="VARCHAR" property="kQiu" />
+    <result column="K_zhuiluo" jdbcType="VARCHAR" property="kZhuiluo" />
+    <result column="Hpxishu" jdbcType="VARCHAR" property="hpxishu" />
+    <result column="jiangligold" jdbcType="VARCHAR" property="jiangligold" />
+    <result column="jiangliexp" jdbcType="VARCHAR" property="jiangliexp" />
+    <result column="jiangliitem" jdbcType="VARCHAR" property="jiangliitem" />
+    <result column="itemshuliang" jdbcType="VARCHAR" property="itemshuliang" />
+    <result column="jiangligailv" jdbcType="VARCHAR" property="jiangligailv" />
+    <result column="guanggao" jdbcType="VARCHAR" property="guanggao" />
+    <result column="fuhuo" jdbcType="VARCHAR" property="fuhuo" />
+  </resultMap>
+</mapper>
