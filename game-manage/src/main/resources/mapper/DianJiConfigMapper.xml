@@ -12,6 +12,6 @@
     <result column="guize1quanzhong" jdbcType="VARCHAR" property="guize1quanzhong" />
     <result column="time1" jdbcType="VARCHAR" property="time1" />
     <result column="jiangli1time" jdbcType="VARCHAR" property="jiangli1time" />
-
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
 </mapper>

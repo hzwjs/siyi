@@ -344,14 +344,13 @@ public class GameLevelImpl implements GameLevelService {
         Double num = 0D;
         // cd
         String cdStr = zhuiLuoConfig.getCd();
-        String cd = getDoubleRandomString(cdStr);
-        configWu.setCd(cd);
+        configWu.setCd(cdStr);
 
         // hp
         String hpStr = zhuiLuoConfig.getHp();
         String baseHp = getRandomString(hpStr);
         Double hp = Double.valueOf(baseHp) + Double.valueOf(levelId) / Double.valueOf(hpXishu);
-        configWu.setHp(String.valueOf(hp));
+        configWu.setHp(String.valueOf(hp.intValue()));
 
         String time = "";
         String jiangliTime = "";
@@ -407,7 +406,7 @@ public class GameLevelImpl implements GameLevelService {
         // 道具破坏数量
         configWu.setTotalNum(String.valueOf(num.intValue()));
         // 总时间
-        configWu.setGuizeTime(String.valueOf(timeInt));
+        configWu.setGuizeTime(String.valueOf(timeInt.intValue()));
         // 奖励时间
         configWu.setJiangliTime(jiangliTime);
     }
@@ -502,8 +501,9 @@ public class GameLevelImpl implements GameLevelService {
         configWu.setJiaohuanNum(String.valueOf(jiaohuanNum));
         // cd
         String cdStr = qiuConfig.getCd();
-        String cd = getRandomString(cdStr);
-        configWu.setCd(cd);
+        String cd = getDoubleRandomString(cdStr);
+        Double cdD = Double.valueOf(cd) * 1000;
+        configWu.setCd(String.valueOf(cdD.intValue()));
         // 奖励时间
         String jianglitime = qiuConfig.getJianglitime();
         configWu.setJiangliTime(jianglitime);
@@ -596,6 +596,7 @@ public class GameLevelImpl implements GameLevelService {
         List<DianJiConfigInfo> dianJiConfigInfos = new ArrayList<>();
         for (DianJiConfig dianJiConfig : dianJiConfigs) {
             DianJiConfigInfo dianJiConfigInfo = new DianJiConfigInfo();
+            dianJiConfigInfo.setLei(dianJiConfig.getLei());
             // 数量给具体值
             String baseNumStr = dianJiConfig.getNum();
             String baseNum = getRandomString(baseNumStr);
@@ -604,7 +605,7 @@ public class GameLevelImpl implements GameLevelService {
             String hpStr = dianJiConfig.getHp();
             String baseHp = getRandomString(hpStr);
             Double hp = Double.valueOf(baseHp) + Double.valueOf(levelId) / Double.valueOf(hpXishu);
-            dianJiConfigInfo.setHp(String.valueOf(hp));
+            dianJiConfigInfo.setHp(String.valueOf(hp.intValue()));
             // 根据规则的权重判断命中哪一个规则
             String guize1quanzhong = dianJiConfig.getGuize1quanzhong();
             Map<String, String> guizeWeight = new HashMap<>();
@@ -621,6 +622,7 @@ public class GameLevelImpl implements GameLevelService {
             }
             dianJiConfigInfo.setTime(time);
             dianJiConfigInfo.setJiangliTime(jiangliTime);
+            dianJiConfigInfo.setRemark(dianJiConfig.getRemark());
             dianJiConfigInfos.add(dianJiConfigInfo);
         }
         configWu.setDianJiConfigs(dianJiConfigInfos);
@@ -650,8 +652,9 @@ public class GameLevelImpl implements GameLevelService {
         Integer num = 0;
         // 出现时间
         String chuxiantimeStr = daBaConfig.getChuxiantime();
-        String chuxianTime = getRandomString(chuxiantimeStr);
-        configWu.setChuxianTime(chuxianTime);
+        String chuxianTime = getDoubleRandomString(chuxiantimeStr);
+        Double chuxianTimeD = Double.valueOf(chuxianTime) * 1000;
+        configWu.setChuxianTime(String.valueOf(chuxianTimeD.intValue()));
         // 出现次数
         String cishuStr = daBaConfig.getCishu();
         String cishu = getRandomString(cishuStr);
@@ -660,7 +663,8 @@ public class GameLevelImpl implements GameLevelService {
         // cd
         String cdStr = daBaConfig.getCd();
         String cd = getRandomString(cdStr);
-        configWu.setCd(cd);
+        int cdI = Integer.valueOf(cd) * 1000;
+        configWu.setCd(String.valueOf(cdI));
 
         // 错误次数
         String wrong = daBaConfig.getWrong();

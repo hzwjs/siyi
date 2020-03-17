@@ -37,6 +37,10 @@ public class DianJiConfig implements Serializable {
      */
     private String jiangli1time;
 
+    /**
+     * 备注信息
+     */
+    private String remark;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,6 +50,14 @@ public class DianJiConfig implements Serializable {
 
     public void setLei(String lei) {
         this.lei = lei;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     /**
