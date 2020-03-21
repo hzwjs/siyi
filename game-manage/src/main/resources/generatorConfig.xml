@@ -40,7 +40,7 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_k_dianji_config" domainObjectName="DianJiConfig">
+        <table tableName="tb_level_clear_record" domainObjectName="LevelClearRecord">
             <generatedKey column="serie_id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

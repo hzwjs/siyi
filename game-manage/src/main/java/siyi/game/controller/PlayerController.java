@@ -6,6 +6,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.*;
 import siyi.game.service.game.GameService;
+import siyi.game.service.gamelevel.LevelClearRecordService;
 import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemConfigService;
 import siyi.game.service.item.ItemPlayerRelationService;
@@ -44,6 +45,9 @@ public class PlayerController extends BaseController {
     @Autowired
     private LevelUpService levelUpService;
 
+    @Autowired
+    private LevelClearRecordService levelClearRecordService;
+
     @PostMapping("login")
     public Map<String, Object> login(@RequestBody Player player) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -79,13 +83,20 @@ public class PlayerController extends BaseController {
         loginLog.setPlayerId(findPlayer.getPlayerId());
         loginLog.setLoginTime(new Date());
         loginLogService.insertSelective(loginLog);
+
+        // 查询玩家挑战记录信息
+        LevelClearRecord selectParam = new LevelClearRecord();
+        selectParam.setPlayerId(findPlayer.getPlayerId());
+        selectParam.setGameCode(player.getGameCode());
+        LevelClearRecord levelClearRecord = levelClearRecordService.selectByBean(selectParam);
+        // 返回成功响应
         getSuccessResult(resultMap);
         // 返回数据组装
         resultMap.put("player", findPlayer);
         resultMap.put("openId", uuid32);
         resultMap.put("itemList", itemConfigs);
         resultMap.put("level", levelUpConfig);
-
+        resultMap.put("levelRecord", levelClearRecord);
         return resultMap;
     }
 
