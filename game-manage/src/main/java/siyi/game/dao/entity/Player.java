@@ -65,6 +65,24 @@ public class Player implements Serializable {
     @Column(name = " platform_id")
     private String platformId;
 
+    /**
+     * 平台ID
+     */
+    @Column(name = " wu_level")
+    private String wuLevel;
+
+    /**
+     * 文关经验
+     */
+    @Column(name = "wen_experience")
+    private String wenExperience;
+
+    /**
+     * 武关经验
+     */
+    @Column(name = "wu_experience")
+    private String wuExperience;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -245,6 +263,54 @@ public class Player implements Serializable {
         this.platformId = platformId;
     }
 
+    /**
+     * 获取玩家级别 武关级别
+     */
+    public String getWuLevel() {
+        return wuLevel;
+    }
+
+    /**
+     * 设置玩家级别 武关级别
+     *
+     * @param wuLevel 玩家级别 武关级别
+     */
+    public void setWuLevel(String wuLevel) {
+        this.wuLevel = wuLevel;
+    }
+
+    /**
+     * 获取文关经验
+     */
+    public String getWenExperience() {
+        return wenExperience;
+    }
+
+    /**
+     * 设置文关经验
+     *
+     * @param wenExperience 文关经验
+     */
+    public void setWenExperience(String wenExperience) {
+        this.wenExperience = wenExperience;
+    }
+
+    /**
+     * 获取武关经验
+     */
+    public String getWuExperience() {
+        return wuExperience;
+    }
+
+    /**
+     * 设置武关经验
+     *
+     * @param wuExperience 武关经验
+     */
+    public void setWuExperience(String wuExperience) {
+        this.wuExperience = wuExperience;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
@@ -258,6 +324,7 @@ public class Player implements Serializable {
                 ", playerHp='" + playerHp + '\'' +
                 ", gameCode='" + gameCode + '\'' +
                 ", platformId='" + platformId + '\'' +
+                ", wuLevel='" + wuLevel + '\'' +
                 '}';
     }
 }

@@ -14,6 +14,9 @@
     <result column="game_level" jdbcType="VARCHAR" property="gameLevel" />
     <result column="player_hp" jdbcType="VARCHAR" property="playerHp" />
     <result column="game_code" jdbcType="VARCHAR" property="gameCode" />
+    <result column="wu_level" jdbcType="VARCHAR" property="wuLevel" />
+    <result column="wen_experience" jdbcType="VARCHAR" property="wenExperience" />
+    <result column="wu_experience" jdbcType="VARCHAR" property="wuExperience" />
   </resultMap>
 
   <select id="selectAreaReportByGameCode" resultType="java.util.Map" parameterType="string">

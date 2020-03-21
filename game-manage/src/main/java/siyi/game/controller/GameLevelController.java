@@ -165,34 +165,60 @@ public class GameLevelController {
      */
     @GetMapping("submitDesignation")
     @ResponseBody
-    public Map<String, Object> submitDesignation(String playerId) {
+    public Map<String, Object> submitDesignation(String playerId, String levelType) {
+        logger.info("开始兑换称号操作，玩家id：{}，兑换类型：{}", playerId, levelType);
         Map<String, Object> resultMap = new HashMap<>();
         Player player = playerService.selectByPlayerId(playerId);
-        String playerLevel = player.getPlayerLevel();
-        String experience = player.getExperience();
+        String playerLevel = "";
+        String experience = "";
+        if ("wen".equals(levelType)) {
+            playerLevel = player.getPlayerLevel();
+            experience = player.getWenExperience();
+            logger.info("兑换文关称号，玩家当前文关等级：{}，玩家当前文关经验：{}", playerLevel, experience);
+        } else {
+            playerLevel = player.getWuLevel();
+            experience = player.getWuExperience();
+            logger.info("兑换武关称号，玩家当前武关等级：{}，玩家当前武关经验：{}", playerLevel, experience);
+        }
         Integer currentExpInt = Integer.valueOf(experience);
         Integer currentLevelInt = Integer.valueOf(playerLevel);
-        if (currentLevelInt >= 10) {
+        if (currentLevelInt < 10) {
             int nextLevel = currentLevelInt + 1;
+            logger.info("玩家下一级别为{}", nextLevel);
             LevelUpConfig levelUpConfig = levelUpService.selectByLevel(String.valueOf(nextLevel));
+            logger.info("获取下一等级配置信息：{}", levelUpConfig.toString());
             String levelUpExpStr = levelUpConfig.getExp();
+            logger.info("兑换称号所需经验：{}", levelUpExpStr);
             Integer levelUpExpInt = Integer.valueOf(levelUpExpStr);
             if (currentExpInt <= levelUpExpInt) {
+                logger.info("玩家现有经验不足，兑换失败");
                 resultMap.put("resCode", "000001");
                 resultMap.put("resMsg", "称号兑换失败，当前玩家经验不足");
                 return resultMap;
             }
             // 开始更新玩家数据，获取剩余经验
             int surplusExpInt = currentLevelInt - currentExpInt;
-            player.setExperience(String.valueOf(surplusExpInt));
-            player.setPlayerLevel(String.valueOf(nextLevel));
+            logger.info("玩家兑换称号后，剩余经验为：{}", surplusExpInt);
+            if ("wen".equals(levelType)) {
+                // 更新文关经验及文关称号
+                logger.info("开始更新玩家文关经验及文关称号");
+                player.setWenExperience(String.valueOf(surplusExpInt));
+                player.setPlayerLevel(String.valueOf(nextLevel));
+            } else {
+                logger.info("开始更新玩家武关经验及武关称号");
+                player.setWuExperience(String.valueOf(surplusExpInt));
+                player.setWuLevel(String.valueOf(nextLevel));
+            }
             playerService.updateByIdSelective(player);
+            player = playerService.selectByPlayerId(playerId);
+            logger.info("兑换完成，玩家信息：{}", player.toString());
             resultMap.put("resCode", "000000");
             resultMap.put("resMsg", "称号兑换成功");
             resultMap.put("player", player);
             resultMap.put("levelUp", levelUpConfig);
             return resultMap;
         } else {
+            logger.info("玩家已经是当前最高等级");
             resultMap.put("resCode", "000010");
             resultMap.put("resMsg", "当前已是最高称号");
             return resultMap;
