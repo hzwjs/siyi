@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import siyi.game.bo.gamelevel.*;
 import siyi.game.dao.*;
 import siyi.game.dao.entity.*;
+import siyi.game.manager.gamelevel.GameLevelManage;
 import siyi.game.service.config.JiangliConfigService;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.utill.RandomUtil;
@@ -24,11 +24,13 @@ import java.util.*;
 public class GameLevelImpl implements GameLevelService {
     private final Logger log = LoggerFactory.getLogger(GameLevelImpl.class);
     @Autowired
-    QuTianziMapper quTianziMapper;
+    private PlayerMapper playerMapper;
     @Autowired
-    QuXuanzeMapper quXuanzeMapper;
+    private QuTianziMapper quTianziMapper;
     @Autowired
-    QuDuicuoMapper quDuicuoMapper;
+    private QuXuanzeMapper quXuanzeMapper;
+    @Autowired
+    private QuDuicuoMapper quDuicuoMapper;
     @Autowired
     GamelevelConfigMapper configMapper;
     @Autowired
@@ -42,7 +44,7 @@ public class GameLevelImpl implements GameLevelService {
     @Autowired
     private FanPaiConfigMapper fanPaiConfigMapper;
     @Autowired
-    private UserQuestionMapper userQuestionMapper;
+    private GameLevelManage gameLevelManage;
 
     @Autowired
     private JiangliConfigService jiangliConfigService;
@@ -57,123 +59,102 @@ public class GameLevelImpl implements GameLevelService {
 
     @Override
     public GameLevel queryWenGameLevelInfo(String userId, String preQType, String preQID, String preStatus) {
-        log.info("=== userId:{}, preQType:{}, preQID:{}, preStatus:{}", userId, preQType, preQID, preStatus);
+        log.info("=== 关卡查询请求参数 userId:{}, preQType:{}, preQID:{}, preStatus:{} ===", userId, preQType, preQID, preStatus);
         GameLevel gameLevel = new GameLevel();
 
-        /* 读取关卡配置信息&做相关的配置处理 */
-        GamelevelConfig gamelevelConfig = configMapper.selectByPrimaryKey("1");
-        ConfigWen configWen = handleWenConfigInfo(gamelevelConfig);
-        String qType = configWen.getQType();
-        gameLevel.setConfigWen(configWen);
-        /* 查询当前玩家的题型进度 */
-        Map<String, String> param = new HashMap<>();
-        param.put("userId", userId);
-        param.put("questionType", qType);
-        UserQuestion userQuestion = userQuestionMapper.queryUserCurrentQuestion(param);
-        String nextID = "";
-        if (userQuestion != null) {
-            String questionID = userQuestion.getQuestionId();
-            nextID = questionID.substring(0, questionID.lastIndexOf("_") + 1) + (Integer.parseInt(questionID.substring(questionID.lastIndexOf("_") + 1)) + 1);
-        } else {
-            nextID = "Q_" + qType + "_1";
-        }
-        /* 如果上一关信息不为空保存入库 */
-        if (!StringUtils.isEmpty(preQID)) {
-            UserQuestion userq = new UserQuestion();
-            userq.setUserId(userId);
-            userq.setQuestionType(preQType);
-            userq.setQuestionId(preQID);
-            List<UserQuestion> temp = userQuestionMapper.select(userq);
-            userq.setStatus(preStatus);
-            userq.setUpdatedTime(new Date());
-            if (temp.size() == 0) {
-                userq.setAnswerNum(1);
-                userQuestionMapper.insert(userq);
-            } else {
-                UserQuestion tempUserQ = temp.get(0);
-                userq.setAnswerNum(tempUserQ.getAnswerNum() + 1);
-                if ("0".equals(preStatus)) {
-                    userq.setAnswerSuccessNum((tempUserQ.getAnswerSuccessNum() == null ? 0 : tempUserQ.getAnswerSuccessNum()) + 1);
-                } else {
-                    nextID = preQID;
-                    userq.setAnswerFailNum((tempUserQ.getAnswerFailNum() == null ? 0 : tempUserQ.getAnswerFailNum()) + 1);
-                }
-                userQuestionMapper.updateByPrimaryKey(userq);
-            }
-        }
-        if (qTypes[0].equals(qType)) {
-            /* 读取题目和答案 */
-            QuTianzi quTianzi = new QuTianzi();
-            quTianzi.setQuId(nextID);
-            quTianzi.setQuStatus(STATUS_VALID);
-            quTianzi = quTianziMapper.selectOne(quTianzi);
-            if (quTianzi == null) {
-                quTianzi.setQuId("Q_tianzi_1");
-                quTianzi.setQuStatus(STATUS_VALID);
-                quTianzi = quTianziMapper.selectOne(quTianzi);
-            }
-            /* 读取题目和答案 */
-            QuestionTianzi question = new QuestionTianzi();
-            CandidateWordTianzi candidate = new CandidateWordTianzi();
-            AnswerTianzi answer = new AnswerTianzi();
-            // 题目
-            BeanCopier copier = BeanCopier.create(quTianzi.getClass(), question.getClass(), false);
-            copier.copy(quTianzi, question, null);
-            // 候选答案
-            BeanCopier copier2 = BeanCopier.create(quTianzi.getClass(), candidate.getClass(), false);
-            copier2.copy(quTianzi, candidate, null);
-            // 拷贝答案
-            Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-            answer = mapper.map(candidate, AnswerTianzi.class);
-            gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
-            gameLevel.setQuestionTianzi(question);
-            gameLevel.setAnswerTianzi(answer);
-            configWen.setQuestionId(quTianzi.getQuId());
-        }
-        if (qTypes[1].equals(qType)) {
-            QuDuicuo quDuicuo = new QuDuicuo();
-            quDuicuo.setQuId(nextID);
-            quDuicuo.setQuStatus(STATUS_VALID);
-            quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
-            if (quDuicuo == null) {
-                quDuicuo.setQuId("Q_duicuo_1");
-                quDuicuo.setQuStatus(STATUS_VALID);
-                quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
-            }
-            /* 提取题目和答案 */
-            QuestionDuicuo question = new QuestionDuicuo();
-            BeanCopier copier = BeanCopier.create(quDuicuo.getClass(), question.getClass(), false);
-            copier.copy(quDuicuo, question, null);
-            String answer = quDuicuo.getAnswer();
-            gameLevel.setQuestionDuicuo(question);
-            gameLevel.setAnswerDuicuo(answer);
-            configWen.setQuestionId(quDuicuo.getQuId());
-        }
-        if (qTypes[2].equals(qType)) {
-            /* 读取题库配置 */
-            QuXuanze quXuanze = new QuXuanze();
-            quXuanze.setQuId(nextID);
-            quXuanze.setQuStatus(STATUS_VALID);
-            quXuanze = quXuanzeMapper.selectOne(quXuanze);
-            if (quXuanze == null) {
-                quXuanze.setQuId("Q_xuanze_1");
-                quXuanze.setQuStatus(STATUS_VALID);
-                quXuanze = quXuanzeMapper.selectOne(quXuanze);
-            }
-            /* 提取题目和答案 */
-            QuestionXuanze question = new QuestionXuanze();
-            BeanCopier copier = BeanCopier.create(quXuanze.getClass(), question.getClass(), false);
-            copier.copy(quXuanze, question, null);
-            AnswerXuanze answerXuanze = new AnswerXuanze();
-            String[] answer = quXuanze.getAnswer().split(",");
-            answerXuanze.setAnswer(answer);
+        Player player = new Player();
+        player.setPlayerId(userId);
+        player = playerMapper.selectOne(player);
+        if (player != null){
+            /* 读取关卡配置信息&做相关的配置处理 */
+            ConfigWen configWen = gameLevelManage.queryWenConfigInfo(player.getGameLevel());
+            if (configWen != null) {
+                String qType = configWen.getQType();
+                /* 选择题目 */
+                String nextID = gameLevelManage.getQuestionId(userId, qType);
+                if (qTypes[2].equals(qType)) {
+                    if (qTypes[0].equals(qType)) {
+                        /* 读取题目和答案 */
+                        QuTianzi quTianzi = new QuTianzi();
+                        quTianzi.setQuId(nextID);
+                        quTianzi.setQuStatus(STATUS_VALID);
+                        quTianzi = quTianziMapper.selectOne(quTianzi);
+                        if (quTianzi == null) {
+                            quTianzi.setQuId("Q_tianzi_1");
+                            quTianzi.setQuStatus(STATUS_VALID);
+                            quTianzi = quTianziMapper.selectOne(quTianzi);
+                        }
+                        /* 读取题目和答案 */
+                        QuestionTianzi question = new QuestionTianzi();
+                        CandidateWordTianzi candidate = new CandidateWordTianzi();
+                        AnswerTianzi answer = new AnswerTianzi();
+                        // 题目
+                        BeanCopier copier = BeanCopier.create(quTianzi.getClass(), question.getClass(), false);
+                        copier.copy(quTianzi, question, null);
+                        // 候选答案
+                        BeanCopier copier2 = BeanCopier.create(quTianzi.getClass(), candidate.getClass(), false);
+                        copier2.copy(quTianzi, candidate, null);
+                        // 拷贝答案
+                        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+                        answer = mapper.map(candidate, AnswerTianzi.class);
+                        gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
+                        gameLevel.setQuestionTianzi(question);
+                        gameLevel.setAnswerTianzi(answer);
+                        configWen.setQuestionId(quTianzi.getQuId());
+                    }
+                    if (qTypes[1].equals(qType)) {
+                        QuDuicuo quDuicuo = new QuDuicuo();
+                        quDuicuo.setQuId(nextID);
+                        quDuicuo.setQuStatus(STATUS_VALID);
+                        quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
+                        if (quDuicuo == null) {
+                            quDuicuo.setQuId("Q_duicuo_1");
+                            quDuicuo.setQuStatus(STATUS_VALID);
+                            quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
+                        }
+                        /* 提取题目和答案 */
+                        QuestionDuicuo question = new QuestionDuicuo();
+                        BeanCopier copier = BeanCopier.create(quDuicuo.getClass(), question.getClass(), false);
+                        copier.copy(quDuicuo, question, null);
+                        String answer = quDuicuo.getAnswer();
+                        gameLevel.setQuestionDuicuo(question);
+                        gameLevel.setAnswerDuicuo(answer);
+                        configWen.setQuestionId(quDuicuo.getQuId());
+                    }
+                    if (qTypes[2].equals(qType)) {
+                        /* 读取题库配置 */
+                        QuXuanze quXuanze = new QuXuanze();
+                        quXuanze.setQuId(nextID);
+                        quXuanze.setQuStatus(STATUS_VALID);
+                        quXuanze = quXuanzeMapper.selectOne(quXuanze);
+                        if (quXuanze == null) {
+                            quXuanze.setQuId("Q_xuanze_1");
+                            quXuanze.setQuStatus(STATUS_VALID);
+                            quXuanze = quXuanzeMapper.selectOne(quXuanze);
+                        }
+                        /* 提取题目和答案 */
+                        QuestionXuanze question = new QuestionXuanze();
+                        BeanCopier copier = BeanCopier.create(quXuanze.getClass(), question.getClass(), false);
+                        copier.copy(quXuanze, question, null);
+                        AnswerXuanze answerXuanze = new AnswerXuanze();
+                        String[] answer = quXuanze.getAnswer().split(",");
+                        answerXuanze.setAnswer(answer);
 
-            gameLevel.setAnswerXuanze(answerXuanze);
-            gameLevel.setQuestionXuanze(question);
-            gameLevel.setTips(quXuanze.getTips());
-            configWen.setQuestionId(quXuanze.getQuId());
+                        gameLevel.setAnswerXuanze(answerXuanze);
+                        gameLevel.setQuestionXuanze(question);
+                        gameLevel.setTips(quXuanze.getTips());
+                        configWen.setQuestionId(quXuanze.getQuId());
+                    }
+                    gameLevel.setConfigWen(configWen);
+                }
+                /* 保存保存玩家答题记录 */
+                gameLevelManage.saveUserWenGameLevelInfo(userId, preQID, qType, preStatus);
+                return gameLevel;
+            }
+            log.warn("=== 获取文关配置信息失败 ===");
         }
-        return gameLevel;
+        log.warn("=== 玩家信息获取失败 ===");
+        return null;
     }
 
     @Override
