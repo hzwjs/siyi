@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import siyi.game.bo.gamelevel.*;
 import siyi.game.dao.*;
 import siyi.game.dao.entity.*;
@@ -63,6 +64,10 @@ public class GameLevelImpl implements GameLevelService {
         log.info("=== 关卡查询请求参数 userId:{}, preQType:{}, preQID:{}, preStatus:{} ===", userId, preQType, preQID, preStatus);
         GameLevel gameLevel = new GameLevel();
 
+        if (!StringUtils.isEmpty(preQID)) {
+            /* 保存玩家答题记录 */
+            gameLevelManage.saveUserWenGameLevelInfo(userId, preQID, preQType, preStatus);
+        }
         Player player = new Player();
         player.setPlayerId(userId);
         player = playerMapper.selectOne(player);
@@ -146,8 +151,7 @@ public class GameLevelImpl implements GameLevelService {
                     configWen.setQuestionId(quXuanze.getQuId());
                 }
                 gameLevel.setConfigWen(configWen);
-                /* 保存保存玩家答题记录 */
-                gameLevelManage.saveUserWenGameLevelInfo(userId, preQID, qType, preStatus);
+
                 return gameLevel;
             }
             log.warn("=== 获取文关配置信息失败 ===");
