@@ -4,6 +4,7 @@ import jdk.nashorn.internal.objects.annotations.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.ItemConfig;
 import siyi.game.dao.entity.ItemPlayerRelation;
@@ -20,7 +21,7 @@ import java.util.*;
  * author: zhengzhiqiang <br>
  * version: 1.0 <br>
  */
-@RestController
+@Controller
 @RequestMapping(value = "idiom/lottery")
 public class LotteryController extends BaseController {
     private final Logger logger = LoggerFactory.getLogger(LotteryController.class);
@@ -42,7 +43,8 @@ public class LotteryController extends BaseController {
      * @param
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
-    @GetMapping("getList2")
+    @RequestMapping("getList")
+    @ResponseBody
     public List<ItemConfig> getLotteryList() {
         List<ItemConfig> resourceList = itemConfigService.selectAll();
         List<ItemConfig> targetList = new ArrayList<>();
