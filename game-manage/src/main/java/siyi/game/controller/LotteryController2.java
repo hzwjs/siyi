@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.ItemConfig;
 import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.dao.entity.Player;
@@ -23,7 +20,7 @@ import java.util.*;
  * author: zhengzhiqiang <br>
  * version: 1.0 <br>
  */
-@Controller
+@RestController
 @RequestMapping(value = "idiom/lottery2")
 public class LotteryController2 extends BaseController {
     private final Logger logger = LoggerFactory.getLogger(LotteryController2.class);
@@ -36,7 +33,7 @@ public class LotteryController2 extends BaseController {
     @Autowired
     private ItemPlayerRelationService itemPlayerRelationService;
 
-    @GetMapping("getList")
+    @GetMapping("getList2")
     public String test(){
         return "test getMapper";
     }
@@ -50,7 +47,7 @@ public class LotteryController2 extends BaseController {
      * @param
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
-    @RequestMapping(value = "getList2")
+    @RequestMapping(value = "getList")
     @ResponseBody
     public List<ItemConfig> getLotteryList() {
         List<ItemConfig> resourceList = itemConfigService.selectAll();
