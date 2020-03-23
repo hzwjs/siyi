@@ -56,4 +56,37 @@ public interface ItemPlayerRelationService {
      * @return java.util.List<siyi.game.dao.entity.ItemPlayerRelation>
      */
     List<ItemPlayerRelation> selectByPlayerIdAndGameCode(String playerId, String gameCode);
+
+    /**
+     * description: 根据bean查询道具关联信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/23 23:21 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param selectParam
+     * @return siyi.game.dao.entity.ItemPlayerRelation
+     */
+    ItemPlayerRelation selectByBean(ItemPlayerRelation selectParam);
+
+    /**
+     * description: 根据主键进行更新数据 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/23 23:24 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param itemPlayerRelation
+     * @return void
+     */
+    void updateByIdSelective(ItemPlayerRelation itemPlayerRelation);
+
+    /**
+     * description: 插入道具关联信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/23 23:25 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param itemPlayerRelation
+     * @return void
+     */
+    void insertSelective(ItemPlayerRelation itemPlayerRelation);
 }

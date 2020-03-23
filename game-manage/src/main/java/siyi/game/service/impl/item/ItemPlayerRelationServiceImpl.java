@@ -50,4 +50,19 @@ public class ItemPlayerRelationServiceImpl implements ItemPlayerRelationService 
 
         return itemPlayerRelationMapper.selectByExample(example);
     }
+
+    @Override
+    public ItemPlayerRelation selectByBean(ItemPlayerRelation selectParam) {
+        return itemPlayerRelationMapper.selectOne(selectParam);
+    }
+
+    @Override
+    public void updateByIdSelective(ItemPlayerRelation itemPlayerRelation) {
+        itemPlayerRelationMapper.updateByPrimaryKeySelective(itemPlayerRelation);
+    }
+
+    @Override
+    public void insertSelective(ItemPlayerRelation itemPlayerRelation) {
+        itemPlayerRelationMapper.insertSelective(itemPlayerRelation);
+    }
 }

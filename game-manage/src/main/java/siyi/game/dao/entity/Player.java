@@ -83,6 +83,12 @@ public class Player implements Serializable {
     @Column(name = "wu_experience")
     private String wuExperience;
 
+    /**
+     * 武关经验
+     */
+    @Column(name = "lottery_num")
+    private Long lotteryNum;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -309,6 +315,22 @@ public class Player implements Serializable {
      */
     public void setWuExperience(String wuExperience) {
         this.wuExperience = wuExperience;
+    }
+
+    /**
+     * 获取抽奖次数
+     */
+    public Long getLotteryNum() {
+        return lotteryNum;
+    }
+
+    /**
+     * 设置抽奖次数
+     *
+     * @param lotteryNum 抽奖次数
+     */
+    public void setLotteryNum(Long lotteryNum) {
+        this.lotteryNum = lotteryNum;
     }
 
     @Override

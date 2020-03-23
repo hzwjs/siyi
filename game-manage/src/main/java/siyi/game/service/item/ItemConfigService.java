@@ -22,4 +22,15 @@ public interface ItemConfigService {
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
     List<ItemConfig> selectByItemNoList(List<String> itemNoList);
+
+    /**
+     * description: 获取全部的道具信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/23 22:49 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param
+     * @return java.util.List<siyi.game.dao.entity.ItemConfig>
+     */
+    List<ItemConfig> selectAll();
 }

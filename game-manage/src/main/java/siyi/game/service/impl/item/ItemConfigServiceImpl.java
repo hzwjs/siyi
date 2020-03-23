@@ -28,4 +28,9 @@ public class ItemConfigServiceImpl implements ItemConfigService {
         criteria.andIn("id", itemNoList);
         return itemConfigMapper.selectByExample(example);
     }
+
+    @Override
+    public List<ItemConfig> selectAll() {
+        return itemConfigMapper.selectAll();
+    }
 }
