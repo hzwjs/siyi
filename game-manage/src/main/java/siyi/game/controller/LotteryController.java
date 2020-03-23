@@ -44,7 +44,7 @@ public class LotteryController extends BaseController {
      * @param
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
-    @GetMapping("getList")
+    @RequestMapping("getList")
     public List<ItemConfig> getLotteryList() {
         List<ItemConfig> resourceList = itemConfigService.selectAll();
         List<ItemConfig> targetList = new ArrayList<>();

@@ -11,6 +11,7 @@ import siyi.game.dao.GamelevelConfigMapper;
 import siyi.game.dao.UserQuestionMapper;
 import siyi.game.dao.entity.GamelevelConfig;
 import siyi.game.dao.entity.UserQuestion;
+import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 
 import java.text.DecimalFormat;
@@ -54,10 +55,15 @@ public class GameLevelManage {
         UserQuestion userQuestion = userQuestionMapper.queryUserCurrentQuestion(param);
         String questionId = "";
         if (userQuestion != null) {
-            String questionID = userQuestion.getQuestionId();
-            String prefix = questionID.substring(0, questionID.lastIndexOf("_")+1);
-            String index = questionID.substring(questionID.lastIndexOf("_") + 1);
-            questionId = prefix + (Integer.parseInt(index) + 1);
+            String status = userQuestion.getStatus();
+            if (Constants.COMMON_SUCCESS.equals(status)) {
+                String questionID = userQuestion.getQuestionId();
+                String prefix = questionID.substring(0, questionID.lastIndexOf("_")+1);
+                String index = questionID.substring(questionID.lastIndexOf("_") + 1);
+                questionId = prefix + (Integer.parseInt(index) + 1);
+            } else {
+                questionId = userQuestion.getQuestionId();
+            }
         } else {
             questionId = "Q_" + qType + "_1";
         }
