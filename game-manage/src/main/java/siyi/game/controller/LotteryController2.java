@@ -50,7 +50,7 @@ public class LotteryController2 extends BaseController {
      * @param
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
-    @RequestMapping(value = "getList")
+    @RequestMapping(value = "getList2")
     @ResponseBody
     public List<ItemConfig> getLotteryList() {
         List<ItemConfig> resourceList = itemConfigService.selectAll();
