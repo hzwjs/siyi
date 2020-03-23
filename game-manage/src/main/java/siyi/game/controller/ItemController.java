@@ -26,7 +26,7 @@ import java.util.Map;
  * version: 1.0 <br>
  */
 @RestController
-@RequestMapping("item")
+@RequestMapping("idiom/item")
 public class ItemController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemController.class);
 

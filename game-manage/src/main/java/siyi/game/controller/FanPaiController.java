@@ -27,7 +27,7 @@ import java.io.File;
  * version: 1.0 <br>
  */
 @Controller
-@RequestMapping(value = "fanpai")
+@RequestMapping(value = "idiom/fanpai")
 public class FanPaiController {
     private final Logger logger = LoggerFactory.getLogger(FanPaiController.class);
 

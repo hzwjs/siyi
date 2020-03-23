@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * version: 1.0 <br>
  */
 @Controller
-@RequestMapping(value = "gameLevel")
+@RequestMapping(value = "idiom/gameLevel")
 public class GameLevelController {
     private final Logger logger = LoggerFactory.getLogger(GameLevelController.class);
 

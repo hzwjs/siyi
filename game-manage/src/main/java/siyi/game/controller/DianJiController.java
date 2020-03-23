@@ -25,7 +25,7 @@ import java.io.File;
  * version: 1.0 <br>
  */
 @RestController
-@RequestMapping(value = "dianji")
+@RequestMapping(value = "idiom/dianji")
 public class DianJiController {
     @Autowired
     private DianJiConfigMapper dianJiConfigMapper;

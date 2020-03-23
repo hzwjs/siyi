@@ -24,12 +24,15 @@ public class DateUtil {
      * @return java.lang.String
      */
     public static String getTimeDiff(Date startTime, Date endTime) {
-        long diff = endTime.getTime() - startTime.getTime();//这样得到的差值是微秒级别
-        long hours = diff / (1000 * 60 * 60); //获取时
-        long minutes = (diff -  hours * (1000 * 60 * 60)) / (1000 * 60);  //获取分钟
-        long s = (diff / 1000 - hours * 60 * 60 - minutes * 60);//获取秒
-        String CountTime =  hours + "小时" + minutes + "分" + s + "秒";
-        return CountTime;
+       if (startTime != null && endTime != null) {
+           long diff = endTime.getTime() - startTime.getTime();//这样得到的差值是微秒级别
+           long hours = diff / (1000 * 60 * 60); //获取时
+           long minutes = (diff -  hours * (1000 * 60 * 60)) / (1000 * 60);  //获取分钟
+           long s = (diff / 1000 - hours * 60 * 60 - minutes * 60);//获取秒
+           String CountTime =  hours + "小时" + minutes + "分" + s + "秒";
+           return CountTime;
+       }
+           return "";
     }
 
     /**

@@ -23,7 +23,7 @@ import java.io.File;
  * version: 1.0 <br>
  */
 @Controller
-@RequestMapping(value = "jiangli")
+@RequestMapping(value = "idiom/jiangli")
 public class JiangliguanqiaController {
     private final Logger logger = LoggerFactory.getLogger(JiangliguanqiaController.class);
 

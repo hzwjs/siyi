@@ -27,7 +27,7 @@ import java.io.File;
  * version: 1.0 <br>
  */
 @Controller
-@RequestMapping(value = "zhuiluo")
+@RequestMapping(value = "idiom/zhuiluo")
 public class ZhuiLuoController {
     private final Logger logger = LoggerFactory.getLogger(ZhuiLuoController.class);
 

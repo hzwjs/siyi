@@ -20,7 +20,7 @@ import java.util.Map;
  * version: 1.0 <br>
  */
 @RestController
-@RequestMapping("levelClear")
+@RequestMapping("idiom/levelClear")
 public class LevelClearRecordController extends BaseController {
 
     private final Logger logger = LoggerFactory.getLogger(LevelClearRecordController.class);

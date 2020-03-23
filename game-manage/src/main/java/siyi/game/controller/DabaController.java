@@ -18,7 +18,7 @@ import java.io.File;
  * version: 1.0 <br>
  */
 @Controller
-@RequestMapping(value = "daba")
+@RequestMapping(value = "idiom/daba")
 public class DabaController {
 
     @Autowired

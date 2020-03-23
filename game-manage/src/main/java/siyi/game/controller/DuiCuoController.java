@@ -20,7 +20,7 @@ import java.io.File;
  * version: 1.0 <br>
  */
 @Controller
-@RequestMapping(value = "duicuo")
+@RequestMapping(value = "idiom/duicuo")
 public class DuiCuoController {
     private final Logger logger = LoggerFactory.getLogger(DuiCuoController.class);
 

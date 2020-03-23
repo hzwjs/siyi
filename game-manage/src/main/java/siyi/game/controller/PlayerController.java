@@ -24,7 +24,7 @@ import java.util.*;
  * version: 1.0 <br>
  */
 @RestController
-@RequestMapping("/player")
+@RequestMapping("idiom/player")
 public class PlayerController extends BaseController {
 
     @Autowired

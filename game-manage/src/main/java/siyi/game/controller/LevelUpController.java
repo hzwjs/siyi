@@ -27,7 +27,7 @@ import java.io.File;
  * version: 1.0 <br>
  */
 @Controller
-@RequestMapping(value = "levelUp")
+@RequestMapping(value = "idiom/levelUp")
 public class LevelUpController {
     private final Logger logger = LoggerFactory.getLogger(LevelUpController.class);
 
