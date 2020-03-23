@@ -43,7 +43,7 @@ public class LotteryController extends BaseController {
      * @param
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
-    @RequestMapping("getList")
+    @RequestMapping(value = "getList2", method = RequestMethod.GET)
     @ResponseBody
     public List<ItemConfig> getLotteryList() {
         List<ItemConfig> resourceList = itemConfigService.selectAll();
@@ -77,7 +77,8 @@ public class LotteryController extends BaseController {
      * @param gameCode 游戏编码
      * @return java.util.Map<java.lang.String   ,   java.lang.Object>
      */
-    @PostMapping("submit")
+    @RequestMapping(value = "submit", method = RequestMethod.POST)
+    @ResponseBody
     public Map<String, Object> submitLottery(String itemId, String quantity, String playerId, String gameCode) {
         Map<String, Object> resultMap = new HashMap<>();
         logger.info("提交玩家抽奖记录，方法入参：itemId：{}，quantity：{}，playerId：{}，gameCode：{}", itemId, quantity, playerId, gameCode);
