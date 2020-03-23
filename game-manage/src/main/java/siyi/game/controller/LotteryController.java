@@ -20,7 +20,7 @@ import java.util.*;
  * version: 1.0 <br>
  */
 @RestController
-@RequestMapping("idiom/lottery")
+@RequestMapping(value = "idiom/lottery")
 public class LotteryController extends BaseController {
     private final Logger logger = LoggerFactory.getLogger(LotteryController.class);
     @Autowired
