@@ -3,10 +3,7 @@ package siyi.game.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.ItemConfig;
 import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.dao.entity.Player;
@@ -45,6 +42,7 @@ public class LotteryController extends BaseController {
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
     @GetMapping("getList")
+    @ResponseBody
     public List<ItemConfig> getLotteryList() {
         List<ItemConfig> resourceList = itemConfigService.selectAll();
         List<ItemConfig> targetList = new ArrayList<>();
@@ -78,6 +76,7 @@ public class LotteryController extends BaseController {
      * @return java.util.Map<java.lang.String   ,   java.lang.Object>
      */
     @PostMapping("submit")
+    @ResponseBody
     public Map<String, Object> submitLottery(String itemId, String quantity, String playerId, String gameCode) {
         Map<String, Object> resultMap = new HashMap<>();
         logger.info("提交玩家抽奖记录，方法入参：itemId：{}，quantity：{}，playerId：{}，gameCode：{}", itemId, quantity, playerId, gameCode);
