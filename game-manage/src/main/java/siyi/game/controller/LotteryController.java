@@ -1,5 +1,6 @@
 package siyi.game.controller;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,7 @@ public class LotteryController extends BaseController {
      * @param
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
-    @RequestMapping("getList")
-    @ResponseBody
+    @GetMapping("getList2")
     public List<ItemConfig> getLotteryList() {
         List<ItemConfig> resourceList = itemConfigService.selectAll();
         List<ItemConfig> targetList = new ArrayList<>();
