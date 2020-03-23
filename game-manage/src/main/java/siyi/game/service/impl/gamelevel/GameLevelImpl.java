@@ -72,81 +72,79 @@ public class GameLevelImpl implements GameLevelService {
                 String qType = configWen.getQType();
                 /* 选择题目 */
                 String nextID = gameLevelManage.getQuestionId(userId, qType);
-                if (qTypes[2].equals(qType)) {
-                    if (qTypes[0].equals(qType)) {
-                        /* 读取题目和答案 */
-                        QuTianzi quTianzi = new QuTianzi();
-                        quTianzi.setQuId(nextID);
+                if (qTypes[0].equals(qType)) {
+                    /* 读取题目和答案 */
+                    QuTianzi quTianzi = new QuTianzi();
+                    quTianzi.setQuId(nextID);
+                    quTianzi.setQuStatus(STATUS_VALID);
+                    quTianzi = quTianziMapper.selectOne(quTianzi);
+                    if (quTianzi == null) {
+                        quTianzi.setQuId("Q_tianzi_1");
                         quTianzi.setQuStatus(STATUS_VALID);
                         quTianzi = quTianziMapper.selectOne(quTianzi);
-                        if (quTianzi == null) {
-                            quTianzi.setQuId("Q_tianzi_1");
-                            quTianzi.setQuStatus(STATUS_VALID);
-                            quTianzi = quTianziMapper.selectOne(quTianzi);
-                        }
-                        /* 读取题目和答案 */
-                        QuestionTianzi question = new QuestionTianzi();
-                        CandidateWordTianzi candidate = new CandidateWordTianzi();
-                        AnswerTianzi answer = new AnswerTianzi();
-                        // 题目
-                        BeanCopier copier = BeanCopier.create(quTianzi.getClass(), question.getClass(), false);
-                        copier.copy(quTianzi, question, null);
-                        // 候选答案
-                        BeanCopier copier2 = BeanCopier.create(quTianzi.getClass(), candidate.getClass(), false);
-                        copier2.copy(quTianzi, candidate, null);
-                        // 拷贝答案
-                        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-                        answer = mapper.map(candidate, AnswerTianzi.class);
-                        gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
-                        gameLevel.setQuestionTianzi(question);
-                        gameLevel.setAnswerTianzi(answer);
-                        configWen.setQuestionId(quTianzi.getQuId());
                     }
-                    if (qTypes[1].equals(qType)) {
-                        QuDuicuo quDuicuo = new QuDuicuo();
-                        quDuicuo.setQuId(nextID);
+                    /* 读取题目和答案 */
+                    QuestionTianzi question = new QuestionTianzi();
+                    CandidateWordTianzi candidate = new CandidateWordTianzi();
+                    AnswerTianzi answer = new AnswerTianzi();
+                    // 题目
+                    BeanCopier copier = BeanCopier.create(quTianzi.getClass(), question.getClass(), false);
+                    copier.copy(quTianzi, question, null);
+                    // 候选答案
+                    BeanCopier copier2 = BeanCopier.create(quTianzi.getClass(), candidate.getClass(), false);
+                    copier2.copy(quTianzi, candidate, null);
+                    // 拷贝答案
+                    Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+                    answer = mapper.map(candidate, AnswerTianzi.class);
+                    gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
+                    gameLevel.setQuestionTianzi(question);
+                    gameLevel.setAnswerTianzi(answer);
+                    configWen.setQuestionId(quTianzi.getQuId());
+                }
+                if (qTypes[1].equals(qType)) {
+                    QuDuicuo quDuicuo = new QuDuicuo();
+                    quDuicuo.setQuId(nextID);
+                    quDuicuo.setQuStatus(STATUS_VALID);
+                    quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
+                    if (quDuicuo == null) {
+                        quDuicuo.setQuId("Q_duicuo_1");
                         quDuicuo.setQuStatus(STATUS_VALID);
                         quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
-                        if (quDuicuo == null) {
-                            quDuicuo.setQuId("Q_duicuo_1");
-                            quDuicuo.setQuStatus(STATUS_VALID);
-                            quDuicuo = quDuicuoMapper.selectOne(quDuicuo);
-                        }
-                        /* 提取题目和答案 */
-                        QuestionDuicuo question = new QuestionDuicuo();
-                        BeanCopier copier = BeanCopier.create(quDuicuo.getClass(), question.getClass(), false);
-                        copier.copy(quDuicuo, question, null);
-                        String answer = quDuicuo.getAnswer();
-                        gameLevel.setQuestionDuicuo(question);
-                        gameLevel.setAnswerDuicuo(answer);
-                        configWen.setQuestionId(quDuicuo.getQuId());
                     }
-                    if (qTypes[2].equals(qType)) {
-                        /* 读取题库配置 */
-                        QuXuanze quXuanze = new QuXuanze();
-                        quXuanze.setQuId(nextID);
+                    /* 提取题目和答案 */
+                    QuestionDuicuo question = new QuestionDuicuo();
+                    BeanCopier copier = BeanCopier.create(quDuicuo.getClass(), question.getClass(), false);
+                    copier.copy(quDuicuo, question, null);
+                    String answer = quDuicuo.getAnswer();
+                    gameLevel.setQuestionDuicuo(question);
+                    gameLevel.setAnswerDuicuo(answer);
+                    configWen.setQuestionId(quDuicuo.getQuId());
+                }
+                if (qTypes[2].equals(qType)) {
+                    /* 读取题库配置 */
+                    QuXuanze quXuanze = new QuXuanze();
+                    quXuanze.setQuId(nextID);
+                    quXuanze.setQuStatus(STATUS_VALID);
+                    quXuanze = quXuanzeMapper.selectOne(quXuanze);
+                    if (quXuanze == null) {
+                        quXuanze.setQuId("Q_xuanze_1");
                         quXuanze.setQuStatus(STATUS_VALID);
                         quXuanze = quXuanzeMapper.selectOne(quXuanze);
-                        if (quXuanze == null) {
-                            quXuanze.setQuId("Q_xuanze_1");
-                            quXuanze.setQuStatus(STATUS_VALID);
-                            quXuanze = quXuanzeMapper.selectOne(quXuanze);
-                        }
-                        /* 提取题目和答案 */
-                        QuestionXuanze question = new QuestionXuanze();
-                        BeanCopier copier = BeanCopier.create(quXuanze.getClass(), question.getClass(), false);
-                        copier.copy(quXuanze, question, null);
-                        AnswerXuanze answerXuanze = new AnswerXuanze();
-                        String[] answer = quXuanze.getAnswer().split(",");
-                        answerXuanze.setAnswer(answer);
-
-                        gameLevel.setAnswerXuanze(answerXuanze);
-                        gameLevel.setQuestionXuanze(question);
-                        gameLevel.setTips(quXuanze.getTips());
-                        configWen.setQuestionId(quXuanze.getQuId());
                     }
-                    gameLevel.setConfigWen(configWen);
+                    /* 提取题目和答案 */
+                    QuestionXuanze question = new QuestionXuanze();
+                    BeanCopier copier = BeanCopier.create(quXuanze.getClass(), question.getClass(), false);
+                    copier.copy(quXuanze, question, null);
+                    AnswerXuanze answerXuanze = new AnswerXuanze();
+                    String[] answer = quXuanze.getAnswer().split(",");
+                    answerXuanze.setAnswer(answer);
+
+                    gameLevel.setAnswerXuanze(answerXuanze);
+                    gameLevel.setQuestionXuanze(question);
+                    gameLevel.setTips(quXuanze.getTips());
+                    configWen.setQuestionId(quXuanze.getQuId());
                 }
+                gameLevel.setConfigWen(configWen);
                 /* 保存保存玩家答题记录 */
                 gameLevelManage.saveUserWenGameLevelInfo(userId, preQID, qType, preStatus);
                 return gameLevel;
