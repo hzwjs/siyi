@@ -161,7 +161,7 @@ public class GameLevelImpl implements GameLevelService {
     }
 
     @Override
-    public GameLevel queryWuGameLevelInfo(String preQID) {
+    public GameLevel queryWuGameLevelInfo(String preQID, String userId) {
         // 根据权重获取最终命中的武关关卡类型
         ConfigWu configWu = new ConfigWu();
         // 获取本题题数，获取配置信息
@@ -192,10 +192,14 @@ public class GameLevelImpl implements GameLevelService {
         } else if ("fanpai".equals(configWu.getLevelType())) {
             // 翻牌类型
             List<FanPaiConfig> fanPaiConfigs = fanPaiConfigMapper.selectAll();
-            if (!CollectionUtils.isEmpty(fanPaiConfigs)) {
-                FanPaiConfig fanPaiConfig = fanPaiConfigs.get(0);
-                setFanPaiTypeConfig(fanPaiConfig, configWu);
+            String wuFanpaiId = gameLevelManage.getWuFanpaiId(userId, "fanpai");
+            FanPaiConfig finalFanpaiConfig = fanPaiConfigMapper.selectByPrimaryKey(wuFanpaiId);
+            if (finalFanpaiConfig == null) {
+                finalFanpaiConfig = fanPaiConfigs.get(0);
             }
+            setFanPaiTypeConfig(finalFanpaiConfig, configWu);
+            /* 保存保存玩家答题记录 */
+            gameLevelManage.saveUserWuGameRecord(userId, wuFanpaiId, "fanpai");
         } else if ("qiu".equals(configWu.getLevelType())) {
             // 杯中藏球类型
             List<QiuConfig> qiuConfigs = qiuConfigMapper.selectAll();
@@ -541,26 +545,157 @@ public class GameLevelImpl implements GameLevelService {
 
     private List<String> getWordList(FanPaiConfig fanPaiConfig) {
         List<String> wordList = new ArrayList<>();
-        wordList.add(fanPaiConfig.getZi1());
-        wordList.add(fanPaiConfig.getZi2());
-        wordList.add(fanPaiConfig.getZi3());
-        wordList.add(fanPaiConfig.getZi4());
-        wordList.add(fanPaiConfig.getZi5());
-        wordList.add(fanPaiConfig.getZi6());
-        wordList.add(fanPaiConfig.getZi7());
-        wordList.add(fanPaiConfig.getZi8());
-        wordList.add(fanPaiConfig.getZi9());
-        wordList.add(fanPaiConfig.getZi10());
-        wordList.add(fanPaiConfig.getZi11());
-        wordList.add(fanPaiConfig.getZi12());
-        wordList.add(fanPaiConfig.getZi13());
-        wordList.add(fanPaiConfig.getZi14());
-        wordList.add(fanPaiConfig.getZi15());
-        wordList.add(fanPaiConfig.getZi16());
-        wordList.add(fanPaiConfig.getZi17());
-        wordList.add(fanPaiConfig.getZi18());
-        wordList.add(fanPaiConfig.getZi19());
-        wordList.add(fanPaiConfig.getZi20());
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi1())) {
+            wordList.add(fanPaiConfig.getZi1());
+        }
+
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi2())) {
+            wordList.add(fanPaiConfig.getZi2());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi3())) {
+            wordList.add(fanPaiConfig.getZi3());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi4())) {
+            wordList.add(fanPaiConfig.getZi4());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi5())) {
+            wordList.add(fanPaiConfig.getZi5());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi6())) {
+            wordList.add(fanPaiConfig.getZi6());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi7())) {
+            wordList.add(fanPaiConfig.getZi7());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi8())) {
+            wordList.add(fanPaiConfig.getZi8());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi9())) {
+            wordList.add(fanPaiConfig.getZi9());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi10())) {
+            wordList.add(fanPaiConfig.getZi10());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi11())) {
+            wordList.add(fanPaiConfig.getZi11());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi12())) {
+            wordList.add(fanPaiConfig.getZi12());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi13())) {
+            wordList.add(fanPaiConfig.getZi13());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi14())) {
+            wordList.add(fanPaiConfig.getZi14());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi15())) {
+            wordList.add(fanPaiConfig.getZi15());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi16())) {
+            wordList.add(fanPaiConfig.getZi16());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi17())) {
+            wordList.add(fanPaiConfig.getZi17());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi18())) {
+            wordList.add(fanPaiConfig.getZi18());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi19())) {
+            wordList.add(fanPaiConfig.getZi19());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi20())) {
+            wordList.add(fanPaiConfig.getZi20());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi21())) {
+            wordList.add(fanPaiConfig.getZi21());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi22())) {
+            wordList.add(fanPaiConfig.getZi22());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi23())) {
+            wordList.add(fanPaiConfig.getZi23());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi24())) {
+            wordList.add(fanPaiConfig.getZi24());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi25())) {
+            wordList.add(fanPaiConfig.getZi25());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi26())) {
+            wordList.add(fanPaiConfig.getZi26());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi27())) {
+            wordList.add(fanPaiConfig.getZi27());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi28())) {
+            wordList.add(fanPaiConfig.getZi28());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi29())) {
+            wordList.add(fanPaiConfig.getZi29());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi30())) {
+            wordList.add(fanPaiConfig.getZi30());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi31())) {
+            wordList.add(fanPaiConfig.getZi31());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi32())) {
+            wordList.add(fanPaiConfig.getZi32());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi33())) {
+            wordList.add(fanPaiConfig.getZi33());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi34())) {
+            wordList.add(fanPaiConfig.getZi34());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi35())) {
+            wordList.add(fanPaiConfig.getZi35());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi36())) {
+            wordList.add(fanPaiConfig.getZi36());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi37())) {
+            wordList.add(fanPaiConfig.getZi37());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi38())) {
+            wordList.add(fanPaiConfig.getZi38());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi39())) {
+            wordList.add(fanPaiConfig.getZi39());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi40())) {
+            wordList.add(fanPaiConfig.getZi40());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi41())) {
+            wordList.add(fanPaiConfig.getZi41());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi42())) {
+            wordList.add(fanPaiConfig.getZi42());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi43())) {
+            wordList.add(fanPaiConfig.getZi43());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi44())) {
+            wordList.add(fanPaiConfig.getZi44());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi45())) {
+            wordList.add(fanPaiConfig.getZi45());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi46())) {
+            wordList.add(fanPaiConfig.getZi46());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi47())) {
+            wordList.add(fanPaiConfig.getZi47());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi48())) {
+            wordList.add(fanPaiConfig.getZi48());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi49())) {
+            wordList.add(fanPaiConfig.getZi49());
+        }
+        if (!StringUtils.isEmpty(fanPaiConfig.getZi50())) {
+            wordList.add(fanPaiConfig.getZi50());
+        }
         return wordList;
     }
 

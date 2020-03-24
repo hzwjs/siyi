@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import siyi.game.bo.gamelevel.ConfigWen;
 import siyi.game.dao.GamelevelConfigMapper;
@@ -13,6 +14,7 @@ import siyi.game.dao.entity.GamelevelConfig;
 import siyi.game.dao.entity.UserQuestion;
 import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
+import tk.mybatis.mapper.entity.Example;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -70,6 +72,38 @@ public class GameLevelManage {
         return questionId;
     }
 
+
+    /**
+     * 获取题目ID
+     *
+     * @param userId
+     * @return
+     */
+    public String getWuFanpaiId(String userId, String levelType) {
+        Example example = new Example(UserQuestion.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("questionType", levelType);
+        example.setOrderByClause("UPDATED_TIME DESC");
+        List<UserQuestion> userQuestion = userQuestionMapper.selectByExample(example);
+        String fanpaiId = "";
+        if (!CollectionUtils.isEmpty(userQuestion)) {
+            UserQuestion userQuestion1 = userQuestion.get(0);
+            fanpaiId = userQuestion1.getQuestionId();
+        } else {
+            fanpaiId = "fanpai_1";
+            return fanpaiId;
+        }
+        String questionId = "";
+
+        String prefix = fanpaiId.substring(0, fanpaiId.lastIndexOf("_") + 1);
+        String index = fanpaiId.substring(fanpaiId.lastIndexOf("_") + 1);
+        questionId = prefix + (Integer.parseInt(index) + 1);
+
+        return questionId;
+    }
+
+
     /**
      * 保存文关答题情况
      * @param userId
@@ -104,6 +138,41 @@ public class GameLevelManage {
         }
     }
 
+    /**
+     * description: 保存玩家武关答题情况 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/24 22:35 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param userId     玩家id
+     * @param wuFanpaiId 武关配置id
+     * @param levelType  武关类型
+     * @return void
+     */
+    public void saveUserWuGameRecord(String userId, String wuFanpaiId, String levelType) {
+        UserQuestion selectParam = new UserQuestion();
+        selectParam.setUserId(userId);
+        selectParam.setQuestionId(wuFanpaiId);
+        UserQuestion userQuestion = userQuestionMapper.selectOne(selectParam);
+        if (userQuestion != null) {
+            userQuestion.setUpdatedTime(new Date());
+            Integer answerNum = userQuestion.getAnswerNum();
+            if (answerNum != null) {
+                answerNum = answerNum + 1;
+            } else {
+                answerNum = 1;
+            }
+            userQuestion.setAnswerNum(answerNum);
+            userQuestionMapper.updateByPrimaryKeySelective(userQuestion);
+        } else {
+            UserQuestion insertParam = new UserQuestion();
+            insertParam.setUserId(userId);
+            insertParam.setQuestionId(wuFanpaiId);
+            insertParam.setQuestionType(levelType);
+            insertParam.setUpdatedTime(new Date());
+            userQuestionMapper.insertSelective(insertParam);
+        }
+    }
 
 
     /**
@@ -225,5 +294,6 @@ public class GameLevelManage {
             index++;
         }
     }
+
 
 }

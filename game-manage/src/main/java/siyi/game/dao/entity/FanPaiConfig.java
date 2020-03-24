@@ -5,6 +5,14 @@ import javax.persistence.*;
 
 @Table(name = "tb_k_fanpai_config")
 public class FanPaiConfig implements Serializable {
+
+    /**
+     * 主键，自增
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+
     /**
      * 数量
      */
@@ -64,8 +72,54 @@ public class FanPaiConfig implements Serializable {
     private String zi19;
 
     private String zi20;
+    private String zi21;
+    private String zi22;
+    private String zi23;
+    private String zi24;
+    private String zi25;
+    private String zi26;
+    private String zi27;
+    private String zi28;
+    private String zi29;
+    private String zi30;
+    private String zi31;
+    private String zi32;
+    private String zi33;
+    private String zi34;
+    private String zi35;
+    private String zi36;
+    private String zi37;
+    private String zi38;
+    private String zi39;
+    private String zi40;
+    private String zi41;
+    private String zi42;
+    private String zi43;
+    private String zi44;
+    private String zi45;
+    private String zi46;
+    private String zi47;
+    private String zi48;
+    private String zi49;
+    private String zi50;
 
     private static final long serialVersionUID = 1L;
+    /**
+     * 获取id
+     *
+     * @return id - id
+     */
+    public String getId() {
+        return id;
+    }
+    /**
+     * 设置id
+     *
+     * @param id id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * 获取数量
@@ -417,5 +471,245 @@ public class FanPaiConfig implements Serializable {
      */
     public void setZi20(String zi20) {
         this.zi20 = zi20 == null ? null : zi20.trim();
+    }
+
+    public String getZi21() {
+        return zi21;
+    }
+
+    public void setZi21(String zi21) {
+        this.zi21 = zi21;
+    }
+
+    public String getZi22() {
+        return zi22;
+    }
+
+    public void setZi22(String zi22) {
+        this.zi22 = zi22;
+    }
+
+    public String getZi23() {
+        return zi23;
+    }
+
+    public void setZi23(String zi23) {
+        this.zi23 = zi23;
+    }
+
+    public String getZi24() {
+        return zi24;
+    }
+
+    public void setZi24(String zi24) {
+        this.zi24 = zi24;
+    }
+
+    public String getZi25() {
+        return zi25;
+    }
+
+    public void setZi25(String zi25) {
+        this.zi25 = zi25;
+    }
+
+    public String getZi26() {
+        return zi26;
+    }
+
+    public void setZi26(String zi26) {
+        this.zi26 = zi26;
+    }
+
+    public String getZi27() {
+        return zi27;
+    }
+
+    public void setZi27(String zi27) {
+        this.zi27 = zi27;
+    }
+
+    public String getZi28() {
+        return zi28;
+    }
+
+    public void setZi28(String zi28) {
+        this.zi28 = zi28;
+    }
+
+    public String getZi29() {
+        return zi29;
+    }
+
+    public void setZi29(String zi29) {
+        this.zi29 = zi29;
+    }
+
+    public String getZi30() {
+        return zi30;
+    }
+
+    public void setZi30(String zi30) {
+        this.zi30 = zi30;
+    }
+
+    public String getZi31() {
+        return zi31;
+    }
+
+    public void setZi31(String zi31) {
+        this.zi31 = zi31;
+    }
+
+    public String getZi32() {
+        return zi32;
+    }
+
+    public void setZi32(String zi32) {
+        this.zi32 = zi32;
+    }
+
+    public String getZi33() {
+        return zi33;
+    }
+
+    public void setZi33(String zi33) {
+        this.zi33 = zi33;
+    }
+
+    public String getZi34() {
+        return zi34;
+    }
+
+    public void setZi34(String zi34) {
+        this.zi34 = zi34;
+    }
+
+    public String getZi35() {
+        return zi35;
+    }
+
+    public void setZi35(String zi35) {
+        this.zi35 = zi35;
+    }
+
+    public String getZi36() {
+        return zi36;
+    }
+
+    public void setZi36(String zi36) {
+        this.zi36 = zi36;
+    }
+
+    public String getZi37() {
+        return zi37;
+    }
+
+    public void setZi37(String zi37) {
+        this.zi37 = zi37;
+    }
+
+    public String getZi38() {
+        return zi38;
+    }
+
+    public void setZi38(String zi38) {
+        this.zi38 = zi38;
+    }
+
+    public String getZi39() {
+        return zi39;
+    }
+
+    public void setZi39(String zi39) {
+        this.zi39 = zi39;
+    }
+
+    public String getZi40() {
+        return zi40;
+    }
+
+    public void setZi40(String zi40) {
+        this.zi40 = zi40;
+    }
+
+    public String getZi41() {
+        return zi41;
+    }
+
+    public void setZi41(String zi41) {
+        this.zi41 = zi41;
+    }
+
+    public String getZi42() {
+        return zi42;
+    }
+
+    public void setZi42(String zi42) {
+        this.zi42 = zi42;
+    }
+
+    public String getZi43() {
+        return zi43;
+    }
+
+    public void setZi43(String zi43) {
+        this.zi43 = zi43;
+    }
+
+    public String getZi44() {
+        return zi44;
+    }
+
+    public void setZi44(String zi44) {
+        this.zi44 = zi44;
+    }
+
+    public String getZi45() {
+        return zi45;
+    }
+
+    public void setZi45(String zi45) {
+        this.zi45 = zi45;
+    }
+
+    public String getZi46() {
+        return zi46;
+    }
+
+    public void setZi46(String zi46) {
+        this.zi46 = zi46;
+    }
+
+    public String getZi47() {
+        return zi47;
+    }
+
+    public void setZi47(String zi47) {
+        this.zi47 = zi47;
+    }
+
+    public String getZi48() {
+        return zi48;
+    }
+
+    public void setZi48(String zi48) {
+        this.zi48 = zi48;
+    }
+
+    public String getZi49() {
+        return zi49;
+    }
+
+    public void setZi49(String zi49) {
+        this.zi49 = zi49;
+    }
+
+    public String getZi50() {
+        return zi50;
+    }
+
+    public void setZi50(String zi50) {
+        this.zi50 = zi50;
     }
 }

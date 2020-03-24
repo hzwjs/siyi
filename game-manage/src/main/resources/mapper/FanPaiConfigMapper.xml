@@ -5,6 +5,7 @@
     <!--
       WARNING - @mbg.generated
     -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="num" jdbcType="VARCHAR" property="num" />
     <result column="quanzhong" jdbcType="VARCHAR" property="quanzhong" />
     <result column="time" jdbcType="VARCHAR" property="time" />
@@ -29,5 +30,35 @@
     <result column="zi18" jdbcType="VARCHAR" property="zi18" />
     <result column="zi19" jdbcType="VARCHAR" property="zi19" />
     <result column="zi20" jdbcType="VARCHAR" property="zi20" />
+    <result column="zi21" jdbcType="VARCHAR" property="zi21" />
+    <result column="zi22" jdbcType="VARCHAR" property="zi22" />
+    <result column="zi23" jdbcType="VARCHAR" property="zi23" />
+    <result column="zi24" jdbcType="VARCHAR" property="zi24" />
+    <result column="zi25" jdbcType="VARCHAR" property="zi25" />
+    <result column="zi26" jdbcType="VARCHAR" property="zi26" />
+    <result column="zi27" jdbcType="VARCHAR" property="zi27" />
+    <result column="zi28" jdbcType="VARCHAR" property="zi28" />
+    <result column="zi29" jdbcType="VARCHAR" property="zi29" />
+    <result column="zi30" jdbcType="VARCHAR" property="zi30" />
+    <result column="zi31" jdbcType="VARCHAR" property="zi31" />
+    <result column="zi32" jdbcType="VARCHAR" property="zi32" />
+    <result column="zi33" jdbcType="VARCHAR" property="zi33" />
+    <result column="zi34" jdbcType="VARCHAR" property="zi34" />
+    <result column="zi35" jdbcType="VARCHAR" property="zi35" />
+    <result column="zi36" jdbcType="VARCHAR" property="zi36" />
+    <result column="zi37" jdbcType="VARCHAR" property="zi37" />
+    <result column="zi38" jdbcType="VARCHAR" property="zi38" />
+    <result column="zi39" jdbcType="VARCHAR" property="zi39" />
+    <result column="zi40" jdbcType="VARCHAR" property="zi40" />
+    <result column="zi41" jdbcType="VARCHAR" property="zi41" />
+    <result column="zi42" jdbcType="VARCHAR" property="zi42" />
+    <result column="zi43" jdbcType="VARCHAR" property="zi43" />
+    <result column="zi44" jdbcType="VARCHAR" property="zi44" />
+    <result column="zi45" jdbcType="VARCHAR" property="zi45" />
+    <result column="zi46" jdbcType="VARCHAR" property="zi46" />
+    <result column="zi47" jdbcType="VARCHAR" property="zi47" />
+    <result column="zi48" jdbcType="VARCHAR" property="zi48" />
+    <result column="zi49" jdbcType="VARCHAR" property="zi49" />
+    <result column="zi50" jdbcType="VARCHAR" property="zi50" />
   </resultMap>
 </mapper>

@@ -7,4 +7,5 @@ import java.util.Map;
 
 public interface UserQuestionMapper extends Mapper<UserQuestion> {
     UserQuestion queryUserCurrentQuestion(Map param);
+
 }
