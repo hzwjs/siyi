@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,6 +95,16 @@ public class GameLevelController {
         }
     }
 
+    /**
+     * description: 提交经验及道具信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/24 23:22 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param player
+     * @param itemPlayerRelations
+     * @return void
+     */
     @PostMapping(value = "submitGame")
     @ResponseBody
     public void submitGame(Player player, List<ItemPlayerRelation> itemPlayerRelations) {
@@ -157,6 +168,72 @@ public class GameLevelController {
             logger.error("提交游戏数据失败：{}", e);
         }
     }
+
+    /**
+     * description: 升级经验 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/24 23:01 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param playerId 玩家id
+     * @param expType  升级类型 文关 or 武关
+     * @param exp      升级经验值
+     * @param addExp   新获取的经验值
+     * @return java.util.Map<java.lang.String               ,               java.lang.Object>
+     */
+    @PostMapping("splitExp")
+    public Map<String, Object> splitExp(String playerId, String expType, String exp, String addExp) {
+        logger.info("开始升级，方法入参：玩家id：{}，升级类型：{}，升级经验值：{}，新增经验值：{}", playerId, expType, exp, addExp);
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            // 根据玩家id查询对应玩家信息
+            Player player = playerService.selectByPlayerId(playerId);
+            // 获取当前玩家的总经验值
+            String experience = player.getExperience();
+            Long totalExp = Long.valueOf(experience);
+            if (!StringUtils.isEmpty(addExp)) {
+                totalExp = Long.valueOf(experience) + Long.valueOf(addExp);
+            }
+            // 判断当前经验值是否满足升级需要
+            if (totalExp < Long.valueOf(exp)) {
+                resultMap.put("errCode", "000100");
+                resultMap.put("errMsg", "玩家经验不足");
+                return resultMap;
+            }
+            // 若满足升级需要，则根据升级类型判断将经验值分去哪个经验
+            String targetExp = "";
+            if ("wen".equals(expType)) {
+                logger.info("获取文关经验");
+                targetExp = player.getWenExperience();
+            } else {
+                logger.info("获取武关经验");
+                targetExp = player.getWuExperience();
+            }
+            logger.info("获取最终经验值：{}", targetExp);
+            Long finalPlayerExp = totalExp - Long.valueOf(exp);
+            player.setExperience(String.valueOf(finalPlayerExp));
+            Long finalTargetExp = Long.valueOf(targetExp) + Long.valueOf(exp);
+            if ("wen".equals(expType)) {
+                logger.info("更新文关经验");
+                player.setWenExperience(String.valueOf(finalTargetExp));
+            } else {
+                logger.info("更新武关经验");
+                player.setWuExperience(String.valueOf(finalTargetExp));
+            }
+            // 更新用户信息
+            playerService.updateByIdSelective(player);
+            resultMap.put("errCode", "000000");
+            resultMap.put("errMsg", "升级成功");
+            resultMap.put("newExp", String.valueOf(finalTargetExp));
+            return resultMap;
+        } catch (Exception e) {
+           logger.error("升级错误：{}", e);
+           resultMap.put("errCode", "999999");
+           resultMap.put("errMsg", "升级错误");
+           return resultMap;
+        }
+    }
+
 
     /**
      * description: 兑换称号 <br>
