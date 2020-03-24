@@ -5,16 +5,21 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.ItemConfigMapper;
 import siyi.game.dao.entity.Game;
 import siyi.game.dao.entity.Item;
 import siyi.game.dao.entity.ItemConfig;
+import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.manager.excel.read.ItemDataListener;
 import siyi.game.service.game.GameService;
+import siyi.game.service.item.ItemConfigService;
+import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.item.ItemService;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +43,12 @@ public class ItemController extends BaseController {
 
     @Autowired
     private ItemConfigMapper itemConfigMapper;
+
+    @Autowired
+    private ItemPlayerRelationService itemPlayerRelationService;
+
+    @Autowired
+    private ItemConfigService itemConfigService;
 
     @GetMapping("getAll")
     public Map<String, Object> getItemPageList(@RequestParam(name = "itemName", required = false, defaultValue = "") String itemName,
@@ -86,5 +97,28 @@ public class ItemController extends BaseController {
         } catch (Exception e) {
             LOGGER.error("读取道具配置信息错误：{}", e);
         }
+    }
+
+    /**
+     * description: 玩家查询背包道具列表 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/24 23:29 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param playerId 玩家id
+     * @param gameCode 游戏编码
+     * @return java.util.List<siyi.game.dao.entity.ItemConfig>
+     */
+    @GetMapping("getItem")
+    public List<ItemConfig> selectPlayerItem(String playerId, String gameCode) {
+        // 查询玩家道具信息
+        List<ItemPlayerRelation> relations = itemPlayerRelationService.selectByPlayerIdAndGameCode(playerId, gameCode);
+        List<String> itemNoList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(relations)) {
+            for (ItemPlayerRelation relation : relations) {
+                itemNoList.add(relation.getItemNo());
+            }
+        }
+        return itemConfigService.selectByItemNoList(itemNoList);
     }
 }
