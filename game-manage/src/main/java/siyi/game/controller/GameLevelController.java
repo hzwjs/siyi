@@ -182,6 +182,7 @@ public class GameLevelController {
      * @return java.util.Map<java.lang.String               ,               java.lang.Object>
      */
     @PostMapping("splitExp")
+    @ResponseBody
     public Map<String, Object> splitExp(String playerId, String expType, String exp, String addExp) {
         logger.info("开始升级，方法入参：玩家id：{}，升级类型：{}，升级经验值：{}，新增经验值：{}", playerId, expType, exp, addExp);
         Map<String, Object> resultMap = new HashMap<>();
