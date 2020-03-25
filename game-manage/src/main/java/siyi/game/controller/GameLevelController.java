@@ -245,7 +245,7 @@ public class GameLevelController {
      * @param
      * @return void
      */
-    @GetMapping("submitDesignation")
+    @PostMapping("submitDesignation")
     @ResponseBody
     public Map<String, Object> submitDesignation(String playerId, String levelType) {
         Map<String, Object> resultMap = new HashMap<>();
