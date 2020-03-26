@@ -1,8 +1,12 @@
 package siyi.game.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import siyi.game.dao.entity.*;
 import siyi.game.service.game.GameService;
@@ -26,7 +30,7 @@ import java.util.*;
 @RestController
 @RequestMapping("idiom/player")
 public class PlayerController extends BaseController {
-
+    private final Logger logger = LoggerFactory.getLogger(PlayerController.class);
     @Autowired
     private PlayerService playerService;
 
@@ -50,21 +54,43 @@ public class PlayerController extends BaseController {
 
     @PostMapping("login")
     public Map<String, Object> login(@RequestBody Player player) {
+        logger.info("开始玩家登录，登录玩家：{}", player.toString());
         Map<String, Object> resultMap = new HashMap<>();
-        Player findPlayer = playerService.selectByPlatFormId(player.getPlatformId());
-        if (findPlayer == null) {
+        String platformId = player.getPlatformId();
+        String playerId1 = player.getPlayerId();
+        Player loginPlayer;
+        if (StringUtils.isEmpty(platformId) && (StringUtils.isEmpty(playerId1))) {
+            logger.info("该玩家为新玩家");
+            // 新用户
+            loginPlayer = null;
+        } else if (!StringUtils.isEmpty(platformId) && !StringUtils.isEmpty(playerId1)) {
+            // 老用户，根据平台ID获取玩家信息
+            logger.info("该玩家为老玩家");
+            loginPlayer = playerService.selectByPlatFormId(platformId);
+        } else if (StringUtils.isEmpty(platformId) && !StringUtils.isEmpty(playerId1)) {
+            // 老用户，但未授权
+            logger.info("该玩家为老玩家，但未授权");
+            loginPlayer = playerService.selectByPlayerId(playerId1);
+        } else {
+            // 其他情况，按新角色处理
+            logger.info("该玩家为新玩家");
+            loginPlayer = null;
+        }
+
+        if (loginPlayer == null) {
             // 若没有玩家信息，则新增玩家
+            loginPlayer = new Player();
             // 生成玩家编号
             String playerId = RandomUtil.generate16();
-            player.setPlayerId(playerId);
-            playerService.insertSelective(player);
+            BeanUtils.copyProperties(player, loginPlayer);
+            loginPlayer.setPlayerId(playerId);
+            playerService.insertSelective(loginPlayer);
         }
-        // 查询最新玩家信息
-        findPlayer = playerService.selectByPlatFormId(player.getPlatformId());
+        logger.info("获取登录玩家信息：{}", loginPlayer);
         // 设置登录ID，通过该值判断是哪一次登录
         String uuid32 = UUIDUtil.getUUID32();
         // 查询玩家道具信息
-        List<ItemPlayerRelation> relations = itemPlayerRelationService.selectByPlayerIdAndGameCode(player.getPlayerId(), player.getGameCode());
+        List<ItemPlayerRelation> relations = itemPlayerRelationService.selectByPlayerIdAndGameCode(loginPlayer.getPlayerId(), loginPlayer.getGameCode());
         List<String> itemNoList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(relations)) {
             for (ItemPlayerRelation relation : relations) {
@@ -73,32 +99,57 @@ public class PlayerController extends BaseController {
         }
         List<ItemConfig> itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
         // 查询玩家称号信息
-        String playerLevel = player.getPlayerLevel();
+        String playerLevel = loginPlayer.getPlayerLevel();
         LevelUpConfig levelUpConfig = levelUpService.selectByLevel(playerLevel);
 
         // 插入玩家登录数据
         LoginLog loginLog = new LoginLog();
-        loginLog.setGameCode(player.getGameCode());
+        loginLog.setGameCode(loginPlayer.getGameCode());
         loginLog.setOpenId(uuid32);
-        loginLog.setPlayerId(findPlayer.getPlayerId());
+        loginLog.setPlayerId(loginPlayer.getPlayerId());
         loginLog.setLoginTime(new Date());
         loginLogService.insertSelective(loginLog);
 
         // 查询玩家挑战记录信息
         LevelClearRecord selectParam = new LevelClearRecord();
-        selectParam.setPlayerId(findPlayer.getPlayerId());
-        selectParam.setGameCode(player.getGameCode());
+        selectParam.setPlayerId(loginPlayer.getPlayerId());
+        selectParam.setGameCode(loginPlayer.getGameCode());
         LevelClearRecord levelClearRecord = levelClearRecordService.selectByBean(selectParam);
         // 返回成功响应
         getSuccessResult(resultMap);
         // 返回数据组装
-        resultMap.put("player", findPlayer);
+        resultMap.put("player", loginPlayer);
         resultMap.put("openId", uuid32);
         resultMap.put("itemList", itemConfigs);
         resultMap.put("level", levelUpConfig);
         resultMap.put("levelRecord", levelClearRecord);
         return resultMap;
     }
+
+    /**
+     * description: 授权 <br>
+     * version: 1.0 <br>
+     * date: 2020/3/26 23:30 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param playerId 本地玩家id
+     * @param platformId 平台玩家id
+     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     */
+    @PostMapping("authorize")
+    public Map<String, Object> Authorize(String playerId, String platformId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Player player = playerService.selectByPlayerId(playerId);
+        if (player == null) {
+            getFailResult(resultMap, "不存在该玩家信息");
+            return resultMap;
+        }
+        player.setPlatformId(platformId);
+        playerService.updateByIdSelective(player);
+        getSuccessResult(resultMap);
+        return resultMap;
+    }
+
 
     @GetMapping("/logOut")
     public Map<String, Object> logOut(String playerId, String openId) {
@@ -117,7 +168,7 @@ public class PlayerController extends BaseController {
      * @param gameCode
      * @param pageNum
      * @param pageSize
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      */
     @GetMapping("/getAll")
     public Map<String, Object> getPlayerList(@RequestParam(name = "playerName", required = false, defaultValue = "") String playerName,
