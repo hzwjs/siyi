@@ -198,14 +198,11 @@ public class GameLevelManage {
         int limitTime = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(limit[0]), Integer.parseInt(limit[1]));
         configWen.setLimitTime(limitTime);
         /* 是否出现双倍按钮 */
-        String doublePercent = config.getDoubleGaiLv();
+        String doublePercent = config.getShowAd();
         configWen.setDoubleBut(RandomUtil.isHit(doublePercent));
         /* 是否出现复活按钮 */
         String fhPercent = config.getFuHuo();
         configWen.setFuhouBut(RandomUtil.isHit(fhPercent));
-        /* 是否出现奖励 */
-        String jlPercent = config.getJiangLiGaiLv();
-        configWen.setJiangli(RandomUtil.isHit(jlPercent));
         /* 是否出现武关 */
         String wgPercent = config.getWuGaiLv();
         configWen.setWuguan(RandomUtil.isHit(wgPercent));

@@ -65,6 +65,7 @@ public class GameLevelConfigDataListener extends AnalysisEventListener<Gamelevel
 
     /**
      * 加上存储数据库
+     * todo -hzw 后续考虑优化：存在记录更新，不存在则插入
      */
     private void saveData() {
         LOGGER.info("{}条数据，开始存储数据库！", list.size());

@@ -9,6 +9,12 @@
     <result column="TIME" jdbcType="VARCHAR" property="time" />
     <result column="QUTION_TIANZI" jdbcType="VARCHAR" property="qutionTianzi" />
     <result column="QUTION_TIANZI_WRONG" jdbcType="VARCHAR" property="qutionTianziWrong" />
+    <result column="QUESTION_XUANZE4" jdbcType="VARCHAR" property="questionXuanze4" />
+    <result column="QUESTION_XUANZE4_WRONG" jdbcType="VARCHAR" property="questionXuanze4Wrong" />
+    <result column="QUESTION_XUANZE5" jdbcType="VARCHAR" property="questionXuanze5" />
+    <result column="QUESTION_XUANZE5_WRONG" jdbcType="VARCHAR" property="questionXuanze5Wrong" />
+    <result column="QUESTION_XUANZE7" jdbcType="VARCHAR" property="questionXuanze7" />
+    <result column="QUESTION_XUANZE7_WRONG" jdbcType="VARCHAR" property="questionXuanze7Wrong" />
     <result column="XUAN_ZHUAN_GAI_LV" jdbcType="VARCHAR" property="xuanZhuanGaiLv" />
     <result column="JIAO_HUAN_GAI_LV" jdbcType="VARCHAR" property="jiaoHuanGaiLv" />
     <result column="BIAN_HEI_GAI_LV" jdbcType="VARCHAR" property="bianHeiGaiLv" />
@@ -19,12 +25,14 @@
     <result column="BIAN_HEI_GAI_LV2" jdbcType="VARCHAR" property="bianHeiGaiLv2" />
     <result column="QUTION_DUICUO" jdbcType="VARCHAR" property="qutionDuicuo" />
     <result column="QUTION_DUICUO_WRONG" jdbcType="VARCHAR" property="qutionDuicuoWrong" />
+    <result column="QUTION_DUICUO2" jdbcType="VARCHAR" property="qutionDuicuo2" />
+    <result column="QUTION_DUICUO2_WRONG" jdbcType="VARCHAR" property="qutionDuicuo2Wrong" />
     <result column="JIANGLI_GOLD" jdbcType="VARCHAR" property="jiangliGold" />
     <result column="JIANGLI_EXP" jdbcType="VARCHAR" property="jiangliExp" />
     <result column="JIANG_LI_ITEM" jdbcType="VARCHAR" property="jiangLiItem" />
     <result column="ITEM_SHU_LIANG" jdbcType="VARCHAR" property="itemShuLiang" />
-    <result column="JIANG_LI_GAI_LV" jdbcType="VARCHAR" property="jiangLiGaiLv" />
-    <result column="DOUBLE_GAI_LV" jdbcType="VARCHAR" property="doubleGaiLv" />
+    <result column="SHOW_AD" jdbcType="VARCHAR" property="showAd" />
+    <result column="SHOW_AD_AUTO" jdbcType="VARCHAR" property="showAdAuto" />
     <result column="FU_HUO" jdbcType="VARCHAR" property="fuHuo" />
     <result column="SPEED" jdbcType="VARCHAR" property="speed" />
     <result column="CD" jdbcType="VARCHAR" property="cd" />
@@ -34,5 +42,6 @@
     <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
     <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="untitled" jdbcType="VARCHAR" property="untitled" />
   </resultMap>
 </mapper>

@@ -18,8 +18,10 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
 
         <!--jdbc driver-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.52.201.42:3306/scf"
-                        userId="scf" password="scfisc"/>
+<!--        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.52.201.42:3306/scf"-->
+<!--                        userId="scf" password="scfisc"/>-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/baoer-test"
+                        userId="root" password="hzw138144"/>
 
         <!--TableName.java-->
         <javaModelGenerator targetPackage="siyi.game.dao.entity"
@@ -40,8 +42,8 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_level_clear_record" domainObjectName="LevelClearRecord">
-            <generatedKey column="serie_id" sqlStatement="Mysql" identity="true"/>
+        <table tableName="tb_gamelevel_config" domainObjectName="GamelevelConfig">
+            <generatedKey column="GAME_LEVEL_ID" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>
