@@ -1,0 +1,36 @@
+server:
+  port: 18888
+
+spring:
+  application:
+    name: game-manage
+  datasource:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://localhost:3306/baoer-test?useUnicode=true&characterEncoding=utf8&useSSL=false
+          name:
+          username: root
+          password: hzw138144
+          hikari:
+              data-source-properties:
+                  cachePrepStmts: true
+                  prepStmtCacheSize: 250
+                  prepStmtCacheSqlLimit: 2048
+                  useServerPrepStmts: true
+              maximumPoolSize: 50
+
+logging:
+  config: classpath:logback-spring.xml
+
+mapper:
+  mappers:
+    - tk.mybatis.mapper.common.Mapper
+  notEmpty: true
+
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
