@@ -1,6 +1,5 @@
 package siyi.game.bo.gamelevel;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dozermapper.core.Mapping;
 import lombok.Data;

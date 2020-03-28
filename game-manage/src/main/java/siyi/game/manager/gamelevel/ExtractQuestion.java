@@ -1,5 +1,8 @@
 package siyi.game.manager.gamelevel;
 
+import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import siyi.game.bo.gamelevel.AnswerTianzi;
@@ -24,6 +27,8 @@ import java.util.*;
 @Service
 public class ExtractQuestion {
 
+    private final Logger log = LoggerFactory.getLogger(ExtractQuestion.class);
+
     /**
      * The Tianzi 4 mapper.
      */
@@ -38,7 +43,7 @@ public class ExtractQuestion {
     public Map<String, Object> extractTianzi4() {
         // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
         Map weight = new HashMap();
-        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 5);
+        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 500);
         int itemNum = selectNumByWeight(weight);
         // 获取题库的总题数
         int count = tianzi4Mapper.selectCount(new Tianzi4());
@@ -52,6 +57,7 @@ public class ExtractQuestion {
             itemList.add(tianzi4);
         }
         /* 对每个项目进行布局、挖字、组装答案处理 */
+        log.info("=== tianzi4原始题：{} ===", JSON.toJSONString(itemList));
         Map answerMap = buildAnswer(itemList);
         AnswerTianzi answerTianzi = (AnswerTianzi) answerMap.get("answer");
         CandidateWordTianzi candidate = (CandidateWordTianzi) answerMap.get("candidate");
