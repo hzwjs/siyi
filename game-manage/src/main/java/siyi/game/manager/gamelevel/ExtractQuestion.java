@@ -83,22 +83,12 @@ public class ExtractQuestion {
                     point = index0 + x_startIndex + j;
                 }
                 String value = (String) ReflectOperate.getGetMethodValue(item, "item" + j);
-                List<String> contents = digWord(item);
                 Map answer = BeanUtil.beanToMap(answerTianzi);
-                for (int q = 0; q < contents.size(); q++) {
-                    if (value.equals(contents.get(q))) {
-                        Set<String> keys = answer.keySet();
-                        String temp = value;
-                        for (String key : keys) {
-                            if (value.equals(answer.get(key))) {
-                                temp = key;
-                                break;
-                            }
-                        }
-                        if (!temp.equals(value)) {
-                            value = temp;
-                            break;
-                        }
+                Set<String> keys = answer.keySet();
+                for (String key: keys) {
+                    if (value.equals(answer.get(key))) {
+                        value = key;
+                        break;
                     }
                 }
                 ReflectOperate.setValueByFieldName(quTianzi, "point" + point, value);
@@ -142,7 +132,7 @@ public class ExtractQuestion {
         for (Tianzi4 tianzi4 : itemList) {
             List<String> contents = digWord(tianzi4);
             for (String content : contents) {
-                ReflectOperate.setValueByFieldName(answerIndex, "A"+answerIndex, content);
+                ReflectOperate.setValueByFieldName(answerTianzi, "A"+answerIndex, content);
                 answerIndex++;
             }
         }
