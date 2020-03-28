@@ -155,9 +155,10 @@ public class GameLevelImpl implements GameLevelService {
                 if (qTypes[3].equals(qType)) {
                     Map tianzi = extractQuestion.extractTianzi4();
                     AnswerTianzi answer = (AnswerTianzi) tianzi.get("answer");
+                    CandidateWordTianzi candidate = (CandidateWordTianzi) tianzi.get("candidate");
                     gameLevel.setAnswerTianzi(answer);
                     gameLevel.setQuestionTianzi((QuestionTianzi) tianzi.get("question"));
-                    gameLevel.setCandidate(padWord(answer)); // 补充候选矩阵
+                    gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
                 }
                 gameLevel.setConfigWen(configWen);
 

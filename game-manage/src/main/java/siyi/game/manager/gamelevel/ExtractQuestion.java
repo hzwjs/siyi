@@ -3,6 +3,7 @@ package siyi.game.manager.gamelevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import siyi.game.bo.gamelevel.AnswerTianzi;
+import siyi.game.bo.gamelevel.CandidateWordTianzi;
 import siyi.game.bo.gamelevel.QuestionTianzi;
 import siyi.game.dao.Tianzi4Mapper;
 import siyi.game.dao.entity.QuTianzi;
@@ -51,11 +52,14 @@ public class ExtractQuestion {
             itemList.add(tianzi4);
         }
         /* 对每个项目进行布局、挖字、组装答案处理 */
-        AnswerTianzi answerTianzi = buildAnswer(itemList);
+        Map answerMap = buildAnswer(itemList);
+        AnswerTianzi answerTianzi = (AnswerTianzi) answerMap.get("answer");
+        CandidateWordTianzi candidate = (CandidateWordTianzi) answerMap.get("candidate");
         QuestionTianzi quTianzi = wordLayout(itemList, answerTianzi);
         Map result = new HashMap();
         result.put("answer", answerTianzi);
         result.put("question", quTianzi);
+        result.put("candidate", candidate);
         return result;
     }
 
@@ -70,9 +74,17 @@ public class ExtractQuestion {
         // 同一列编号的个位数是相同的，相邻的两行同一列上cell的序号相差10
         int xNum = 4; int yNum = itemList.size();
         for (int i = 0; i < yNum; i++) {
-            int index0 = i*10; // 每一行的第一个序号
-            Tianzi4 item = itemList.get(i);
             Map xMap = betweenAnalyze(xNum, 10); // 居中计算
+            Map yMap = betweenAnalyze(yNum, 10); // 居中计算
+            int yStart = (int) yMap.get("startIndex");
+            boolean yIntervalFlag = (boolean) yMap.get("intervalFlag");
+            int index0 = 0;
+            if (yIntervalFlag) {
+                index0 = (yStart + i*2) *10;
+            } else {
+                index0 = (yStart + i) *10;
+            }
+            Tianzi4 item = itemList.get(i);
             int x_startIndex = (int) xMap.get("startIndex");
             boolean intervalFlag = (boolean) xMap.get("intervalFlag");
             for (int j = 1; j <= 4; j++) {
@@ -88,6 +100,7 @@ public class ExtractQuestion {
                 for (String key: keys) {
                     if (value.equals(answer.get(key))) {
                         value = key;
+                        answer.remove(key);
                         break;
                     }
                 }
@@ -126,17 +139,22 @@ public class ExtractQuestion {
      * @param itemList the item list
      * @return the answer tianzi
      */
-    private AnswerTianzi buildAnswer(List<Tianzi4> itemList) {
+    private Map<String, Object> buildAnswer(List<Tianzi4> itemList) {
         AnswerTianzi answerTianzi = new AnswerTianzi();
+        CandidateWordTianzi candidate = new CandidateWordTianzi();
         int answerIndex = 1;
         for (Tianzi4 tianzi4 : itemList) {
             List<String> contents = digWord(tianzi4);
             for (String content : contents) {
                 ReflectOperate.setValueByFieldName(answerTianzi, "A"+answerIndex, content);
+                ReflectOperate.setValueByFieldName(candidate, "point"+(answerIndex + 99), content);
                 answerIndex++;
             }
         }
-        return answerTianzi;
+        Map result = new HashMap();
+        result.put("answer", answerTianzi);
+        result.put("candidate", candidate);
+        return result;
     }
 
     /**
