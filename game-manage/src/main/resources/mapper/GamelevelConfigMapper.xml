@@ -31,6 +31,7 @@
     <result column="JIANGLI_EXP" jdbcType="VARCHAR" property="jiangliExp" />
     <result column="JIANG_LI_ITEM" jdbcType="VARCHAR" property="jiangLiItem" />
     <result column="ITEM_SHU_LIANG" jdbcType="VARCHAR" property="itemShuLiang" />
+    <result column="JIANGLI_GAI_LV" jdbcType="VARCHAR" property="jiangliGaiLv" />
     <result column="SHOW_AD" jdbcType="VARCHAR" property="showAd" />
     <result column="SHOW_AD_AUTO" jdbcType="VARCHAR" property="showAdAuto" />
     <result column="FU_HUO" jdbcType="VARCHAR" property="fuHuo" />

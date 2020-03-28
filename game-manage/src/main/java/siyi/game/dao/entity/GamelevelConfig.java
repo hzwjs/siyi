@@ -165,6 +165,12 @@ public class GamelevelConfig implements Serializable {
     private String itemShuLiang;
 
     /**
+     * 奖励概率
+     */
+    @Column(name = "JIANGLI_GAI_LV")
+    private String jiangliGaiLv;
+
+    /**
      * 显示广告概率
      */
     @Column(name = "SHOW_AD")
@@ -700,6 +706,24 @@ public class GamelevelConfig implements Serializable {
      */
     public void setItemShuLiang(String itemShuLiang) {
         this.itemShuLiang = itemShuLiang == null ? null : itemShuLiang.trim();
+    }
+
+    /**
+     * 获取奖励概率
+     *
+     * @return JIANGLI_GAI_LV - 奖励概率
+     */
+    public String getJiangliGaiLv() {
+        return jiangliGaiLv;
+    }
+
+    /**
+     * 设置奖励概率
+     *
+     * @param jiangliGaiLv 奖励概率
+     */
+    public void setJiangliGaiLv(String jiangliGaiLv) {
+        this.jiangliGaiLv = jiangliGaiLv == null ? null : jiangliGaiLv.trim();
     }
 
     /**
