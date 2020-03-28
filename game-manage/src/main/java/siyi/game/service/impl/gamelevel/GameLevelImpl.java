@@ -12,10 +12,10 @@ import org.springframework.util.StringUtils;
 import siyi.game.bo.gamelevel.*;
 import siyi.game.dao.*;
 import siyi.game.dao.entity.*;
+import siyi.game.manager.gamelevel.ExtractQuestion;
 import siyi.game.manager.gamelevel.GameLevelManage;
 import siyi.game.service.config.JiangliConfigService;
 import siyi.game.service.gamelevel.GameLevelService;
-import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 
 import java.lang.reflect.Field;
@@ -47,11 +47,13 @@ public class GameLevelImpl implements GameLevelService {
     private FanPaiConfigMapper fanPaiConfigMapper;
     @Autowired
     private GameLevelManage gameLevelManage;
+    @Autowired
+    private ExtractQuestion extractQuestion;
 
     @Autowired
     private JiangliConfigService jiangliConfigService;
 
-    private static String[] qTypes = {"tianzi", "duicuo", "xuanze"};
+    private static String[] qTypes = {"tianzi", "duicuo", "xuanze", "tianzi4"};
     private static final String STATUS_VALID = "1";
 
     @Override
@@ -149,6 +151,13 @@ public class GameLevelImpl implements GameLevelService {
                     gameLevel.setQuestionXuanze(question);
                     gameLevel.setTips(quXuanze.getTips());
                     configWen.setQuestionId(quXuanze.getQuId());
+                }
+                if (qTypes[3].equals(qType)) {
+                    Map tianzi = extractQuestion.extractTianzi4();
+                    AnswerTianzi answer = (AnswerTianzi) tianzi.get("answer");
+                    gameLevel.setAnswerTianzi(answer);
+                    gameLevel.setQuestionTianzi((QuestionTianzi) tianzi.get("question"));
+                    gameLevel.setCandidate(padWord(answer)); // 补充候选矩阵
                 }
                 gameLevel.setConfigWen(configWen);
 
