@@ -31,7 +31,7 @@ public class GameLevelManage {
     @Autowired
     private UserQuestionMapper userQuestionMapper;
 
-    private static String[] qTypes = {"tianzi", "duicuo", "xuanze", "tianzi4"};
+    private static String[] qTypes = {"tianzi", "duicuo", "xuanze", "tianzi4", "tianzi5", "tianzi7"};
 
     /**
      * 查询当前文关关卡的配置信息
@@ -192,6 +192,8 @@ public class GameLevelManage {
         map.put(qTypes[1], config.getQutionDuicuo());
         map.put(qTypes[2], config.getQutionXuanze());
         map.put(qTypes[3], config.getQuestionXuanze4());
+        map.put(qTypes[4], config.getQuestionXuanze5());
+        map.put(qTypes[5], config.getQuestionXuanze7());
         selectQuestionTypeByWeight(map, configWen);
         /* 关卡限时 */
         String time = config.getTime();

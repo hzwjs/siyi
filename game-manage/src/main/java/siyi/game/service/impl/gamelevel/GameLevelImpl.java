@@ -55,7 +55,7 @@ public class GameLevelImpl implements GameLevelService {
     @Autowired
     private JiangliConfigService jiangliConfigService;
 
-    private static String[] qTypes = {"tianzi", "duicuo", "xuanze", "tianzi4"};
+    private static String[] qTypes = {"tianzi", "duicuo", "xuanze", "tianzi4", "tianzi5", "tianzi7"};
     private static final String STATUS_VALID = "1";
 
     @Override
@@ -156,6 +156,28 @@ public class GameLevelImpl implements GameLevelService {
                 }
                 if (qTypes[3].equals(qType)) {
                     Map tianzi = extractQuestion.extractTianzi4();
+                    AnswerTianzi answer = (AnswerTianzi) tianzi.get("answer");
+                    CandidateWordTianzi candidate = (CandidateWordTianzi) tianzi.get("candidate");
+                    QuestionTianzi questionTianzi = (QuestionTianzi) tianzi.get("question");
+                    gameLevel.setAnswerTianzi(answer);
+                    gameLevel.setQuestionTianzi(questionTianzi);
+                    gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
+                    log.info("=== tainzi4 answer:{} ===", JSON.toJSONString(answer));
+                    log.info("=== tainzi4 question:{} ===", JSON.toJSONString(questionTianzi));
+                }
+                if (qTypes[4].equals(qType)) {
+                    Map tianzi = extractQuestion.extractTianzi5();
+                    AnswerTianzi answer = (AnswerTianzi) tianzi.get("answer");
+                    CandidateWordTianzi candidate = (CandidateWordTianzi) tianzi.get("candidate");
+                    QuestionTianzi questionTianzi = (QuestionTianzi) tianzi.get("question");
+                    gameLevel.setAnswerTianzi(answer);
+                    gameLevel.setQuestionTianzi(questionTianzi);
+                    gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
+                    log.info("=== tainzi4 answer:{} ===", JSON.toJSONString(answer));
+                    log.info("=== tainzi4 question:{} ===", JSON.toJSONString(questionTianzi));
+                }
+                if (qTypes[5].equals(qType)) {
+                    Map tianzi = extractQuestion.extractTianzi7();
                     AnswerTianzi answer = (AnswerTianzi) tianzi.get("answer");
                     CandidateWordTianzi candidate = (CandidateWordTianzi) tianzi.get("candidate");
                     QuestionTianzi questionTianzi = (QuestionTianzi) tianzi.get("question");

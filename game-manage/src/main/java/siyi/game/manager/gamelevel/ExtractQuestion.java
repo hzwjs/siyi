@@ -9,8 +9,12 @@ import siyi.game.bo.gamelevel.AnswerTianzi;
 import siyi.game.bo.gamelevel.CandidateWordTianzi;
 import siyi.game.bo.gamelevel.QuestionTianzi;
 import siyi.game.dao.Tianzi4Mapper;
+import siyi.game.dao.Tianzi5Mapper;
+import siyi.game.dao.Tianzi7Mapper;
 import siyi.game.dao.entity.QuTianzi;
 import siyi.game.dao.entity.Tianzi4;
+import siyi.game.dao.entity.Tianzi5;
+import siyi.game.dao.entity.Tianzi7;
 import siyi.game.utill.BeanUtil;
 import siyi.game.utill.RandomUtil;
 import siyi.game.utill.ReflectOperate;
@@ -35,6 +39,12 @@ public class ExtractQuestion {
     @Autowired
     private Tianzi4Mapper tianzi4Mapper;
 
+    @Autowired
+    private Tianzi5Mapper tianzi5Mapper;
+
+    @Autowired
+    private Tianzi7Mapper tianzi7Mapper;
+
     /**
      * 从tianzi4的题库中提取题目
      *
@@ -43,7 +53,7 @@ public class ExtractQuestion {
     public Map<String, Object> extractTianzi4() {
         // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
         Map weight = new HashMap();
-        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 5);
+        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
         int itemNum = selectNumByWeight(weight);
         // 获取题库的总题数
         int count = tianzi4Mapper.selectCount(new Tianzi4());
@@ -61,7 +71,65 @@ public class ExtractQuestion {
         Map answerMap = buildAnswer(itemList);
         AnswerTianzi answerTianzi = (AnswerTianzi) answerMap.get("answer");
         CandidateWordTianzi candidate = (CandidateWordTianzi) answerMap.get("candidate");
-        QuestionTianzi quTianzi = wordLayout(itemList, answerTianzi);
+        QuestionTianzi quTianzi = wordLayout(itemList, answerTianzi, 4);
+        Map result = new HashMap();
+        result.put("answer", answerTianzi);
+        result.put("question", quTianzi);
+        result.put("candidate", candidate);
+        return result;
+    }
+
+    public Map<String, Object> extractTianzi5() {
+        // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
+        Map weight = new HashMap();
+        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
+        int itemNum = selectNumByWeight(weight);
+        // 获取题库的总题数
+        int count = tianzi5Mapper.selectCount(new Tianzi5());
+        // 随机选择出对应个数的项目
+        List<Tianzi5> itemList = new ArrayList<>();
+        for (int i = 1; i <= itemNum; i++) {
+            int questionId = RandomUtil.getRandomNumInTwoIntNum(1, count);
+            Tianzi5 tianzi5 = new Tianzi5();
+            tianzi5.setQuestionId(questionId + "");
+            tianzi5 = tianzi5Mapper.selectByPrimaryKey(tianzi5);
+            itemList.add(tianzi5);
+        }
+        /* 对每个项目进行布局、挖字、组装答案处理 */
+        log.info("=== tianzi5原始题：{} ===", JSON.toJSONString(itemList));
+        Map answerMap = buildAnswer5(itemList);
+        AnswerTianzi answerTianzi = (AnswerTianzi) answerMap.get("answer");
+        CandidateWordTianzi candidate = (CandidateWordTianzi) answerMap.get("candidate");
+        QuestionTianzi quTianzi = wordLayout(itemList, answerTianzi, 5);
+        Map result = new HashMap();
+        result.put("answer", answerTianzi);
+        result.put("question", quTianzi);
+        result.put("candidate", candidate);
+        return result;
+    }
+
+    public Map<String, Object> extractTianzi7() {
+        // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
+        Map weight = new HashMap();
+        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
+        int itemNum = selectNumByWeight(weight);
+        // 获取题库的总题数
+        int count = tianzi7Mapper.selectCount(new Tianzi7());
+        // 随机选择出对应个数的项目
+        List<Tianzi7> itemList = new ArrayList<>();
+        for (int i = 1; i <= itemNum; i++) {
+            int questionId = RandomUtil.getRandomNumInTwoIntNum(1, count);
+            Tianzi7 tianzi7 = new Tianzi7();
+            tianzi7.setQuestionId(questionId + "");
+            tianzi7 = tianzi7Mapper.selectByPrimaryKey(tianzi7);
+            itemList.add(tianzi7);
+        }
+        /* 对每个项目进行布局、挖字、组装答案处理 */
+        log.info("=== tianzi7原始题：{} ===", JSON.toJSONString(itemList));
+        Map answerMap = buildAnswer7(itemList);
+        AnswerTianzi answerTianzi = (AnswerTianzi) answerMap.get("answer");
+        CandidateWordTianzi candidate = (CandidateWordTianzi) answerMap.get("candidate");
+        QuestionTianzi quTianzi = wordLayout(itemList, answerTianzi, 7);
         Map result = new HashMap();
         result.put("answer", answerTianzi);
         result.put("question", quTianzi);
@@ -75,10 +143,10 @@ public class ExtractQuestion {
      * @param itemList the item list
      * @return the qu tianzi
      */
-    private QuestionTianzi wordLayout(List<Tianzi4> itemList, AnswerTianzi answerTianzi) {
+    private QuestionTianzi wordLayout(List itemList, AnswerTianzi answerTianzi, int rowNum) {
         QuestionTianzi quTianzi = new QuestionTianzi();
         // 同一列编号的个位数是相同的，相邻的两行同一列上cell的序号相差10
-        int xNum = 4; int yNum = itemList.size();
+        int xNum = rowNum; int yNum = itemList.size();
         for (int i = 0; i < yNum; i++) {
             Map xMap = betweenAnalyze(xNum, 10); // 居中计算
             Map yMap = betweenAnalyze(yNum, 10); // 居中计算
@@ -90,12 +158,12 @@ public class ExtractQuestion {
             } else {
                 index0 = (yStart + i) *10;
             }
-            Tianzi4 item = itemList.get(i);
+            Object item = itemList.get(i);
             int x_startIndex = (int) xMap.get("startIndex");
             boolean intervalFlag = (boolean) xMap.get("intervalFlag");
             // 将成语的每字填入题目矩阵中，point代办矩阵中的位置
             Map answer = BeanUtil.beanToMapRemoveNull(answerTianzi);
-            for (int j = 1; j <= 4; j++) {
+            for (int j = 1; j <= rowNum; j++) {
                 String value = (String) ReflectOperate.getGetMethodValue(item, "item" + j);
                 Set<String> keys = answer.keySet();
                 for (String key: keys) {
@@ -165,6 +233,44 @@ public class ExtractQuestion {
         return result;
     }
 
+    private Map<String, Object> buildAnswer5(List<Tianzi5> itemList) {
+        AnswerTianzi answerTianzi = new AnswerTianzi();
+        CandidateWordTianzi candidate = new CandidateWordTianzi();
+        int answerIndex = 1;
+        for (Tianzi5 tianzi5 : itemList) {
+            List<String> contents = digWord5(tianzi5);
+            for (String content : contents) {
+                ReflectOperate.setValueByFieldName(answerTianzi, "A"+answerIndex, content);
+                ReflectOperate.setValueByFieldName(candidate, "point"+(answerIndex + 99), content);
+                answerIndex++;
+            }
+        }
+        Map result = new HashMap();
+        log.info("=== 挖去的字:{} ===", JSON.toJSONString(answerTianzi));
+        result.put("answer", answerTianzi);
+        result.put("candidate", candidate);
+        return result;
+    }
+
+    private Map<String, Object> buildAnswer7(List<Tianzi7> itemList) {
+        AnswerTianzi answerTianzi = new AnswerTianzi();
+        CandidateWordTianzi candidate = new CandidateWordTianzi();
+        int answerIndex = 1;
+        for (Tianzi7 tianzi7 : itemList) {
+            List<String> contents = digWord7(tianzi7);
+            for (String content : contents) {
+                ReflectOperate.setValueByFieldName(answerTianzi, "A"+answerIndex, content);
+                ReflectOperate.setValueByFieldName(candidate, "point"+(answerIndex + 99), content);
+                answerIndex++;
+            }
+        }
+        Map result = new HashMap();
+        log.info("=== 挖去的字:{} ===", JSON.toJSONString(answerTianzi));
+        result.put("answer", answerTianzi);
+        result.put("candidate", candidate);
+        return result;
+    }
+
     /**
      * Dig word.
      * 挖字
@@ -185,6 +291,46 @@ public class ExtractQuestion {
             Set<Integer> indexSet = RandomUtil.getRandomNumInTwoIntNumRepetition(1, 4, num); // 挖字的位置
             for (Integer index : indexSet) {
                 String indexValue = (String) ReflectOperate.getGetMethodValue(tianzi4, "Item" + index);
+                content.add(indexValue);
+            }
+            return content;
+        }
+        return null;
+    }
+
+    private List<String> digWord5(Tianzi5 tianzi5) {
+        String[] emptyNum = tianzi5.getEmptyNum().split(";");
+        String[] ratio = tianzi5.getEmptyNumRatio().split(";");
+        List<String> content = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        if (emptyNum.length == ratio.length) {
+            for (int i = 0; i < emptyNum.length; i++) {
+                map.put(Integer.parseInt(emptyNum[i]), Integer.parseInt(ratio[i]));
+            }
+            int num = selectNumByWeight(map); // 挖字的数量
+            Set<Integer> indexSet = RandomUtil.getRandomNumInTwoIntNumRepetition(1, 5, num); // 挖字的位置
+            for (Integer index : indexSet) {
+                String indexValue = (String) ReflectOperate.getGetMethodValue(tianzi5, "Item" + index);
+                content.add(indexValue);
+            }
+            return content;
+        }
+        return null;
+    }
+
+    private List<String> digWord7(Tianzi7 tianzi7) {
+        String[] emptyNum = tianzi7.getEmptyNum().split(";");
+        String[] ratio = tianzi7.getEmptyNumRatio().split(";");
+        List<String> content = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        if (emptyNum.length == ratio.length) {
+            for (int i = 0; i < emptyNum.length; i++) {
+                map.put(Integer.parseInt(emptyNum[i]), Integer.parseInt(ratio[i]));
+            }
+            int num = selectNumByWeight(map); // 挖字的数量
+            Set<Integer> indexSet = RandomUtil.getRandomNumInTwoIntNumRepetition(1, 7, num); // 挖字的位置
+            for (Integer index : indexSet) {
+                String indexValue = (String) ReflectOperate.getGetMethodValue(tianzi7, "Item" + index);
                 content.add(indexValue);
             }
             return content;
