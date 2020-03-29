@@ -342,8 +342,7 @@ public class GameLevelImpl implements GameLevelService {
         configWu.setBaseNum(baseNum);
         // 速度
         String speedStr = zhuiLuoConfig.getSpend();
-        String speed = getRandomString(speedStr);
-        configWu.setSpeed(speed);
+        configWu.setSpeed(speedStr);
         Double num = 0D;
         // cd
         String cdStr = zhuiLuoConfig.getCd();
@@ -351,9 +350,7 @@ public class GameLevelImpl implements GameLevelService {
 
         // hp
         String hpStr = zhuiLuoConfig.getHp();
-        String baseHp = getRandomString(hpStr);
-        Double hp = Double.valueOf(baseHp) + Double.valueOf(levelId) / Double.valueOf(hpXishu);
-        configWu.setHp(String.valueOf(hp.intValue()));
+        configWu.setHp(hpStr);
 
         String time = "";
         String jiangliTime = "";
