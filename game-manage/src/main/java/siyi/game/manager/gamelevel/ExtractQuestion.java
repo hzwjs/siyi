@@ -49,13 +49,14 @@ public class ExtractQuestion {
         int count = tianzi4Mapper.selectCount(new Tianzi4());
         // 随机选择出对应个数的项目
         List<Tianzi4> itemList = new ArrayList<>();
-        for (int i = 1; i <= itemNum; i++) {
-            int questionId = RandomUtil.getRandomNumInTwoIntNum(1, count);
-            Tianzi4 tianzi4 = new Tianzi4();
-            tianzi4.setQuestionId(questionId + "");
-            tianzi4 = tianzi4Mapper.selectByPrimaryKey(tianzi4);
-            itemList.add(tianzi4);
-        }
+        itemList = buildTestData();
+//        for (int i = 1; i <= itemNum; i++) {
+//            int questionId = RandomUtil.getRandomNumInTwoIntNum(1, count);
+//            Tianzi4 tianzi4 = new Tianzi4();
+//            tianzi4.setQuestionId(questionId + "");
+//            tianzi4 = tianzi4Mapper.selectByPrimaryKey(tianzi4);
+//            itemList.add(tianzi4);
+//        }
         /* 对每个项目进行布局、挖字、组装答案处理 */
         log.info("=== tianzi4原始题：{} ===", JSON.toJSONString(itemList));
         Map answerMap = buildAnswer(itemList);
@@ -159,6 +160,7 @@ public class ExtractQuestion {
             }
         }
         Map result = new HashMap();
+        log.info("=== 挖去的字:{} ===", JSON.toJSONString(answerTianzi));
         result.put("answer", answerTianzi);
         result.put("candidate", candidate);
         return result;
@@ -181,8 +183,8 @@ public class ExtractQuestion {
                 map.put(Integer.parseInt(emptyNum[i]), Integer.parseInt(ratio[i]));
             }
             int num = selectNumByWeight(map); // 挖字的数量
-            for (int j = 1; j <= num; j++) {
-                int index = RandomUtil.getRandomNumInTwoIntNum(1, 4); // 挖字的位置
+            Set<Integer> indexSet = RandomUtil.getRandomNumInTwoIntNumRepetition(1, 4, num); // 挖字的位置
+            for (Integer index : indexSet) {
                 String indexValue = (String) ReflectOperate.getGetMethodValue(tianzi4, "Item" + index);
                 content.add(indexValue);
             }
@@ -224,6 +226,60 @@ public class ExtractQuestion {
             index++;
         }
         return result;
+    }
+
+    public List<Tianzi4> buildTestData() {
+        List<Tianzi4> list = new ArrayList<>();
+        Tianzi4 question0 = new Tianzi4();
+        question0.setQuestionId("6162");
+        question0.setItem1("自");
+        question0.setItem2("由");
+        question0.setItem3("自");
+        question0.setItem4("在");
+        question0.setEmptyNum("1;2");
+        question0.setEmptyNumRatio("100;30");
+
+        Tianzi4 question1 = new Tianzi4();
+        question1.setQuestionId("3086");
+        question1.setItem1("现");
+        question1.setItem2("炒");
+        question1.setItem3("现");
+        question1.setItem4("卖");
+        question1.setEmptyNum("1;2");
+        question1.setEmptyNumRatio("100;30");
+
+        Tianzi4 question2 = new Tianzi4();
+        question2.setQuestionId("5508");
+        question2.setItem1("可");
+        question2.setItem2("以");
+        question2.setItem3("燎");
+        question2.setItem4("原");
+        question2.setEmptyNum("1;2");
+        question2.setEmptyNumRatio("100;30");
+
+        Tianzi4 question3 = new Tianzi4();
+        question3.setQuestionId("1510");
+        question3.setItem1("急");
+        question3.setItem2("中");
+        question3.setItem3("生");
+        question3.setItem4("智");
+        question3.setEmptyNum("1;2");
+        question3.setEmptyNumRatio("100;30");
+
+        Tianzi4 question4 = new Tianzi4();
+        question4.setQuestionId("916");
+        question4.setItem1("高");
+        question4.setItem2("高");
+        question4.setItem3("在");
+        question4.setItem4("上");
+        question4.setEmptyNum("1;2");
+        question4.setEmptyNumRatio("100;30");
+        list.add(question0);
+        list.add(question1);
+        list.add(question2);
+        list.add(question3);
+        list.add(question4);
+        return list;
     }
 
 }
