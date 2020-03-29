@@ -18,6 +18,7 @@ import siyi.game.manager.gamelevel.ExtractQuestion;
 import siyi.game.manager.gamelevel.GameLevelManage;
 import siyi.game.service.config.JiangliConfigService;
 import siyi.game.service.gamelevel.GameLevelService;
+import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 
 import java.lang.reflect.Field;
@@ -69,6 +70,17 @@ public class GameLevelImpl implements GameLevelService {
         GameLevel gameLevel = new GameLevel();
 
         if (!StringUtils.isEmpty(preQID)) {
+            if (Constants.COMMON_SUCCESS.equals(preStatus)) {
+                // 更新关卡等级
+                Player player = new Player();
+                player.setPlayerId(userId);
+                player = playerMapper.selectOne(player);
+                int level = Integer.parseInt(player.getPlayerLevel());
+                if (level < 999) {
+                    player.setGameLevel((level + 1) + "");
+                    playerMapper.updateByPrimaryKey(player);
+                }
+            }
             /* 保存玩家答题记录 */
             gameLevelManage.saveUserWenGameLevelInfo(userId, preQID, preQType, preStatus);
         }
