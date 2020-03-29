@@ -158,13 +158,11 @@ public class GameLevelImpl implements GameLevelService {
                     Map tianzi = extractQuestion.extractTianzi4();
                     AnswerTianzi answer = (AnswerTianzi) tianzi.get("answer");
                     CandidateWordTianzi candidate = (CandidateWordTianzi) tianzi.get("candidate");
-                    candidate = (CandidateWordTianzi) padWord(candidate);
                     QuestionTianzi questionTianzi = (QuestionTianzi) tianzi.get("question");
                     gameLevel.setAnswerTianzi(answer);
                     gameLevel.setQuestionTianzi(questionTianzi);
-                    gameLevel.setCandidate(candidate); // 补充候选矩阵
+                    gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
                     log.info("=== tainzi4 answer:{} ===", JSON.toJSONString(answer));
-                    log.info("=== tainzi4 candidate:{} ===", JSON.toJSONString(candidate));
                     log.info("=== tainzi4 question:{} ===", JSON.toJSONString(questionTianzi));
                 }
                 gameLevel.setConfigWen(configWen);
@@ -972,8 +970,10 @@ public class GameLevelImpl implements GameLevelService {
             CandidateWordTianzi10 answer10 = new CandidateWordTianzi10();
             BeanCopier copier = BeanCopier.create(answer.getClass(), answer10.getClass(), false);
             copier.copy(answer, answer10, null);
+            log.info("=== candidate:{} ===", JSON.toJSONString(answer10));
             return answer10;
         }
+        log.info("=== candidate:{} ===", JSON.toJSONString(answer));
         return answer;
     }
 }
