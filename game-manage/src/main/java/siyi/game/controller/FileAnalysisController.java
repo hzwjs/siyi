@@ -5,14 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import siyi.game.dao.*;
-import siyi.game.dao.entity.GamelevelConfig;
-import siyi.game.dao.entity.IdiomWrong;
-import siyi.game.dao.entity.QuTianzi;
-import siyi.game.dao.entity.Tianzi4;
-import siyi.game.manager.excel.read.GameLevelConfigDataListener;
-import siyi.game.manager.excel.read.QuDuicuo2DataListener;
-import siyi.game.manager.excel.read.QuTianzi4DataListener;
-import siyi.game.manager.excel.read.QuTianziDataListener;
+import siyi.game.dao.entity.*;
+import siyi.game.manager.excel.read.*;
 
 import java.io.File;
 
@@ -30,6 +24,10 @@ public class FileAnalysisController {
     IdiomWrongMapper idiomWrongMapper;
     @Autowired
     Tianzi4Mapper  tianzi4Mapper;
+    @Autowired
+    Tianzi5Mapper  tianzi5Mapper;
+    @Autowired
+    Tianzi7Mapper  tianzi7Mapper;
 
     @RequestMapping("guanqiaConfig")
     public void guanqiaConfigAnalysis() {
@@ -70,6 +68,28 @@ public class FileAnalysisController {
             String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
             String filePath = fileDir + "biz_config" + File.separator + "Q_tianzi4.xlsx";
             EasyExcel.read(filePath, Tianzi4.class, new QuTianzi4DataListener(tianzi4Mapper)).sheet().doRead();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("tianzi5")
+    public void tianzi5Analysis() {
+        try {
+            String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
+            String filePath = fileDir + "biz_config" + File.separator + "Q_tianzi5.xlsx";
+            EasyExcel.read(filePath, Tianzi5.class, new QuTianzi5DataListener(tianzi5Mapper)).sheet().doRead();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("tianzi7")
+    public void tianzi7Analysis() {
+        try {
+            String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
+            String filePath = fileDir + "biz_config" + File.separator + "Q_tianzi7.xlsx";
+            EasyExcel.read(filePath, Tianzi7.class, new QuTianzi7DataListener(tianzi7Mapper)).sheet().doRead();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.Tianzi7Mapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.Tianzi7">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="QUESTION_ID" jdbcType="VARCHAR" property="questionId" />
+    <result column="ITEM1" jdbcType="VARCHAR" property="item1" />
+    <result column="ITEM2" jdbcType="VARCHAR" property="item2" />
+    <result column="ITEM3" jdbcType="VARCHAR" property="item3" />
+    <result column="ITEM4" jdbcType="VARCHAR" property="item4" />
+    <result column="ITEM5" jdbcType="VARCHAR" property="item5" />
+    <result column="ITEM6" jdbcType="VARCHAR" property="item6" />
+    <result column="ITEM7" jdbcType="VARCHAR" property="item7" />
+    <result column="EMPTY_NUM" jdbcType="VARCHAR" property="emptyNum" />
+    <result column="EMPTY_NUM_RATIO" jdbcType="VARCHAR" property="emptyNumRatio" />
+    <result column="REVISION" jdbcType="INTEGER" property="revision" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+</mapper>
