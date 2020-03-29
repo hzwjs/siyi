@@ -1,5 +1,6 @@
 package siyi.game.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import siyi.game.service.item.ItemConfigService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.loginLog.LoginLogService;
 import siyi.game.service.player.PlayerService;
+import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 import siyi.game.utill.UUIDUtil;
 
@@ -59,9 +61,10 @@ public class PlayerController extends BaseController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @PostMapping("login")
-    public Map<String, Object> login(@RequestBody PlayerBo player) {
-        logger.info("开始玩家登录，登录玩家：{}", player.toString());
+    @RequestMapping("login")
+    public Map<String, Object> login(PlayerBo player) {
+        logger.info("开始玩家登录，登录玩家：{}", JSON.toJSONString(player));
+        Map<String, Object> resultMap = new HashMap<>();
         // 微信登录
         String jsCode = player.getWxCode();
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxca19bfbb81a34a47&secret=9702b32d9a5df96bee6ab8f0df4c9fc7&js_code=" + jsCode + "&grant_type=authorization_code";
@@ -69,9 +72,15 @@ public class PlayerController extends BaseController {
         logger.info("=== 微信登录的返回信息:{} ===", requestStr);
         WxLoginResponse response = JSONObject.parseObject(requestStr, WxLoginResponse.class);
         String openId = response.getOpenid();
-        player = (PlayerBo) playerService.selectByPlatFormId(openId);
+        if (!StringUtils.isEmpty(openId)) {
+            player = (PlayerBo) playerService.selectByPlatFormId(openId);
+        } else {
+            logger.info("=== 登录失败 ===");
+            resultMap.put("errCode", response.getErrcode());
+            resultMap.put("errMsg", response.getErrmsg());
+            return resultMap;
+        }
 
-        Map<String, Object> resultMap = new HashMap<>();
         String platformId = player.getPlatformId();
         String playerId1 = player.getPlayerId();
         Player loginPlayer;
