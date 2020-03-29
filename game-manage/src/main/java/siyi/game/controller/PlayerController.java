@@ -81,8 +81,6 @@ public class PlayerController extends BaseController {
             return resultMap;
         }
 
-        String platformId = player.getPlatformId();
-        String playerId1 = player.getPlayerId();
         Player loginPlayer;
         if (player == null) {
             logger.info("该玩家为新玩家");
