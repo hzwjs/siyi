@@ -1,5 +1,6 @@
 package siyi.game.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import siyi.game.bo.PlayerBo;
+import siyi.game.bo.WxLoginResponse;
 import siyi.game.dao.entity.*;
 import siyi.game.service.game.GameService;
 import siyi.game.service.gamelevel.LevelClearRecordService;
@@ -52,29 +56,31 @@ public class PlayerController extends BaseController {
     @Autowired
     private LevelClearRecordService levelClearRecordService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @PostMapping("login")
-    public Map<String, Object> login(@RequestBody Player player) {
+    public Map<String, Object> login(@RequestBody PlayerBo player) {
         logger.info("开始玩家登录，登录玩家：{}", player.toString());
+        // 微信登录
+        String jsCode = player.getWxCode();
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxca19bfbb81a34a47&secret=9702b32d9a5df96bee6ab8f0df4c9fc7&js_code=" + jsCode + "&grant_type=authorization_code";
+        String requestStr = restTemplate.getForObject(url, String.class);
+        logger.info("=== 微信登录的返回信息:{} ===", requestStr);
+        WxLoginResponse response = JSONObject.parseObject(requestStr, WxLoginResponse.class);
+        String openId = response.getOpenid();
+        player = (PlayerBo) playerService.selectByPlatFormId(openId);
+
         Map<String, Object> resultMap = new HashMap<>();
         String platformId = player.getPlatformId();
         String playerId1 = player.getPlayerId();
         Player loginPlayer;
-        if (StringUtils.isEmpty(platformId) && (StringUtils.isEmpty(playerId1))) {
+        if (player == null) {
             logger.info("该玩家为新玩家");
             // 新用户
             loginPlayer = null;
-        } else if (!StringUtils.isEmpty(platformId) && !StringUtils.isEmpty(playerId1)) {
-            // 老用户，根据平台ID获取玩家信息
-            logger.info("该玩家为老玩家");
-            loginPlayer = playerService.selectByPlatFormId(platformId);
-        } else if (StringUtils.isEmpty(platformId) && !StringUtils.isEmpty(playerId1)) {
-            // 老用户，但未授权
-            logger.info("该玩家为老玩家，但未授权");
-            loginPlayer = playerService.selectByPlayerId(playerId1);
         } else {
-            // 其他情况，按新角色处理
-            logger.info("该玩家为新玩家");
-            loginPlayer = null;
+            loginPlayer = player;
         }
 
         if (loginPlayer == null) {
