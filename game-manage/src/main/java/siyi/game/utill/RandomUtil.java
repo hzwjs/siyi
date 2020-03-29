@@ -2,10 +2,7 @@ package siyi.game.utill;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 生成随机整数
@@ -16,9 +13,10 @@ public class RandomUtil {
 
     /**
      * 随机生成[low,high]之间的随机整数
-     * @param low
-     * @param high
-     * @return
+     *
+     * @param low  the low
+     * @param high the high
+     * @return random num in two int num
      */
     public static int getRandomNumInTwoIntNum(int low, int high) {
         int randomNum = 0;
@@ -33,10 +31,28 @@ public class RandomUtil {
     }
 
     /**
+     * Gets random num in two int num repetition.
+     * 随机产生若干不重复的整数
+     * @param low  the low
+     * @param high the high
+     * @param num  the num
+     * @return the random num in two int num repetition
+     */
+    public static Set<Integer> getRandomNumInTwoIntNumRepetition(int low, int high, int num) {
+        Set<Integer> randomSet = new HashSet<>();
+        while (randomSet.size() < num) {
+            int index = RandomUtil.getRandomNumInTwoIntNum(1, 4);
+            randomSet.add(index);
+        }
+        return randomSet;
+    }
+
+    /**
      * 随机生成[low,high]之间的随机整数
-     * @param low
-     * @param high
-     * @return
+     *
+     * @param low  the low
+     * @param high the high
+     * @return random num in two double num
      */
     public static double getRandomNumInTwoDoubleNum(double low, double high) {
         Double randomNum = 0.0;
@@ -53,8 +69,9 @@ public class RandomUtil {
 
     /**
      * 根据传入的百分比，判读是否命中
-     * @param percent
-     * @return
+     *
+     * @param percent the percent
+     * @return boolean
      */
     public static boolean isHit(String percent) {
         int percentNum = 0;
@@ -67,6 +84,11 @@ public class RandomUtil {
         return false;
     }
 
+    /**
+     * Gets random char.
+     *
+     * @return the random char
+     */
     public static String getRandomChar() {
         String str = "";
         int highCode;
@@ -96,8 +118,8 @@ public class RandomUtil {
      * author: zhengzhiqiang <br>
      *
      * @param resourceList 目标集合
-     * @param infoNum 获取数据条数
-     * @return java.util.List<java.lang.String>
+     * @param infoNum      获取数据条数
+     * @return java.util.List<java.lang.String> random list
      */
     public static List<String> getRandomList(List<String> resourceList, int infoNum) {
         //把随机取得的数据存储在 listRandom 中
@@ -122,7 +144,7 @@ public class RandomUtil {
     /**
      * 动态生成16位不重复随机数
      *
-     * @return
+     * @return string
      */
     public synchronized static String generate16() {
         StringBuffer stringBuffer = new StringBuffer();
@@ -132,6 +154,11 @@ public class RandomUtil {
         return stringBuffer.toString();
     }
 
+    /**
+     * Gets dateyyyy m mdd none.
+     *
+     * @return the dateyyyy m mdd none
+     */
     private static String getDateyyyyMMddNone() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -139,6 +166,11 @@ public class RandomUtil {
         return fd;
     }
 
+    /**
+     * Gets date h hmmss none.
+     *
+     * @return the date h hmmss none
+     */
     private static String getDateHHmmssNone() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
