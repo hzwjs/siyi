@@ -62,13 +62,13 @@ public class Player implements Serializable {
     /**
      * 平台ID
      */
-    @Column(name = " platform_id")
+    @Column(name = "platform_id")
     private String platformId;
 
     /**
      * 平台ID
      */
-    @Column(name = " wu_level")
+    @Column(name = "wu_level")
     private String wuLevel;
 
     /**
