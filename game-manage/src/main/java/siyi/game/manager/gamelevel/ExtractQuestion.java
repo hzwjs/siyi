@@ -100,7 +100,7 @@ public class ExtractQuestion {
                 Set<String> keys = answer.keySet();
                 for (String key: keys) {
                     if (value.equals(answer.get(key))) { // 如果成语中的字和答案一样，则将其挖掉用对应的key替换
-                        value = key;
+                        value = key.toUpperCase();
                         answer.remove(key);
                         break;
                     }
