@@ -3,6 +3,7 @@ package siyi.game.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import net.sf.cglib.beans.BeanCopier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -73,7 +74,9 @@ public class PlayerController extends BaseController {
         WxLoginResponse response = JSONObject.parseObject(requestStr, WxLoginResponse.class);
         String openId = response.getOpenid();
         if (!StringUtils.isEmpty(openId)) {
-            player = (PlayerBo) playerService.selectByPlatFormId(openId);
+            Player playerEntery = playerService.selectByPlatFormId(openId);
+            BeanCopier copier = BeanCopier.create(Player.class, PlayerBo.class, false);
+            copier.copy(playerEntery, player, null);
         } else {
             logger.info("=== 登录失败 ===");
             resultMap.put("errCode", response.getErrcode());

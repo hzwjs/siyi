@@ -1,7 +1,6 @@
 package siyi.game.service.impl.gamelevel;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import net.sf.cglib.beans.BeanCopier;
