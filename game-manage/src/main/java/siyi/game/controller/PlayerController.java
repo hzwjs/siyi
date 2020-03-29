@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import siyi.game.bo.PlayerBo;
 import siyi.game.bo.WxLoginResponse;
+import siyi.game.dao.PlayerWxInfoMapper;
 import siyi.game.dao.entity.*;
 import siyi.game.service.game.GameService;
 import siyi.game.service.gamelevel.LevelClearRecordService;
@@ -61,88 +62,80 @@ public class PlayerController extends BaseController {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private PlayerWxInfoMapper playerWxInfoMapper;
 
     @RequestMapping("login")
-    public Map<String, Object> login(@RequestBody PlayerBo player) {
-        logger.info("开始玩家登录，登录玩家：{}", JSON.toJSONString(player));
+    public Map<String, Object> login(@RequestBody PlayerBo playerBo) {
+        logger.info("开始玩家登录，登录玩家：{}", JSON.toJSONString(playerBo));
         Map<String, Object> resultMap = new HashMap<>();
         // 微信登录
-        String jsCode = player.getWxCode();
+        String jsCode = playerBo.getWxCode();
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxca19bfbb81a34a47&secret=9702b32d9a5df96bee6ab8f0df4c9fc7&js_code=" + jsCode + "&grant_type=authorization_code";
         String requestStr = restTemplate.getForObject(url, String.class);
         logger.info("=== 微信登录的返回信息:{} ===", requestStr);
         WxLoginResponse response = JSONObject.parseObject(requestStr, WxLoginResponse.class);
         String openId = response.getOpenid();
+        // 设置登录ID，通过该值判断是哪一次登录
+        String uuid32 = UUIDUtil.getUUID32();
         if (!StringUtils.isEmpty(openId)) {
-            Player playerEntery = playerService.selectByPlatFormId(openId);
-            BeanCopier copier = BeanCopier.create(Player.class, PlayerBo.class, false);
-            copier.copy(playerEntery, player, null);
+            Player player = playerService.selectByPlatFormId(openId);
+            if (player == null) {
+                logger.info("该玩家为新玩家");
+                // 若没有玩家信息，则新增玩家
+                Player loginPlayer = new Player();
+                // 生成玩家编号
+                String playerId = RandomUtil.generate16();
+                loginPlayer.setPlayerId(playerId);
+                loginPlayer.setPlatformId(response.getOpenid());
+                playerService.insertSelective(loginPlayer);
+            } else {
+                logger.info("获取登录玩家信息：{}", player);
+                // 查询玩家道具信息
+                List<ItemPlayerRelation> relations = itemPlayerRelationService.selectByPlayerIdAndGameCode(player.getPlayerId(), player.getGameCode());
+                List<String> itemNoList = new ArrayList<>();
+                if (!CollectionUtils.isEmpty(relations)) {
+                    for (ItemPlayerRelation relation : relations) {
+                        itemNoList.add(relation.getItemNo());
+                    }
+                }
+                List<ItemConfig> itemConfigs = new ArrayList<>();
+                if (itemNoList.size() != 0) {
+                    itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
+                }
+                // 查询玩家称号信息
+                String playerLevel = player.getPlayerLevel();
+                LevelUpConfig levelUpConfig = levelUpService.selectByLevel(playerLevel);
+
+                // 查询玩家挑战记录信息
+                LevelClearRecord selectParam = new LevelClearRecord();
+                selectParam.setPlayerId(player.getPlayerId());
+                selectParam.setGameCode(player.getGameCode());
+                LevelClearRecord levelClearRecord = levelClearRecordService.selectByBean(selectParam);
+                // 返回数据组装
+                resultMap.put("player", player);
+                resultMap.put("openId", uuid32);
+                resultMap.put("itemList", itemConfigs);
+                resultMap.put("level", levelUpConfig);
+                resultMap.put("levelRecord", levelClearRecord);
+            }
+            // 插入玩家登录数据
+            LoginLog loginLog = new LoginLog();
+            loginLog.setGameCode(player.getGameCode());
+            loginLog.setOpenId(uuid32);
+            loginLog.setPlayerId(player.getPlayerId());
+            loginLog.setLoginTime(new Date());
+            loginLogService.insertSelective(loginLog);
         } else {
             logger.info("=== 登录失败 ===");
             resultMap.put("errCode", response.getErrcode());
             resultMap.put("errMsg", response.getErrmsg());
             return resultMap;
         }
-
-        Player loginPlayer;
-        if (player == null) {
-            logger.info("该玩家为新玩家");
-            // 新用户
-            loginPlayer = null;
-        } else {
-            loginPlayer = player;
-        }
-
-        if (loginPlayer == null) {
-            // 若没有玩家信息，则新增玩家
-            loginPlayer = new Player();
-            // 生成玩家编号
-            String playerId = RandomUtil.generate16();
-            loginPlayer.setPlayerId(playerId);
-            loginPlayer.setPlatformId(response.getOpenid());
-            playerService.insertSelective(loginPlayer);
-        }
-        logger.info("获取登录玩家信息：{}", loginPlayer);
-        // 设置登录ID，通过该值判断是哪一次登录
-        String uuid32 = UUIDUtil.getUUID32();
-        // 查询玩家道具信息
-        List<ItemPlayerRelation> relations = itemPlayerRelationService.selectByPlayerIdAndGameCode(loginPlayer.getPlayerId(), loginPlayer.getGameCode());
-        List<String> itemNoList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(relations)) {
-            for (ItemPlayerRelation relation : relations) {
-                itemNoList.add(relation.getItemNo());
-            }
-        }
-        List<ItemConfig> itemConfigs = new ArrayList<>();
-        if (itemNoList.size() != 0) {
-            itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
-        }
-        // 查询玩家称号信息
-        String playerLevel = loginPlayer.getPlayerLevel();
-        LevelUpConfig levelUpConfig = levelUpService.selectByLevel(playerLevel);
-
-        // 插入玩家登录数据
-        LoginLog loginLog = new LoginLog();
-        loginLog.setGameCode(loginPlayer.getGameCode());
-        loginLog.setOpenId(uuid32);
-        loginLog.setPlayerId(loginPlayer.getPlayerId());
-        loginLog.setLoginTime(new Date());
-        loginLogService.insertSelective(loginLog);
-
-        // 查询玩家挑战记录信息
-        LevelClearRecord selectParam = new LevelClearRecord();
-        selectParam.setPlayerId(loginPlayer.getPlayerId());
-        selectParam.setGameCode(loginPlayer.getGameCode());
-        LevelClearRecord levelClearRecord = levelClearRecordService.selectByBean(selectParam);
         // 返回成功响应
         getSuccessResult(resultMap);
-        // 返回数据组装
-        resultMap.put("player", loginPlayer);
-        resultMap.put("openId", uuid32);
-        resultMap.put("itemList", itemConfigs);
-        resultMap.put("level", levelUpConfig);
-        resultMap.put("levelRecord", levelClearRecord);
         return resultMap;
+
     }
 
     /**
@@ -151,20 +144,17 @@ public class PlayerController extends BaseController {
      * date: 2020/3/26 23:30 <br>
      * author: zhengzhiqiang <br>
      *
-     * @param playerId 本地玩家id
-     * @param platformId 平台玩家id
      * @return java.util.Map<java.lang.String   ,   java.lang.Object>
      */
     @PostMapping("authorize")
-    public Map<String, Object> Authorize(String playerId, String platformId) {
+    public Map<String, Object> Authorize(@RequestBody PlayerWxInfo wxInfo) {
         Map<String, Object> resultMap = new HashMap<>();
-        Player player = playerService.selectByPlayerId(playerId);
-        if (player == null) {
-            getFailResult(resultMap, "不存在该玩家信息");
-            return resultMap;
+        PlayerWxInfo playerWxInfo = playerWxInfoMapper.selectOne(wxInfo);
+        if (playerWxInfo == null) {
+            playerWxInfoMapper.insert(wxInfo);
+        } else {
+            playerWxInfoMapper.updateByPrimaryKey(wxInfo);
         }
-        player.setPlatformId(platformId);
-        playerService.updateByIdSelective(player);
         getSuccessResult(resultMap);
         return resultMap;
     }
