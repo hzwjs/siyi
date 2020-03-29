@@ -43,7 +43,7 @@ public class ExtractQuestion {
     public Map<String, Object> extractTianzi4() {
         // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
         Map weight = new HashMap();
-        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 500);
+        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 5);
         int itemNum = selectNumByWeight(weight);
         // 获取题库的总题数
         int count = tianzi4Mapper.selectCount(new Tianzi4());
@@ -93,22 +93,23 @@ public class ExtractQuestion {
             Tianzi4 item = itemList.get(i);
             int x_startIndex = (int) xMap.get("startIndex");
             boolean intervalFlag = (boolean) xMap.get("intervalFlag");
+            // 将成语的每字填入题目矩阵中，point代办矩阵中的位置
+            Map answer = BeanUtil.beanToMapRemoveNull(answerTianzi);
             for (int j = 1; j <= 4; j++) {
+                String value = (String) ReflectOperate.getGetMethodValue(item, "item" + j);
+                Set<String> keys = answer.keySet();
+                for (String key: keys) {
+                    if (value.equals(answer.get(key))) { // 如果成语中的字和答案一样，则将其挖掉用对应的key替换
+                        value = key;
+                        answer.remove(key);
+                        break;
+                    }
+                }
                 int point = 0;
                 if (intervalFlag) {
                     point = index0 + x_startIndex + (j-1)*2;
                 } else {
                     point = index0 + x_startIndex + j;
-                }
-                String value = (String) ReflectOperate.getGetMethodValue(item, "item" + j);
-                Map answer = BeanUtil.beanToMap(answerTianzi);
-                Set<String> keys = answer.keySet();
-                for (String key: keys) {
-                    if (value.equals(answer.get(key))) {
-                        value = key;
-                        answer.remove(key);
-                        break;
-                    }
                 }
                 ReflectOperate.setValueByFieldName(quTianzi, "point" + point, value);
             }
