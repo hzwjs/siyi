@@ -95,8 +95,8 @@ public class PlayerController extends BaseController {
             loginPlayer = new Player();
             // 生成玩家编号
             String playerId = RandomUtil.generate16();
-            BeanUtils.copyProperties(player, loginPlayer);
             loginPlayer.setPlayerId(playerId);
+            loginPlayer.setPlatformId(response.getOpenid());
             playerService.insertSelective(loginPlayer);
         }
         logger.info("获取登录玩家信息：{}", loginPlayer);
