@@ -62,7 +62,7 @@ public class PlayerController extends BaseController {
     private RestTemplate restTemplate;
 
     @RequestMapping("login")
-    public Map<String, Object> login(PlayerBo player) {
+    public Map<String, Object> login(@RequestBody PlayerBo player) {
         logger.info("开始玩家登录，登录玩家：{}", JSON.toJSONString(player));
         Map<String, Object> resultMap = new HashMap<>();
         // 微信登录
@@ -110,7 +110,10 @@ public class PlayerController extends BaseController {
                 itemNoList.add(relation.getItemNo());
             }
         }
-        List<ItemConfig> itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
+        List<ItemConfig> itemConfigs = new ArrayList<>();
+        if (itemNoList.size() != 0) {
+            itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
+        }
         // 查询玩家称号信息
         String playerLevel = loginPlayer.getPlayerLevel();
         LevelUpConfig levelUpConfig = levelUpService.selectByLevel(playerLevel);

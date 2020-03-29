@@ -185,8 +185,8 @@ public class GameLevelImpl implements GameLevelService {
                     gameLevel.setAnswerTianzi(answer);
                     gameLevel.setQuestionTianzi(questionTianzi);
                     gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
-                    log.info("=== tainzi4 answer:{} ===", JSON.toJSONString(answer));
-                    log.info("=== tainzi4 question:{} ===", JSON.toJSONString(questionTianzi));
+                    log.info("=== tainzi5 answer:{} ===", JSON.toJSONString(answer));
+                    log.info("=== tainzi5 question:{} ===", JSON.toJSONString(questionTianzi));
                 }
                 if (qTypes[5].equals(qType)) {
                     Map tianzi = extractQuestion.extractTianzi7();
@@ -196,8 +196,8 @@ public class GameLevelImpl implements GameLevelService {
                     gameLevel.setAnswerTianzi(answer);
                     gameLevel.setQuestionTianzi(questionTianzi);
                     gameLevel.setCandidate(padWord(candidate)); // 补充候选矩阵
-                    log.info("=== tainzi4 answer:{} ===", JSON.toJSONString(answer));
-                    log.info("=== tainzi4 question:{} ===", JSON.toJSONString(questionTianzi));
+                    log.info("=== tainzi7 answer:{} ===", JSON.toJSONString(answer));
+                    log.info("=== tainzi7 question:{} ===", JSON.toJSONString(questionTianzi));
                 }
                 gameLevel.setConfigWen(configWen);
 
