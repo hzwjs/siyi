@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.PlayerMessionRelationMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.PlayerMessionRelation">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="player_id" jdbcType="VARCHAR" property="playerId" />
+    <result column="mession_id" jdbcType="VARCHAR" property="messionId" />
+    <result column="complete_status" jdbcType="VARCHAR" property="completeStatus" />
+    <result column="process" jdbcType="VARCHAR" property="process" />
+    <result column="target" jdbcType="VARCHAR" property="target" />
+    <result column="is_item" jdbcType="VARCHAR" property="isItem" />
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="item_num" jdbcType="VARCHAR" property="itemNum" />
+    <result column="gold" jdbcType="VARCHAR" property="gold" />
+    <result column="exp" jdbcType="VARCHAR" property="exp" />
+    <result column="blank_id" jdbcType="VARCHAR" property="blankId" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.MessionConfigMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.MessionConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="onoff" jdbcType="VARCHAR" property="onoff" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="houxu" jdbcType="VARCHAR" property="houxu" />
+    <result column="xunhuan" jdbcType="VARCHAR" property="xunhuan" />
+    <result column="cd" jdbcType="VARCHAR" property="cd" />
+    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="tips" jdbcType="VARCHAR" property="tips" />
+    <result column="target" jdbcType="VARCHAR" property="target" />
+    <result column="jinbi_get" jdbcType="VARCHAR" property="jinbiGet" />
+    <result column="jingyan_get" jdbcType="VARCHAR" property="jingyanGet" />
+    <result column="jingyan_use" jdbcType="VARCHAR" property="jingyanUse" />
+    <result column="item_get" jdbcType="VARCHAR" property="itemGet" />
+    <result column="item_use" jdbcType="VARCHAR" property="itemUse" />
+    <result column="guoguan_OBJWEN" jdbcType="VARCHAR" property="guoguanObjwen" />
+    <result column="guoguan_OBJWU" jdbcType="VARCHAR" property="guoguanObjwu" />
+    <result column="guoguan_numWEN" jdbcType="VARCHAR" property="guoguanNumwen" />
+    <result column="guoguan_numWU" jdbcType="VARCHAR" property="guoguanNumwu" />
+    <result column="wenguan_TIANZI" jdbcType="VARCHAR" property="wenguanTianzi" />
+    <result column="wenguan_XUANZE" jdbcType="VARCHAR" property="wenguanXuanze" />
+    <result column="wenguan_PANDUAN" jdbcType="VARCHAR" property="wenguanPanduan" />
+    <result column="wuguan1_SHADAI" jdbcType="VARCHAR" property="wuguan1Shadai" />
+    <result column="wuguan1_ZHUANTOU" jdbcType="VARCHAR" property="wuguan1Zhuantou" />
+    <result column="wuguan1_PAIBIAN" jdbcType="VARCHAR" property="wuguan1Paibian" />
+    <result column="wuguan1_MUZHUANG" jdbcType="VARCHAR" property="wuguan1Muzhuang" />
+    <result column="wuguan1_MUGUN" jdbcType="VARCHAR" property="wuguan1Mugun" />
+    <result column="wuguan1_MENBAN" jdbcType="VARCHAR" property="wuguan1Menban" />
+    <result column="wuguan2_PINGPANG" jdbcType="VARCHAR" property="wuguan2Pingpang" />
+    <result column="wuguan2_FEIBIAO" jdbcType="VARCHAR" property="wuguan2Feibiao" />
+    <result column="wuguan2_MUTONG" jdbcType="VARCHAR" property="wuguan2Mutong" />
+    <result column="wuguan3_DUIDUIPENG" jdbcType="VARCHAR" property="wuguan3Duiduipeng" />
+    <result column="wuguan4_QIUQIU" jdbcType="VARCHAR" property="wuguan4Qiuqiu" />
+    <result column="wuguan5_MUBIAO" jdbcType="VARCHAR" property="wuguan5Mubiao" />
+    <result column="guanggao_dianji" jdbcType="VARCHAR" property="guanggaoDianji" />
+    <result column="guanggao_X2" jdbcType="VARCHAR" property="guanggaoX2" />
+    <result column="guanggao_X3" jdbcType="VARCHAR" property="guanggaoX3" />
+    <result column="guanggao_X4" jdbcType="VARCHAR" property="guanggaoX4" />
+    <result column="share_num" jdbcType="VARCHAR" property="shareNum" />
+    <result column="jiangliexp" jdbcType="VARCHAR" property="jiangliexp" />
+    <result column="jianglijinbi" jdbcType="VARCHAR" property="jianglijinbi" />
+    <result column="jiangliitem" jdbcType="VARCHAR" property="jiangliitem" />
+    <result column="itemnum" jdbcType="VARCHAR" property="itemnum" />
+    <result column="itemgailv" jdbcType="VARCHAR" property="itemgailv" />
+  </resultMap>
+</mapper>

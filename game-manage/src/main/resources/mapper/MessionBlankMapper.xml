@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.MessionBlankMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.MessionBlank">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="player_id" jdbcType="VARCHAR" property="playerId" />
+    <result column="blank_one_status" jdbcType="VARCHAR" property="blankOneStatus" />
+    <result column="blank_two_status" jdbcType="VARCHAR" property="blankTwoStatus" />
+    <result column="blank_three_status" jdbcType="VARCHAR" property="blankThreeStatus" />
+    <result column="blank_four_status" jdbcType="VARCHAR" property="blankFourStatus" />
+    <result column="blank_five_status" jdbcType="VARCHAR" property="blankFiveStatus" />
+    <result column="blank_six_status" jdbcType="VARCHAR" property="blankSixStatus" />
+  </resultMap>
+</mapper>

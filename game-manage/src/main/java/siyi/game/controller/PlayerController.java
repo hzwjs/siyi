@@ -22,6 +22,7 @@ import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemConfigService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.loginLog.LoginLogService;
+import siyi.game.service.mission.PlayerMessionRelationService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
@@ -64,6 +65,9 @@ public class PlayerController extends BaseController {
     private RestTemplate restTemplate;
     @Autowired
     private PlayerWxInfoMapper playerWxInfoMapper;
+
+    @Autowired
+    private PlayerMessionRelationService playerMessionRelationService;
 
     @RequestMapping("login")
     public Map<String, Object> login(@RequestBody PlayerBo playerBo) {
@@ -112,12 +116,15 @@ public class PlayerController extends BaseController {
                 selectParam.setPlayerId(player.getPlayerId());
                 selectParam.setGameCode(player.getGameCode());
                 LevelClearRecord levelClearRecord = levelClearRecordService.selectByBean(selectParam);
+                // 查询玩家任务信息
+                List<PlayerMessionRelation> messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
                 // 返回数据组装
                 resultMap.put("player", player);
                 resultMap.put("openId", uuid32);
                 resultMap.put("itemList", itemConfigs);
                 resultMap.put("level", levelUpConfig);
                 resultMap.put("levelRecord", levelClearRecord);
+                resultMap.put("messionList", messionList);
             }
             // 插入玩家登录数据
             LoginLog loginLog = new LoginLog();

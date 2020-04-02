@@ -42,7 +42,7 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_gamelevel_config" domainObjectName="GamelevelConfig">
+        <table tableName="tb_mession_blank" domainObjectName="MessionBlank">
             <generatedKey column="GAME_LEVEL_ID" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
