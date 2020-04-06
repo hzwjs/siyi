@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +79,12 @@ public class MessionConfigController {
     @GetMapping("getPlayerMession")
     public List<PlayerMessionRelation> getPlayerMession(String playerId) {
         List<PlayerMessionRelation> list = playerMessionRelationService.selectByPlayerId(playerId);
+        if (CollectionUtils.isEmpty(list)) {
+            // TODO 若当前玩家无任务信息，需新增任务信息，保存任务记录
+            list = playerMessionRelationService.createNewMession(playerId, null);
+        } else {
+            list = playerMessionRelationService.createNewMession(playerId, list);
+        }
         return list;
     }
 
@@ -91,7 +98,13 @@ public class MessionConfigController {
      * @return java.util.List<siyi.game.dao.entity.MessionBlank>
      */
     @GetMapping("getMessionBlank")
-    public List<MessionBlank> getMessionBlank(String playerId) {
+    public MessionBlank getMessionBlank(String playerId) {
+        MessionBlank findMessionBlank = messionBlankService.selectByPlayerId(playerId);
+        if (findMessionBlank == null) {
+            MessionBlank messionBlank = new MessionBlank();
+            messionBlank.setPlayerId(playerId);
+            messionBlankService.insertSelective(messionBlank);
+        }
         return messionBlankService.selectByPlayerId(playerId);
     }
 
@@ -104,7 +117,7 @@ public class MessionConfigController {
      * @param playerId
      * @param messionId
      * @param processNum
-     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
+     * @return java.util.Map<java.lang.String               ,               java.lang.Object>
      */
     @PostMapping("updateProcess")
     public Map<String, Object> updateProcess(String playerId, String messionId, String processNum) {
@@ -159,7 +172,7 @@ public class MessionConfigController {
      *
      * @param playerId
      * @param messionId
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      */
     @GetMapping("fresh")
     public Map<String, Object> freshMession(String playerId, String messionId) {
@@ -188,13 +201,12 @@ public class MessionConfigController {
      * author: zhengzhiqiang <br>
      *
      * @param
-     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @return java.util.Map<java.lang.String , java.lang.Object>
      */
     @GetMapping("unLock")
     public Map<String, Object> unLockBlank(String playerId, String blankId) {
         Map<String, Object> resultMap = new HashMap<>();
-        List<MessionBlank> messionBlanks = messionBlankService.selectByPlayerId(playerId);
-        MessionBlank messionBlank = messionBlanks.get(0);
+        MessionBlank messionBlank = messionBlankService.selectByPlayerId(playerId);
         if ("four".equals(blankId)) {
             messionBlank.setBlankFourStatus("1");
         } else if ("five".equals(blankId)) {

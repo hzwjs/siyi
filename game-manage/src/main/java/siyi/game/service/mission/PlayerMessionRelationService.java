@@ -44,4 +44,16 @@ public interface PlayerMessionRelationService {
      * @return void
      */
     void updateByIdSelective(PlayerMessionRelation relation);
+
+    /**
+     * description: 玩家获取新任务 <br>
+     * version: 1.0 <br>
+     * date: 2020/4/6 21:12 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param playerId
+     * @param relations
+     * @return void
+     */
+    List<PlayerMessionRelation> createNewMession(String playerId, List<PlayerMessionRelation> relations);
 }

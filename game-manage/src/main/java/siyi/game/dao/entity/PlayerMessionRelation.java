@@ -73,6 +73,11 @@ public class PlayerMessionRelation implements Serializable {
     @Column(name = "blank_id")
     private String blankId;
 
+    /**
+     * 任务描述
+     */
+    @Column(name = "mession_tips")
+    private String messionTips;
     private static final long serialVersionUID = 1L;
 
     /**
@@ -289,5 +294,23 @@ public class PlayerMessionRelation implements Serializable {
      */
     public void setBlankId(String blankId) {
         this.blankId = blankId == null ? null : blankId.trim();
+    }
+
+    /**
+     * 获取任务描述
+     *
+     * @return blank_id - 任务描述
+     */
+    public String getMessionTips() {
+        return messionTips;
+    }
+
+    /**
+     * 设置任务描述
+     *
+     * @param messionTips 任务描述
+     */
+    public void setMessionTips(String messionTips) {
+        this.messionTips = messionTips;
     }
 }

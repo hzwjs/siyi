@@ -22,15 +22,20 @@ public class MessionBlankServiceImpl implements MessionBlankService {
     private MessionBlankMapper messionBlankMapper;
 
     @Override
-    public List<MessionBlank> selectByPlayerId(String playerId) {
+    public MessionBlank selectByPlayerId(String playerId) {
         Example example = new Example(MessionBlank.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("playerId", playerId);
-        return messionBlankMapper.selectByExample(example);
+        return messionBlankMapper.selectOneByExample(example);
     }
 
     @Override
     public void updateByIdSelective(MessionBlank messionBlank) {
         messionBlankMapper.updateByPrimaryKeySelective(messionBlank);
+    }
+
+    @Override
+    public void insertSelective(MessionBlank messionBlank) {
+        messionBlankMapper.insertSelective(messionBlank);
     }
 }
