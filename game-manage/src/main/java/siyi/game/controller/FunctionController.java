@@ -12,7 +12,7 @@ import java.util.Map;
  * 功能按钮对应的接口
  */
 @Controller
-@RequestMapping("/function")
+@RequestMapping("function")
 public class FunctionController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class FunctionController {
      * @param flag     是否更新抽奖次数的标志
      * @return
      */
-    @RequestMapping("/award")
+    @RequestMapping("award")
     @ResponseBody
     public Map getAwardNum(String playerId, boolean flag) {
         Map result = functionService.getAwardInfo(playerId,flag);
