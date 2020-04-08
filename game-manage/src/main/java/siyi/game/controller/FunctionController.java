@@ -12,7 +12,7 @@ import java.util.Map;
  * 功能按钮对应的接口
  */
 @Controller
-@RequestMapping("function")
+@RequestMapping("idiom/function")
 public class FunctionController {
 
     @Autowired
