@@ -1,10 +1,13 @@
 package siyi.game.service.fuctionbtn;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Map;
 
 /**
  * 功能按钮服务类
  */
+@Service
 public interface FunctionService {
 
     /**
