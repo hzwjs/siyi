@@ -1,6 +1,7 @@
 package siyi.game.service.impl.functionbtn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import siyi.game.dao.ItemConfigMapper;
 import siyi.game.dao.PlayerMapper;
 import siyi.game.dao.entity.Item;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class FunctionServiceImpl implements FunctionService {
 
     @Autowired

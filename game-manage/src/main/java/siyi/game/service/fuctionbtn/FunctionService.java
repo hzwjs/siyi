@@ -7,7 +7,6 @@ import java.util.Map;
 /**
  * 功能按钮服务类
  */
-@Service
 public interface FunctionService {
 
     /**
