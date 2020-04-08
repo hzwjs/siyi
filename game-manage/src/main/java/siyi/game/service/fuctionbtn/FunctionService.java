@@ -12,5 +12,5 @@ public interface FunctionService {
      * @param flag  是否更新抽奖次数的标记
      * @return
      */
-    Map getAwardInfo(String playerId, boolean flag);
+    Map getLotteryInfo(String playerId, boolean flag);
 }

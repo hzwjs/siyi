@@ -22,7 +22,7 @@ public class FunctionServiceImpl implements FunctionService {
     private ItemConfigMapper itemConfigMapper;
 
     @Override
-    public Map getAwardInfo(String playerId, boolean flag) {
+    public Map getLotteryInfo(String playerId, boolean flag) {
         Map result = new HashMap();
         Player player = new Player();
         player.setPlayerId(playerId);

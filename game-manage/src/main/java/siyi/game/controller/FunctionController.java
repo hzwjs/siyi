@@ -24,10 +24,10 @@ public class FunctionController {
      * @param flag     是否更新抽奖次数的标志
      * @return
      */
-    @RequestMapping("award")
+    @RequestMapping("lottery")
     @ResponseBody
-    public Map getAwardNum(String playerId, boolean flag) {
-        Map result = functionService.getAwardInfo(playerId,flag);
+    public Map getlotteryInfo(String playerId, boolean flag) {
+        Map result = functionService.getLotteryInfo(playerId,flag);
         return result;
     }
 }
