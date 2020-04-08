@@ -42,8 +42,8 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_mession_blank" domainObjectName="MessionBlank">
-            <generatedKey column="GAME_LEVEL_ID" sqlStatement="Mysql" identity="true"/>
+        <table tableName="tb_player_wx_info" domainObjectName="PlayerWxInfo">
+            <generatedKey column="player_id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>

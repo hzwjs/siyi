@@ -22,40 +22,124 @@
               "chnname": "关卡限时"
             },
             {
-              "name": "Q_TIANZI",
+              "name": "QUTION_TIANZI",
               "type": "DefaultString",
               "remark": "",
-              "chnname": ""
+              "chnname": "填字题型权重"
             },
             {
-              "name": "Q_TIANZI_WRONG",
+              "name": "QUTION_TIANZI_WRONG",
               "type": "DefaultString",
               "remark": "",
-              "chnname": ""
+              "chnname": "允许错误的次数"
             },
             {
-              "name": "Q_XUANZE",
+              "name": "QUESTION_XUANZE4",
               "type": "DefaultString",
               "remark": "",
-              "chnname": ""
+              "chnname": "选择4题型权重"
             },
             {
-              "name": "Q_XUANZE_WRONG",
+              "name": "QUESTION_XUANZE4_WRONG",
               "type": "DefaultString",
               "remark": "",
-              "chnname": ""
+              "chnname": "允许错误的次数"
             },
             {
-              "name": "Q_DUICUO",
+              "name": "QUESTION_XUANZE5",
               "type": "DefaultString",
               "remark": "",
-              "chnname": ""
+              "chnname": "选择5题型权重"
             },
             {
-              "name": "Q_DUICUO_WRONG",
+              "name": "QUESTION_XUANZE5_WRONG",
               "type": "DefaultString",
               "remark": "",
-              "chnname": ""
+              "chnname": "允许错误的次数"
+            },
+            {
+              "name": "QUESTION_XUANZE7",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "选择7题型权重"
+            },
+            {
+              "name": "QUESTION_XUANZE7_WRONG",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "允许错误的次数"
+            },
+            {
+              "name": "XUAN_ZHUAN_GAI_LV",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "旋转概率"
+            },
+            {
+              "name": "JIAO_HUAN_GAI_LV",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "交换概率"
+            },
+            {
+              "name": "BIAN_HEI_GAI_LV",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "变黑概率"
+            },
+            {
+              "name": "TAP_GAI_LV",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "点击变亮"
+            },
+            {
+              "name": "TYPE",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "类型(0,同步全部调用；1,异步全部调用；2,同步部分调用；3,异步部分调用)"
+            },
+            {
+              "name": "QUTION_XUANZE",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "选择题型权重"
+            },
+            {
+              "name": "QUTION_XUANZE_WRONG",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "允许错误的次数"
+            },
+            {
+              "name": "BIAN_HEI_GAI_LV2",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "选择题型变黑的概率"
+            },
+            {
+              "name": "QUTION_DUICUO",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "对错题型权重"
+            },
+            {
+              "name": "QUTION_DUICUO_WRONG",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "允许错误的次数"
+            },
+            {
+              "name": "QUTION_DUICUO2",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "对错题型2权重"
+            },
+            {
+              "name": "QUTION_DUICUO2_WRONG",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "允许错误的次数"
             },
             {
               "name": "JIANGLI_GOLD",
@@ -70,64 +154,40 @@
               "chnname": "奖励经验"
             },
             {
-              "name": "JIANG_LI_TIME",
-              "type": "DefaultString",
+              "name": "JIANG_LI_ITEM",
+              "type": "MiddleString",
               "remark": "",
               "chnname": "奖励道具"
             },
             {
               "name": "ITEM_SHU_LIANG",
-              "type": "DefaultString",
+              "type": "ShortString",
               "remark": "",
               "chnname": "道具数量"
             },
             {
-              "name": "JIANG_LI_GAI_LV",
+              "name": "JIANGLI_GAI_LV",
               "type": "DefaultString",
               "remark": "",
               "chnname": "奖励概率"
             },
             {
-              "name": "DOUBLE_GAI_LV",
+              "name": "SHOW_AD",
               "type": "DefaultString",
               "remark": "",
-              "chnname": "翻倍概率"
+              "chnname": "显示广告概率"
             },
             {
-              "name": "GUANG_GAO",
+              "name": "SHOW_AD_AUTO",
               "type": "DefaultString",
               "remark": "",
-              "chnname": "广告"
+              "chnname": "自动出现广告的概率"
             },
             {
-              "name": "XUAN_ZHUAN_GAI_LV",
+              "name": "FU_HUO",
               "type": "DefaultString",
               "remark": "",
-              "chnname": "旋转概率"
-            },
-            {
-              "name": "BIAN_HEI_GAI_LV",
-              "type": "DefaultString",
-              "remark": "",
-              "chnname": "变黑概率"
-            },
-            {
-              "name": "JIAO_HUAN_GAI_LV",
-              "type": "DefaultString",
-              "remark": "",
-              "chnname": "交换概率"
-            },
-            {
-              "name": "TAP_GAI_LV",
-              "type": "DefaultString",
-              "remark": "",
-              "chnname": "上下对换概率"
-            },
-            {
-              "name": "TYPE",
-              "type": "DefaultString",
-              "remark": "",
-              "chnname": "类型"
+              "chnname": "复活按钮出现的概率"
             },
             {
               "name": "SPEED",
@@ -142,10 +202,161 @@
               "chnname": "CD"
             },
             {
-              "name": "W_GAI_LV",
+              "name": "WU_GAI_LV",
               "type": "DefaultString",
               "remark": "",
-              "chnname": "W_GAI_LV"
+              "chnname": "武关出现的概率"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "untitled",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "关卡配置表"
+        },
+        {
+          "title": "tb_qu_xuanze",
+          "fields": [
+            {
+              "name": "qu_id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "题目ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "qu_status",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "状态"
+            },
+            {
+              "name": "option1",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "选项1"
+            },
+            {
+              "name": "option2",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "选项2"
+            },
+            {
+              "name": "option3",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "选项3"
+            },
+            {
+              "name": "option4",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "选项4"
+            },
+            {
+              "name": "option5",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "选项5"
+            },
+            {
+              "name": "option6",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "选项6"
+            },
+            {
+              "name": "answer",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "答案"
+            },
+            {
+              "name": "tips",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "提示"
             },
             {
               "name": "REVISION",
@@ -225,7 +436,891 @@
               "relationNoShow": true
             }
           ],
-          "chnname": "关卡配置表"
+          "chnname": "选择题库"
+        },
+        {
+          "title": "tb_user_question",
+          "fields": [
+            {
+              "name": "serie_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "流水号",
+              "autoIncrement": true,
+              "notNull": true,
+              "pk": true
+            },
+            {
+              "name": "user_id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "玩家ID",
+              "pk": false,
+              "notNull": true
+            },
+            {
+              "name": "question_id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "题目编号",
+              "pk": false,
+              "notNull": true
+            },
+            {
+              "name": "question_type",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "题目类型"
+            },
+            {
+              "name": "answer_num",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "答题次数"
+            },
+            {
+              "name": "answer_success_num",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "答题成功次数"
+            },
+            {
+              "name": "answer_fail_num",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "答题失败次数"
+            },
+            {
+              "name": "status",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "状态：0-成功；1-失败"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "玩家答题列表",
+          "remark": "记录玩家已经玩过的题目"
+        },
+        {
+          "title": "tb_idiom",
+          "fields": [
+            {
+              "name": "IDIOM_ID",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "IDIOM",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "成语"
+            },
+            {
+              "name": "REMARK",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "成语库"
+        },
+        {
+          "title": "tb_idiom_wrong",
+          "fields": [
+            {
+              "name": "WRONG_ID",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "WRONG_IDIOM",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "错误成语"
+            },
+            {
+              "name": "IDIOM",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "正确成语"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "错误的成语库"
+        },
+        {
+          "title": "tb_tianzi4",
+          "fields": [
+            {
+              "name": "QUESTION_ID",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "id",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "ITEM1",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第一个字"
+            },
+            {
+              "name": "ITEM2",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第二个字"
+            },
+            {
+              "name": "ITEM3",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第三个字"
+            },
+            {
+              "name": "ITEM4",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第四个字"
+            },
+            {
+              "name": "EMPTY_NUM",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "空缺的数量"
+            },
+            {
+              "name": "EMPTY_NUM_RATIO",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "空缺的权重"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "4个子填字题型"
+        },
+        {
+          "title": "tb_tianzi5",
+          "fields": [
+            {
+              "name": "QUESTION_ID",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "id",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "ITEM1",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第一个字"
+            },
+            {
+              "name": "ITEM2",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第二个字"
+            },
+            {
+              "name": "ITEM3",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第三个字"
+            },
+            {
+              "name": "ITEM4",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第四个字"
+            },
+            {
+              "name": "ITEM5",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第五个字"
+            },
+            {
+              "name": "EMPTY_NUM",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "空缺的数量"
+            },
+            {
+              "name": "EMPTY_NUM_RATIO",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "空缺的权重"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "5个子填字题型"
+        },
+        {
+          "title": "tb_tianzi7",
+          "fields": [
+            {
+              "name": "QUESTION_ID",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "id",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "ITEM1",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第一个字"
+            },
+            {
+              "name": "ITEM2",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第二个字"
+            },
+            {
+              "name": "ITEM3",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第三个字"
+            },
+            {
+              "name": "ITEM4",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第四个字"
+            },
+            {
+              "name": "ITEM5",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第五个字"
+            },
+            {
+              "name": "ITEM6",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第六个字"
+            },
+            {
+              "name": "ITEM7",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第七个字"
+            },
+            {
+              "name": "EMPTY_NUM",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "空缺的数量"
+            },
+            {
+              "name": "EMPTY_NUM_RATIO",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "空缺的权重"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "7个子填字题型"
+        },
+        {
+          "title": "tb_player_wx_info",
+          "fields": [
+            {
+              "name": "player_id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "文武双全游戏ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "wx_openid",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "微信openId",
+              "notNull": false
+            },
+            {
+              "name": "avatar_url",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "头像url"
+            },
+            {
+              "name": "gender",
+              "type": "Char",
+              "remark": "0-未知；1-男；2-女",
+              "chnname": "性别"
+            },
+            {
+              "name": "province",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "省份"
+            },
+            {
+              "name": "city",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "城市"
+            },
+            {
+              "name": "country",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "国家"
+            },
+            {
+              "name": "nickName",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "昵称"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "玩家微信信息"
         }
       ],
       "graphCanvas": {
