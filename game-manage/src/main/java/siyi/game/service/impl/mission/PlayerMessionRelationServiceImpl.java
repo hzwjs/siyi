@@ -2,8 +2,10 @@ package siyi.game.service.impl.mission;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import siyi.game.dao.PlayerMessionRelationMapper;
 import siyi.game.dao.entity.PlayerMessionRelation;
+import siyi.game.service.mission.MessionConfigService;
 import siyi.game.service.mission.PlayerMessionRelationService;
 import tk.mybatis.mapper.entity.Example;
 
@@ -21,11 +23,15 @@ public class PlayerMessionRelationServiceImpl implements PlayerMessionRelationSe
     @Autowired
     private PlayerMessionRelationMapper playerMessionRelationMapper;
 
+    @Autowired
+    private MessionConfigService messionConfigService;
+
     @Override
     public List<PlayerMessionRelation> selectByPlayerId(String playerId) {
         Example example = new Example(PlayerMessionRelation.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("playerId", playerId);
+        example.setOrderByClause("id DESC");
         return playerMessionRelationMapper.selectByExample(example);
     }
 
@@ -37,5 +43,18 @@ public class PlayerMessionRelationServiceImpl implements PlayerMessionRelationSe
     @Override
     public void updateByIdSelective(PlayerMessionRelation relation) {
         playerMessionRelationMapper.updateByPrimaryKeySelective(relation);
+    }
+
+    @Override
+    public List<PlayerMessionRelation> createNewMession(String playerId, List<PlayerMessionRelation> relations) {
+
+        List<PlayerMessionRelation> list = selectByPlayerId(playerId);
+        if (CollectionUtils.isEmpty(list)) {
+            // 玩家第一次进入游戏，无任务记录，任务取两个主线，一个支线
+            list = messionConfigService.createNewMession(playerId, null);
+        } else {
+            list = messionConfigService.createNewMession(playerId, relations);
+        }
+        return list;
     }
 }

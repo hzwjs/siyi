@@ -21,7 +21,7 @@ public interface MessionBlankService {
      * @param playerId
      * @return java.util.List<siyi.game.dao.entity.MessionBlank>
      */
-    List<MessionBlank> selectByPlayerId(String playerId);
+    MessionBlank selectByPlayerId(String playerId);
 
     /**
      * description: 根据主键进行更新任务栏信息 <br>
@@ -33,4 +33,15 @@ public interface MessionBlankService {
      * @return void
      */
     void updateByIdSelective(MessionBlank messionBlank);
+
+    /**
+     * description: 插入任务栏信息 <br>
+     * version: 1.0 <br>
+     * date: 2020/4/4 22:59 <br>
+     * author: zhengzhiqiang <br>
+     *
+     * @param messionBlank
+     * @return void
+     */
+    void insertSelective(MessionBlank messionBlank);
 }

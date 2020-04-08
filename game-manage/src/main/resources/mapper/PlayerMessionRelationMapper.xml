@@ -17,5 +17,6 @@
     <result column="gold" jdbcType="VARCHAR" property="gold" />
     <result column="exp" jdbcType="VARCHAR" property="exp" />
     <result column="blank_id" jdbcType="VARCHAR" property="blankId" />
+    <result column="mession_tips" jdbcType="VARCHAR" property="messionTips" />
   </resultMap>
 </mapper>
