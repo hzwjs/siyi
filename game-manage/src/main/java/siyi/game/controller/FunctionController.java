@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import siyi.game.dao.PlayerMapper;
-import siyi.game.dao.entity.Player;
+import siyi.game.service.fuctionbtn.FunctionService;
+
+import java.util.Map;
 
 /**
  * 功能按钮对应的接口
@@ -15,18 +16,18 @@ import siyi.game.dao.entity.Player;
 public class FunctionController {
 
     @Autowired
-    private PlayerMapper playerMapper;
+    private FunctionService functionService;
+
     /**
      * 获取当前的可抽奖次数
      * @param playerId 玩家ID
+     * @param flag     是否更新抽奖次数的标志
      * @return
      */
     @RequestMapping("/award")
     @ResponseBody
-    public Long getAwardNum(String playerId) {
-        Player player = new Player();
-        player.setPlayerId(playerId);
-        player = playerMapper.selectOne(player);
-        return player.getLotteryNum();
+    public Map getAwardNum(String playerId, boolean flag) {
+        Map result = functionService.getAwardInfo(playerId,flag);
+        return result;
     }
 }
