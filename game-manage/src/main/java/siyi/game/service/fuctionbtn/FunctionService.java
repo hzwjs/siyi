@@ -1,6 +1,7 @@
 package siyi.game.service.fuctionbtn;
 
 import org.springframework.stereotype.Service;
+import siyi.game.dao.entity.PlayerSign;
 
 import java.util.Map;
 
@@ -25,4 +26,19 @@ public interface FunctionService {
      * @return
      */
     boolean saveLotteryInfo(String playerId, String itemId, int num, String gameCode);
+
+    /**
+     * 查询玩家签到信息
+     * @param playerId
+     * @return
+     */
+    PlayerSign querySignInfo(String playerId);
+
+    /**
+     * 提交签到信息
+     * @param playerId
+     * @param signDays 签到日期（包含不签到），多个日期之间用";"隔开
+     * @return
+     */
+    boolean submitSignInfo(String playerId, String signDays);
 }

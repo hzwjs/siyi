@@ -6,18 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import siyi.game.dao.ItemConfigMapper;
 import siyi.game.dao.PlayerMapper;
-import siyi.game.dao.entity.Item;
-import siyi.game.dao.entity.ItemConfig;
-import siyi.game.dao.entity.ItemPlayerRelation;
-import siyi.game.dao.entity.Player;
+import siyi.game.dao.PlayerSignMapper;
+import siyi.game.dao.entity.*;
 import siyi.game.service.fuctionbtn.FunctionService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.utill.RandomUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -31,6 +26,8 @@ public class FunctionServiceImpl implements FunctionService {
     private ItemConfigMapper itemConfigMapper;
     @Autowired
     private ItemPlayerRelationService itemPlayerRelationService;
+    @Autowired
+    private PlayerSignMapper playerSignMapper;
 
     @Override
     public Map getLotteryInfo(String playerId, boolean flag) {
@@ -76,6 +73,27 @@ public class FunctionServiceImpl implements FunctionService {
             log.error("=== 保存抽奖道具失败：{}===", e);
         }
         return flag;
+    }
+
+    @Override
+    public PlayerSign querySignInfo(String playerId) {
+        PlayerSign playerSign = new PlayerSign();
+        playerSign.setPlayerId(playerId);
+        playerSign = playerSignMapper.selectOne(playerSign);
+        if (playerSign == null) {
+            // 第一次签到的时候是没有记录的需要手动插入一条
+            PlayerSign firstSign = new PlayerSign();
+            firstSign.setPlayerId(playerId);
+            firstSign.setStartDate(new Date());
+            log.info("=== 第一次签到 ===");
+        }
+        return playerSign;
+    }
+
+    @Override
+    public boolean submitSignInfo(String playerId, String signDays) {
+
+        return false;
     }
 
     /**
