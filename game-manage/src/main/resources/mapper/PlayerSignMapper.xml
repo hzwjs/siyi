@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.PlayerSignMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.PlayerSign">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="player_id" jdbcType="VARCHAR" property="playerId" />
+    <result column="day1" jdbcType="VARCHAR" property="day1" />
+    <result column="day2" jdbcType="VARCHAR" property="day2" />
+    <result column="day3" jdbcType="VARCHAR" property="day3" />
+    <result column="day4" jdbcType="VARCHAR" property="day4" />
+    <result column="day5" jdbcType="VARCHAR" property="day5" />
+    <result column="day6" jdbcType="VARCHAR" property="day6" />
+    <result column="day7" jdbcType="VARCHAR" property="day7" />
+    <result column="day8" jdbcType="VARCHAR" property="day8" />
+    <result column="day9" jdbcType="VARCHAR" property="day9" />
+    <result column="day10" jdbcType="VARCHAR" property="day10" />
+    <result column="day11" jdbcType="VARCHAR" property="day11" />
+    <result column="day12" jdbcType="VARCHAR" property="day12" />
+    <result column="day13" jdbcType="VARCHAR" property="day13" />
+    <result column="day14" jdbcType="VARCHAR" property="day14" />
+    <result column="day15" jdbcType="VARCHAR" property="day15" />
+    <result column="day16" jdbcType="VARCHAR" property="day16" />
+    <result column="day17" jdbcType="VARCHAR" property="day17" />
+    <result column="day18" jdbcType="VARCHAR" property="day18" />
+    <result column="day19" jdbcType="VARCHAR" property="day19" />
+    <result column="day20" jdbcType="VARCHAR" property="day20" />
+    <result column="day21" jdbcType="VARCHAR" property="day21" />
+    <result column="day22" jdbcType="VARCHAR" property="day22" />
+    <result column="day23" jdbcType="VARCHAR" property="day23" />
+    <result column="day24" jdbcType="VARCHAR" property="day24" />
+    <result column="day25" jdbcType="VARCHAR" property="day25" />
+    <result column="day26" jdbcType="VARCHAR" property="day26" />
+    <result column="day27" jdbcType="VARCHAR" property="day27" />
+    <result column="day28" jdbcType="VARCHAR" property="day28" />
+    <result column="day29" jdbcType="VARCHAR" property="day29" />
+    <result column="day30" jdbcType="VARCHAR" property="day30" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="accumulate_day_num" jdbcType="INTEGER" property="accumulateDayNum" />
+    <result column="accumulate_award_flag" jdbcType="VARCHAR" property="accumulateAwardFlag" />
+    <result column="REVISION" jdbcType="INTEGER" property="revision" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+</mapper>
