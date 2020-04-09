@@ -4,11 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.dao.entity.Player;
+import siyi.game.dao.entity.PlayerSign;
 import siyi.game.service.fuctionbtn.FunctionService;
 
 import java.util.HashMap;
@@ -50,7 +52,7 @@ public class FunctionController extends BaseController{
      */
     @RequestMapping(value = "submit")
     @ResponseBody
-    public Map<String, Object> submitLottery(String itemId, int num, String playerId, String gameCode) {
+    public Map<String, Object> submitLottery(@RequestBody String itemId, @RequestBody  int num, @RequestBody  String playerId, @RequestBody String gameCode) {
         log.info("提交玩家抽奖记录，方法入参：itemId：{}，quantity：{}，playerId：{}，gameCode：{}", itemId, num, playerId, gameCode);
         Map<String, Object> resultMap = new HashMap<>();
         boolean flag = functionService.saveLotteryInfo(playerId, itemId, num, gameCode);
@@ -61,6 +63,13 @@ public class FunctionController extends BaseController{
             getFailResult(resultMap, "保存失败");
         }
         return resultMap;
+    }
+
+    @RequestMapping(value = "querySignInfo")
+    @ResponseBody
+    public PlayerSign submitLottery(String playerId){
+        PlayerSign playerSign = functionService.querySignInfo(playerId);
+        return playerSign;
     }
 
 }
