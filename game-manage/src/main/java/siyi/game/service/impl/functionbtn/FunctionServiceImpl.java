@@ -14,6 +14,7 @@ import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 import siyi.game.utill.ReflectOperate;
+import siyi.game.utill.UUIDUtil;
 
 import java.util.*;
 
@@ -75,6 +76,11 @@ public class FunctionServiceImpl implements FunctionService {
                 flag = true;
             } else {
                 log.info("玩家新增道具信息，开始新增道具记录");
+                itemPlayerRelation.setPlayerId(playerId);
+                itemPlayerRelation.setQuantity(num+"");
+                itemPlayerRelation.setGameCode(gameCode);
+                itemPlayerRelation.setItemNo(itemId);
+                itemPlayerRelation.setId(Long.valueOf(RandomUtil.generate16()));
                 itemPlayerRelationService.insertSelective(itemPlayerRelation);
             }
         } catch (Exception e) {

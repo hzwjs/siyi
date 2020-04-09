@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import siyi.game.bo.functionbtn.AwardInfo;
 import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.dao.entity.Player;
 import siyi.game.dao.entity.PlayerSign;
@@ -52,10 +53,10 @@ public class FunctionController extends BaseController{
      */
     @RequestMapping(value = "submit")
     @ResponseBody
-    public Map<String, Object> submitLottery(String itemId,int num, String playerId, String gameCode) {
-        log.info("提交玩家抽奖记录，方法入参：itemId：{}，quantity：{}，playerId：{}，gameCode：{}", itemId, num, playerId, gameCode);
+    public Map<String, Object> submitLottery(@RequestBody AwardInfo awardInfo) {
+        log.info("提交玩家抽奖记录，方法入参：itemId：{}，quantity：{}，playerId：{}，num：{}", awardInfo.getItemId(), awardInfo.getNum(), awardInfo.getPlayerId(), awardInfo.getGameCode());
         Map<String, Object> resultMap = new HashMap<>();
-        boolean flag = functionService.saveLotteryInfo(playerId, itemId, num, gameCode);
+        boolean flag = functionService.saveLotteryInfo(awardInfo.getPlayerId(), awardInfo.getItemId(), awardInfo.getNum(), awardInfo.getGameCode());
         if (flag) {
             resultMap.put("errCode", "000000");
             resultMap.put("errMsg", "保存成功");
