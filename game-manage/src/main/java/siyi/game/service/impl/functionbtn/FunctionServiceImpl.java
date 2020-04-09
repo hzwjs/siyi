@@ -76,12 +76,13 @@ public class FunctionServiceImpl implements FunctionService {
                 flag = true;
             } else {
                 log.info("玩家新增道具信息，开始新增道具记录");
-                itemPlayerRelation.setPlayerId(playerId);
-                itemPlayerRelation.setQuantity(num+"");
-                itemPlayerRelation.setGameCode(gameCode);
-                itemPlayerRelation.setItemNo(itemId);
-                itemPlayerRelation.setId(Long.valueOf(RandomUtil.generate16()));
-                itemPlayerRelationService.insertSelective(itemPlayerRelation);
+                ItemPlayerRelation itemPlayerRelation2 = new ItemPlayerRelation();
+                itemPlayerRelation2.setPlayerId(playerId);
+                itemPlayerRelation2.setQuantity(num+"");
+                itemPlayerRelation2.setGameCode(gameCode);
+                itemPlayerRelation2.setItemNo(itemId);
+                itemPlayerRelation2.setId(Long.valueOf(RandomUtil.generate16()));
+                itemPlayerRelationService.insertSelective(itemPlayerRelation2);
             }
         } catch (Exception e) {
             log.error("=== 保存抽奖道具失败：{}===", e);
