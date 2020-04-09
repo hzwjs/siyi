@@ -15,4 +15,14 @@ public interface FunctionService {
      * @return
      */
     Map getLotteryInfo(String playerId, boolean flag);
+
+    /**
+     * 保存获取到的奖励信息
+     * @param playerId
+     * @param itemId
+     * @param num
+     * @param gameCode
+     * @return
+     */
+    boolean saveLotteryInfo(String playerId, String itemId, int num, String gameCode);
 }
