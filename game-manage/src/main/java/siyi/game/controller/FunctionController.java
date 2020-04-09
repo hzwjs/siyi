@@ -45,15 +45,12 @@ public class FunctionController extends BaseController{
 
     /**
      * 提交获取的道具
-     * @param itemId
-     * @param num
-     * @param playerId
-     * @param gameCode
+     * @param awardInfo
      * @return
      */
     @RequestMapping(value = "submit")
     @ResponseBody
-    public Map<String, Object> submitLottery(@RequestBody AwardInfo awardInfo) {
+    public Map<String, Object> submitLottery(AwardInfo awardInfo) {
         log.info("提交玩家抽奖记录，方法入参：itemId：{}，quantity：{}，playerId：{}，num：{}", awardInfo.getItemId(), awardInfo.getNum(), awardInfo.getPlayerId(), awardInfo.getGameCode());
         Map<String, Object> resultMap = new HashMap<>();
         boolean flag = functionService.saveLotteryInfo(awardInfo.getPlayerId(), awardInfo.getItemId(), awardInfo.getNum(), awardInfo.getGameCode());
