@@ -83,6 +83,7 @@ public class FunctionServiceImpl implements FunctionService {
                 itemPlayerRelation2.setItemNo(itemId);
                 itemPlayerRelation2.setId(Long.valueOf(RandomUtil.generate16()));
                 itemPlayerRelationService.insertSelective(itemPlayerRelation2);
+                flag = true;
             }
         } catch (Exception e) {
             log.error("=== 保存抽奖道具失败：{}===", e);
