@@ -52,7 +52,7 @@ public class FunctionController extends BaseController{
      */
     @RequestMapping(value = "submit")
     @ResponseBody
-    public Map<String, Object> submitLottery(@RequestBody String itemId, @RequestBody  int num, @RequestBody  String playerId, @RequestBody String gameCode) {
+    public Map<String, Object> submitLottery(String itemId,int num, String playerId, String gameCode) {
         log.info("提交玩家抽奖记录，方法入参：itemId：{}，quantity：{}，playerId：{}，gameCode：{}", itemId, num, playerId, gameCode);
         Map<String, Object> resultMap = new HashMap<>();
         boolean flag = functionService.saveLotteryInfo(playerId, itemId, num, gameCode);

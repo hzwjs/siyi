@@ -4,13 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import siyi.game.dao.ItemConfigMapper;
 import siyi.game.dao.PlayerMapper;
 import siyi.game.dao.PlayerSignMapper;
 import siyi.game.dao.entity.*;
 import siyi.game.service.fuctionbtn.FunctionService;
 import siyi.game.service.item.ItemPlayerRelationService;
+import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
+import siyi.game.utill.ReflectOperate;
 
 import java.util.*;
 
@@ -19,6 +22,11 @@ import java.util.*;
 public class FunctionServiceImpl implements FunctionService {
 
     private final Logger log = LoggerFactory.getLogger(FunctionServiceImpl.class);
+
+    private static final String SIGN_STATUS_DONE = "0"; // 已签到
+    private static final String SIGN_STATUS_REPAIR = "1"; // 不签到
+    private static final String SIGN_STATUS_DOING = "2"; // 待签到
+    private static final String SIGN_STATUS_TODO = "3"; // 未开始
 
     @Autowired
     private PlayerMapper playerMapper;
@@ -80,12 +88,16 @@ public class FunctionServiceImpl implements FunctionService {
         PlayerSign playerSign = new PlayerSign();
         playerSign.setPlayerId(playerId);
         playerSign = playerSignMapper.selectOne(playerSign);
-        if (playerSign == null) {
+        if (playerSign == null && !StringUtils.isEmpty(playerId)) {
             // 第一次签到的时候是没有记录的需要手动插入一条
             PlayerSign firstSign = new PlayerSign();
             firstSign.setPlayerId(playerId);
             firstSign.setStartDate(new Date());
+            firstSign.setAccumulateAwardFlag(Constants.COMMON_FALSE);
+            setDateStatus(1,firstSign);
             log.info("=== 第一次签到 ===");
+            playerSignMapper.insert(firstSign);
+            return firstSign;
         }
         return playerSign;
     }
@@ -112,5 +124,32 @@ public class FunctionServiceImpl implements FunctionService {
             resultList.add(list.get(index).getId());
         }
         return resultList;
+    }
+
+    /**
+     * 设置日期的状态
+     * @param index 表示当前处在第几天
+     */
+    private void setDateStatus(int index, Object obj) {
+        String field = "day";
+        // index的状态改为：2待签到
+        // index之后的日期：判断状态是否是3-未开始，如果是不处理，不是将状态更新为3；
+        // index之前的日期：判断状态是否是0或1，如果不是更新成1；
+        for (int i = 1; i <= 30; i++) {
+            String status = (String) ReflectOperate.getGetMethodValue(obj, field + i);
+            if (i == index) {
+                ReflectOperate.setValueByFieldName(obj, field+index, FunctionServiceImpl.SIGN_STATUS_DOING);
+            }
+            if (i < index) {
+                if (!FunctionServiceImpl.SIGN_STATUS_DONE.equals(status) && !FunctionServiceImpl.SIGN_STATUS_REPAIR.equals(status)) {
+                    ReflectOperate.setValueByFieldName(obj, field+i, FunctionServiceImpl.SIGN_STATUS_REPAIR);
+                }
+            }
+            if (i > index) {
+                if (!FunctionServiceImpl.SIGN_STATUS_TODO.equals(status)) {
+                    ReflectOperate.setValueByFieldName(obj, field+i, FunctionServiceImpl.SIGN_STATUS_TODO);
+                }
+            }
+        }
     }
 }
