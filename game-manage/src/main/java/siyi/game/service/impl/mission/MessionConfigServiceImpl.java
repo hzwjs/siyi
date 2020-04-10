@@ -1,5 +1,6 @@
 package siyi.game.service.impl.mission;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -9,8 +10,10 @@ import siyi.game.dao.entity.MessionConfig;
 import siyi.game.dao.entity.PlayerMessionRelation;
 import siyi.game.service.mission.MessionConfigService;
 import siyi.game.utill.RandomUtil;
+import siyi.game.utill.StringUtil;
 import tk.mybatis.mapper.entity.Example;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -21,6 +24,7 @@ import java.util.*;
  * version: 1.0 <br>
  */
 @Service
+@Slf4j
 public class MessionConfigServiceImpl implements MessionConfigService {
 
     @Autowired
@@ -38,7 +42,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         criteria.andIn("id", messionIds);
         List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(relations)) {
-            // TODO 如果任务关系为空 需在主线任务中选择第一条任务
+            // TODO 如果任务关系为空 表示为第一次进入游戏，需在主线任务中选择第一条任务
 
         } else {
             // 如果存在关联关系，则需在支线任务中删除掉已完成过的任务（三次以内），保证三次内无重复支线任务
@@ -69,7 +73,24 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         String[] jiangliexpLimit = jiangliexp.split(";");
         int jiangliexpLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jiangliexpLimit[0]), Integer.parseInt(jiangliexpLimit[1]));
         String exp = String.valueOf(jiangliexpLimitNum);
-
+        String target = messionConfig.getTarget();
+        target = StringUtil.getCamelCase(target);
+        Class<? extends MessionConfig> clazz = messionConfig.getClass();
+        Field[] fields = clazz.getFields();
+        String targetNum = "";
+        for (Field field : fields) {
+            field.setAccessible(true);
+            String name = field.getName();
+            if (name.equals(target)) {
+                // 如果字段名与目标一致，则取出值赋值给目标数量
+                try {
+                    targetNum = (String) field.get(messionConfig);
+                } catch (IllegalAccessException e) {
+                    log.error("获取字段{}值异常：{}", field.getName(), e);
+                    return new ArrayList<>();
+                }
+            }
+        }
         // 奖励金币
         String jianglijinbi = messionConfig.getJianglijinbi();
         String[] jianglijinbiLimit = jianglijinbi.split(";");
@@ -79,6 +100,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         PlayerMessionRelation relation = new PlayerMessionRelation();
         relation.setMessionId(messionId);
         relation.setPlayerId(playerId);
+        relation.setTarget(targetNum);
         relation.setMessionTips(messionConfig.getTips());
         relation.setBlankId("three");
         // 经验需给确定值，金币确定值，道具是否存在

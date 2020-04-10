@@ -56,4 +56,12 @@ public interface PlayerMessionRelationService {
      * @return void
      */
     List<PlayerMessionRelation> createNewMession(String playerId, List<PlayerMessionRelation> relations);
+
+    /**
+     * 根据玩家id查询玩家最近三次任务记录
+     *
+     * @param playerId
+     * @return
+     */
+    List<PlayerMessionRelation> selectLastThreeRelationByPlayerId(String playerId);
 }

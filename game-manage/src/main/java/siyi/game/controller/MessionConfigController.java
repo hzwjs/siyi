@@ -78,9 +78,8 @@ public class MessionConfigController {
      */
     @GetMapping("getPlayerMession")
     public List<PlayerMessionRelation> getPlayerMession(String playerId) {
-        List<PlayerMessionRelation> list = playerMessionRelationService.selectByPlayerId(playerId);
+        List<PlayerMessionRelation> list = playerMessionRelationService.selectLastThreeRelationByPlayerId(playerId);
         if (CollectionUtils.isEmpty(list)) {
-            // TODO 若当前玩家无任务信息，需新增任务信息，保存任务记录
             list = playerMessionRelationService.createNewMession(playerId, null);
         } else {
             list = playerMessionRelationService.createNewMession(playerId, list);

@@ -9,6 +9,7 @@ import siyi.game.service.mission.MessionConfigService;
 import siyi.game.service.mission.PlayerMessionRelationService;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,5 +57,23 @@ public class PlayerMessionRelationServiceImpl implements PlayerMessionRelationSe
             list = messionConfigService.createNewMession(playerId, relations);
         }
         return list;
+    }
+
+    @Override
+    public List<PlayerMessionRelation> selectLastThreeRelationByPlayerId(String playerId) {
+        Example example = new Example(PlayerMessionRelation.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("playerId", playerId);
+        example.setOrderByClause("id desc");
+        List<PlayerMessionRelation> playerMessionRelations = playerMessionRelationMapper.selectByExample(example);
+        List<PlayerMessionRelation> targetList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(playerMessionRelations) && playerMessionRelations.size() >= 3) {
+            for (int i = 0; i < 3; i++) {
+                targetList.add(playerMessionRelations.get(i));
+            }
+        } else {
+            targetList = playerMessionRelations;
+        }
+        return targetList;
     }
 }
