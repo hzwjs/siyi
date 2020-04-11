@@ -1,14 +1,11 @@
 package siyi.game.bo.functionbtn;
 
-import lombok.Data;
-
-
 public class AwardInfo {
-    private String playerId;
-    private String itemId;
-    private int num;
-    private String gameCode;
-    private int multiple;
+    private String playerId; // 用户id
+    private String itemId; // 道具id
+    private int num; // 道具数量
+    private String gameCode; // 游戏编号
+    private int multiple; // 奖励倍数，将道具配置表中的所有道具乘以这个倍数
 
     public String getPlayerId() {
         return playerId;
