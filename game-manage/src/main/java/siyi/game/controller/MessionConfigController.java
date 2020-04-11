@@ -59,7 +59,7 @@ public class MessionConfigController {
     public void fileAnalysis() {
         try {
             String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
-            String filePath = fileDir + "biz_config" + File.separator + "item.xlsx";
+            String filePath = fileDir + "biz_config" + File.separator + "Quest.xlsx";
             EasyExcel.read(filePath, MessionConfig.class, new MessionConfigDataListener(messionConfigMapper)).sheet().doRead();
 
         } catch (Exception e) {
@@ -78,13 +78,7 @@ public class MessionConfigController {
      */
     @GetMapping("getPlayerMession")
     public List<PlayerMessionRelation> getPlayerMession(String playerId) {
-        List<PlayerMessionRelation> list = playerMessionRelationService.selectLastThreeRelationByPlayerId(playerId);
-        if (CollectionUtils.isEmpty(list)) {
-            list = playerMessionRelationService.createNewMession(playerId, null);
-        } else {
-            list = playerMessionRelationService.createNewMession(playerId, list);
-        }
-        return list;
+        return playerMessionRelationService.selectByPlayerId(playerId);
     }
 
     /**

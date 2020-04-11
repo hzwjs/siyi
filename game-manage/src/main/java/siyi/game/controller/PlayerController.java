@@ -123,6 +123,9 @@ public class PlayerController extends BaseController {
                 LevelClearRecord levelClearRecord = levelClearRecordService.selectByBean(selectParam);
                 // 查询玩家任务信息
                 List<PlayerMessionRelation> messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
+                if (CollectionUtils.isEmpty(messionList)) {
+                    messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
+                }
                 // 返回数据组装
                 resultMap.put("player", player);
                 resultMap.put("openId", uuid32);

@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 import siyi.game.dao.MessionConfigMapper;
 import siyi.game.dao.PlayerMessionRelationMapper;
 import siyi.game.dao.entity.MessionConfig;
+import siyi.game.dao.entity.PlayerMessionRecord;
 import siyi.game.dao.entity.PlayerMessionRelation;
 import siyi.game.service.mission.MessionConfigService;
 import siyi.game.utill.RandomUtil;
@@ -48,7 +49,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
             // 如果存在关联关系，则需在支线任务中删除掉已完成过的任务（三次以内），保证三次内无重复支线任务
             List<String> relationIds = new ArrayList<>();
             for (PlayerMessionRelation relation : relations) {
-                relationIds.add(relation.getBlankId());
+                relationIds.add(relation.getMessionId());
             }
 
             Iterator<MessionConfig> iterator = messionConfigs.iterator();

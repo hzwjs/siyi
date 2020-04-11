@@ -42,7 +42,7 @@
         </javaClientGenerator>
 
         <!--table name-->
-        <table tableName="tb_player_wx_info" domainObjectName="PlayerWxInfo">
+        <table tableName="tb_player_mession_record" domainObjectName="PlayerMessionRecord">
             <generatedKey column="player_id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
