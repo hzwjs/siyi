@@ -112,23 +112,13 @@ public class PlayerController extends BaseController {
                 if (itemNoList.size() != 0) {
                     itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
                 }
-                // 查询玩家称号信息
-                String playerLevel = player.getPlayerLevel();
-                LevelUpConfig levelUpConfig = levelUpService.selectByLevel(playerLevel);
 
-                // 查询玩家挑战记录信息
-                LevelClearRecord selectParam = new LevelClearRecord();
-                selectParam.setPlayerId(player.getPlayerId());
-                selectParam.setGameCode(player.getGameCode());
-                LevelClearRecord levelClearRecord = levelClearRecordService.selectByBean(selectParam);
                 // 查询玩家任务信息
                 List<PlayerMessionRelation> messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
                 if (CollectionUtils.isEmpty(messionList)) {
                     messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
                 }
                 resultMap.put("itemList", itemConfigs);
-                resultMap.put("level", levelUpConfig);
-                resultMap.put("levelRecord", levelClearRecord);
                 resultMap.put("messionList", messionList);
             }
             // 返回数据组装

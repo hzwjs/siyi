@@ -1,25 +1,21 @@
 package siyi.game.controller;
 
-import com.alibaba.excel.EasyExcel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.GamelevelConfigMapper;
-import siyi.game.dao.QuTianziMapper;
-import siyi.game.dao.QuXuanzeMapper;
-import siyi.game.dao.entity.*;
-import siyi.game.manager.excel.read.GameLevelConfigDataListener;
-import siyi.game.manager.excel.read.QuXuanzeDataListener;
-import siyi.game.service.fuctionbtn.FunctionService;
+import siyi.game.dao.entity.ItemPlayerRelation;
+import siyi.game.dao.entity.LevelUpConfig;
+import siyi.game.dao.entity.Player;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
@@ -28,7 +24,6 @@ import siyi.game.service.wx.WxService;
 import siyi.game.utill.CacheClass;
 import siyi.game.utill.Constants;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +92,7 @@ public class GameLevelController extends BaseController{
      */
     @PostMapping(value = "submitGame")
     @ResponseBody
-    public void submitGame(Player player, List<ItemPlayerRelation> itemPlayerRelations, String sessionKey) {
+    public void submitGame(Player player, @RequestParam(value="itemPlayerRelations", required=false) List<ItemPlayerRelation> itemPlayerRelations, String sessionKey) {
         try {
             logger.info("提交游戏数据，开始更新数据库");
             logger.info("获取玩家信息：{}", player.toString());
