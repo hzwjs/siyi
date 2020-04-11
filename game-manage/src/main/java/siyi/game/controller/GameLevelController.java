@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "idiom/gameLevel")
 public class GameLevelController extends BaseController{
     private final Logger logger = LoggerFactory.getLogger(GameLevelController.class);
-    private static final String SIGNTYPE = "HmacSHA256";
+    private static final String SIGNTYPE = "hmac_sha256";
     private static final String SUCCESS_CODE = "0";
 
     @Autowired
@@ -97,6 +97,7 @@ public class GameLevelController extends BaseController{
         try {
             logger.info("提交游戏数据，开始更新数据库");
             logger.info("获取玩家信息：{}", player.toString());
+            logger.info("=== sessionKey:{} ===",sessionKey);
             String playerId = player.getPlayerId();
             Player findPlayer = playerService.selectByPlayerId(playerId);
             String experience = player.getExperience();

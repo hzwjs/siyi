@@ -31,7 +31,8 @@ public class WxServiceImpl implements WxService {
             if ("MD5".equals(signType)) {
                 return EncryptUtil.MD5(sb.toString()).toUpperCase();
             }
-            else if ("HmacSHA256".equals(signType)) {
+            else if ("hmac_sha256".equals(signType)) {
+                log.info("=== 开始生成微信的电子签名 ===");
                 return EncryptUtil.HMACSHA256(sb.toString(), key);
             }
             else {
