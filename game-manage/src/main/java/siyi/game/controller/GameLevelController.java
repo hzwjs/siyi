@@ -127,7 +127,9 @@ public class GameLevelController extends BaseController{
                     Map response = restTemplate.getForObject(url, HashMap.class);
                     logger.info("=== response:{} ===", response);
                     // 动态更新配置
+
                     CacheClass.setCache("accessToken", (String) response.get("access_token"));
+                    accessToken = (String) response.get("access_token");
                 }
                 String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature + "&openid=" + findPlayer.getPlatformId() + "&sig_method=" + SIGNTYPE;
                 logger.info("=== 微信接口url：{} ===", url);
