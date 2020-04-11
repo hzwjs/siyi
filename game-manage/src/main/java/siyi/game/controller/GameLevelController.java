@@ -120,7 +120,7 @@ public class GameLevelController extends BaseController{
                 data.put("level", player.getGameLevel());
                 Map param = new HashMap();
                 param.put("kv_list", JSON.toJSONString(data));
-                String signature = wxService.generateSignature(data, sessionKey, SIGNTYPE);
+                String signature = wxService.generateSignature(param, sessionKey, SIGNTYPE);
                 String accessToken = CacheClass.getCache("accessToken");
                 if (StringUtils.isEmpty(accessToken)) {
                     logger.info("++++");
@@ -136,7 +136,7 @@ public class GameLevelController extends BaseController{
                 String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature +
                         "&openid=" + findPlayer.getPlatformId() + "&sig_method=" + SIGNTYPE;
                 logger.info("=== 微信接口url：{} ===", url);
-                Map response = restTemplate.postForObject(url, param, Map.class);
+                Map response = restTemplate.postForObject(url, JSON.toJSONString(param), Map.class);
                 logger.info("=== 微信set_user_storage接口返回值：{} ===", JSON.toJSONString(response));
                 if (SUCCESS_CODE.equals(response.get("errcode"))) {
                     getSuccessResult(new HashMap<>());
