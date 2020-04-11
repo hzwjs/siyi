@@ -119,7 +119,7 @@ public class GameLevelController extends BaseController{
                 Map data = new HashMap();
                 data.put("level", player.getGameLevel());
                 Map param = new HashMap();
-                param.put("kv_list", data);
+                param.put("kv_list", JSON.toJSONString(data));
                 String signature = wxService.generateSignature(data, sessionKey, SIGNTYPE);
                 String accessToken = CacheClass.getCache("accessToken");
                 if (StringUtils.isEmpty(accessToken)) {
