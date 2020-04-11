@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -61,11 +62,15 @@ public class PlayerController extends BaseController {
     @Autowired
     private LevelClearRecordService levelClearRecordService;
 
+    @Value("${appid}")
+    private String appid;
+    @Value("${secret}")
+    private String secret;
+
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private PlayerWxInfoMapper playerWxInfoMapper;
-
     @Autowired
     private PlayerMessionRelationService playerMessionRelationService;
 
@@ -75,7 +80,7 @@ public class PlayerController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         // 微信登录
         String jsCode = playerBo.getWxCode();
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxca19bfbb81a34a47&secret=9702b32d9a5df96bee6ab8f0df4c9fc7&js_code=" + jsCode + "&grant_type=authorization_code";
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" +secret + "&js_code=" + jsCode + "&grant_type=authorization_code";
         String requestStr = restTemplate.getForObject(url, String.class);
         logger.info("=== 微信登录的返回信息:{} ===", requestStr);
         WxLoginResponse response = JSONObject.parseObject(requestStr, WxLoginResponse.class);
