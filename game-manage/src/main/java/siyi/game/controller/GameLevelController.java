@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.GamelevelConfigMapper;
 import siyi.game.dao.QuTianziMapper;
@@ -18,10 +19,13 @@ import siyi.game.dao.QuXuanzeMapper;
 import siyi.game.dao.entity.*;
 import siyi.game.manager.excel.read.GameLevelConfigDataListener;
 import siyi.game.manager.excel.read.QuXuanzeDataListener;
+import siyi.game.service.fuctionbtn.FunctionService;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.player.PlayerService;
+import siyi.game.service.wx.WxService;
+import siyi.game.utill.CacheClass;
 import siyi.game.utill.Constants;
 
 import java.io.File;
@@ -39,27 +43,26 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping(value = "idiom/gameLevel")
-public class GameLevelController {
+public class GameLevelController extends BaseController{
     private final Logger logger = LoggerFactory.getLogger(GameLevelController.class);
+    private static final String SIGNTYPE = "HMACSHA256";
+    private static final String SUCCESS_CODE = "0";
 
-    @Autowired
-    private QuTianziMapper quTianziMapper;
     @Autowired
     GamelevelConfigMapper configMapper;
     @Autowired
-    private QuXuanzeMapper quXuanzeMapper;
-
-    @Autowired
     private GameLevelService gameLevelService;
-
     @Autowired
     private PlayerService playerService;
-
     @Autowired
     private ItemPlayerRelationService itemPlayerRelationService;
-
     @Autowired
     private LevelUpService levelUpService;
+    @Autowired
+    private WxService wxService;
+    @Autowired
+    private RestTemplate restTemplate;
+
 
 
     @RequestMapping(value = "queryGameLevelInfo")
@@ -82,19 +85,6 @@ public class GameLevelController {
         }
     }
 
-
-    @RequestMapping(value = "fileAnalysis")
-    @ResponseBody
-    public void fileAnalysis() {
-        try {
-            String fileDir = ClassLoader.getSystemResource("").toURI().getPath();
-            String filePath = fileDir + "biz_config" + File.separator + "Q_xuanze.xlsx";
-            EasyExcel.read(filePath, QuXuanze.class, new QuXuanzeDataListener(quXuanzeMapper)).sheet().doRead();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * description: 提交经验及道具信息 <br>
      * version: 1.0 <br>
@@ -107,7 +97,7 @@ public class GameLevelController {
      */
     @PostMapping(value = "submitGame")
     @ResponseBody
-    public void submitGame(Player player, List<ItemPlayerRelation> itemPlayerRelations) {
+    public void submitGame(Player player, List<ItemPlayerRelation> itemPlayerRelations, String sessionKey) {
         try {
             logger.info("提交游戏数据，开始更新数据库");
             logger.info("获取玩家信息：{}", player.toString());
@@ -121,7 +111,24 @@ public class GameLevelController {
             int finalGold = Integer.valueOf(gold) + Integer.valueOf(findPlayer.getGold());
             findPlayer.setExperience(String.valueOf(finalExp));
             findPlayer.setGold(String.valueOf(finalGold));
+            // 更新玩家的游戏等级
+            if ( Integer.parseInt(findPlayer.getGameLevel()) < Integer.parseInt(player.getGameLevel())) {
+                findPlayer.setGameLevel(player.getGameLevel());
+                // 将玩家等级上送微信
+                Map data = new HashMap();
+                data.put("level", player.getGameLevel());
+                String signature = wxService.generateSignature(data, sessionKey, SIGNTYPE);
+                String accessToken = CacheClass.getCache("accessToken");
+                String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature + "&openid=" + player.getPlatformId() + "&sig_method=" + SIGNTYPE;
+                Map response = restTemplate.postForObject(url, data, Map.class);
+                if (SUCCESS_CODE.equals(response.get("errcode"))) {
+                    getSuccessResult(new HashMap<>());
+                } else {
+                    getFailResult(new HashMap<>(), "=== 用户的关卡信息上送失败 ===");
+                }
+            }
             playerService.updateByIdSelective(findPlayer);
+
             // 更新道具关联关系
             List<ItemPlayerRelation> existRelations = new ArrayList<>();
             List<ItemPlayerRelation> notExistRelations = new ArrayList<>();
