@@ -123,7 +123,9 @@ public class GameLevelController extends BaseController{
                 if (StringUtils.isEmpty(accessToken)) {
                     logger.info("++++");
                     String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
+                    logger.info("=== url:{} ===", url);
                     Map response = restTemplate.getForObject(url, HashMap.class);
+                    logger.info("=== response:{} ===", response);
                     // 动态更新配置
                     CacheClass.setCache("accessToken", (String) response.get("access_token"));
                 }
