@@ -81,9 +81,9 @@ public class PlayerController extends BaseController {
         // 微信登录
         String jsCode = playerBo.getWxCode();
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" +secret + "&js_code=" + jsCode + "&grant_type=authorization_code";
-        String requestStr = restTemplate.getForObject(url, String.class);
-        logger.info("=== 微信登录的返回信息:{} ===", requestStr);
-        WxLoginResponse response = JSONObject.parseObject(requestStr, WxLoginResponse.class);
+        String responseStr = restTemplate.getForObject(url, String.class);
+        logger.info("=== 微信登录的返回信息:{} ===", responseStr);
+        WxLoginResponse response = JSONObject.parseObject(responseStr, WxLoginResponse.class);
         String openId = response.getOpenid();
         // 设置登录ID，通过该值判断是哪一次登录
         String uuid32 = UUIDUtil.getUUID32();
@@ -126,14 +126,15 @@ public class PlayerController extends BaseController {
                 if (CollectionUtils.isEmpty(messionList)) {
                     messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
                 }
-                // 返回数据组装
-                resultMap.put("player", player);
-                resultMap.put("openId", uuid32);
                 resultMap.put("itemList", itemConfigs);
                 resultMap.put("level", levelUpConfig);
                 resultMap.put("levelRecord", levelClearRecord);
                 resultMap.put("messionList", messionList);
             }
+            // 返回数据组装
+            resultMap.put("player", player);
+            resultMap.put("openId", uuid32);
+            resultMap.put("session_key", response.getSession_key());
             // 插入玩家登录数据
             LoginLog loginLog = new LoginLog();
             loginLog.setGameCode(player.getGameCode());
