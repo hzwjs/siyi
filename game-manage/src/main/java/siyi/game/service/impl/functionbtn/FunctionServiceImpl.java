@@ -86,7 +86,7 @@ public class FunctionServiceImpl implements FunctionService {
                 flag = true;
             }
         } catch (Exception e) {
-            log.error("=== 保存抽奖道具失败：{}===", e);
+            log.error("=== 保存奖道具失败：{}===", e);
         }
         return flag;
     }
