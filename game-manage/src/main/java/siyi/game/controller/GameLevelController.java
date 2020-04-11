@@ -1,5 +1,6 @@
 package siyi.game.controller;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,10 +116,11 @@ public class GameLevelController extends BaseController{
                 String accessToken = CacheClass.getCache("accessToken");
                 String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature + "&openid=" + player.getPlatformId() + "&sig_method=" + SIGNTYPE;
                 Map response = restTemplate.postForObject(url, data, Map.class);
+                logger.info("=== 微信set_user_storage接口返回值：{} ===", JSON.toJSONString(response));
                 if (SUCCESS_CODE.equals(response.get("errcode"))) {
                     getSuccessResult(new HashMap<>());
                 } else {
-                    getFailResult(new HashMap<>(), "=== 用户的关卡信息上送失败 ===");
+                    getFailResult(new HashMap<>(), "=== 用户的关卡信息上送微信失败 ===");
                 }
             }
             playerService.updateByIdSelective(findPlayer);
