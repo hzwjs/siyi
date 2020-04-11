@@ -75,13 +75,16 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         int jiangliexpLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jiangliexpLimit[0]), Integer.parseInt(jiangliexpLimit[1]));
         String exp = String.valueOf(jiangliexpLimitNum);
         String target = messionConfig.getTarget();
+        log.info("获取目标：{}", target);
         target = StringUtil.getCamelCase(target);
+        log.info("转换后目标：{}", target);
         Class<? extends MessionConfig> clazz = messionConfig.getClass();
         Field[] fields = clazz.getFields();
         String targetNum = "";
         for (Field field : fields) {
             field.setAccessible(true);
             String name = field.getName();
+            log.info("字段名称：{}", name);
             if (name.equals(target)) {
                 // 如果字段名与目标一致，则取出值赋值给目标数量
                 try {
