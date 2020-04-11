@@ -64,4 +64,12 @@ public interface PlayerMessionRelationService {
      * @return
      */
     List<PlayerMessionRelation> selectLastThreeRelationByPlayerId(String playerId);
+
+    /**
+     * 根据查询参数查询玩家任务信息
+     *
+     * @param selectParam
+     * @return
+     */
+    List<PlayerMessionRelation> selectListByBean(PlayerMessionRelation selectParam);
 }

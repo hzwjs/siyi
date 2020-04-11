@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import siyi.game.dao.MessionConfigMapper;
-import siyi.game.dao.entity.MessionBlank;
-import siyi.game.dao.entity.MessionConfig;
-import siyi.game.dao.entity.PlayerMessionRelation;
+import siyi.game.dao.entity.*;
 import siyi.game.manager.excel.read.MessionConfigDataListener;
+import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.mission.MessionBlankService;
 import siyi.game.service.mission.MessionConfigService;
 import siyi.game.service.mission.PlayerMessionRelationService;
+import siyi.game.service.player.PlayerService;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * description: MessionConfigController 任务相关接口服务 <br>
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("idiom/mession")
-public class MessionConfigController {
+public class MessionConfigController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessionConfigController.class);
 
     @Autowired
@@ -45,6 +45,12 @@ public class MessionConfigController {
 
     @Autowired
     private MessionBlankService messionBlankService;
+
+    @Autowired
+    private PlayerService playerService;
+
+    @Autowired
+    private ItemPlayerRelationService itemPlayerRelationService;
 
     /**
      * description: 解析任务配置文件 <br>
@@ -210,6 +216,71 @@ public class MessionConfigController {
         messionBlankService.updateByIdSelective(messionBlank);
         resultMap.put("errCode", "000000");
         return resultMap;
+    }
+
+    /**
+     * 完成任务
+     *
+     * @param playerId
+     * @param messionId
+     * @return
+     */
+    @PostMapping("complete")
+    public Map<String, Object> completeMession(String playerId, String messionId) {
+        Map<String, Object> result = new HashMap<>();
+        PlayerMessionRelation selectParam = new PlayerMessionRelation();
+        selectParam.setPlayerId(playerId);
+        selectParam.setMessionId(messionId);
+        selectParam.setCompleteStatus("1");
+        List<PlayerMessionRelation> list = playerMessionRelationService.selectListByBean(selectParam);
+        if (CollectionUtils.isEmpty(list)) {
+           getFailResult(result, "玩家无该任务信息");
+           return result;
+        }
+        // 根据id进行倒序排序
+        list = list.stream()
+                .sorted(Comparator.comparing(PlayerMessionRelation::getId).reversed())
+                .collect(Collectors.toList());
+        // 取出最新一条任务信息
+        PlayerMessionRelation playerMessionRelation = list.get(0);
+        String exp = playerMessionRelation.getExp();
+        String gold = playerMessionRelation.getGold();
+        String isItem = playerMessionRelation.getIsItem();
+        if ("1".equals(isItem)) {
+            // 包含道具奖励，需更新玩家道具信息
+            String itemId = playerMessionRelation.getItemId();
+            String itemNum = playerMessionRelation.getItemNum();
+            ItemPlayerRelation selectRelation = new ItemPlayerRelation();
+            selectRelation.setPlayerId(playerId);
+            selectRelation.setItemNo(itemId);
+            ItemPlayerRelation itemPlayerRelation = itemPlayerRelationService.selectByBean(selectRelation);
+            if (itemPlayerRelation == null) {
+                // 玩家没有该道具，则新增关联关系
+                itemPlayerRelation = new ItemPlayerRelation();
+                itemPlayerRelation.setItemNo(itemId);
+                itemPlayerRelation.setPlayerId(playerId);
+                itemPlayerRelation.setGameCode("game001");
+                itemPlayerRelation.setQuantity(itemNum);
+                itemPlayerRelationService.insertSelective(itemPlayerRelation);
+            } else {
+                // 玩家有该道具，更新该道具数量
+                String quantity = itemPlayerRelation.getQuantity();
+                long totalNum = Long.parseLong(quantity) + Long.parseLong(itemNum);
+                itemPlayerRelation.setQuantity(String.valueOf(totalNum));
+                itemPlayerRelationService.updateByIdSelective(itemPlayerRelation);
+            }
+        }
+        // 根据玩家id进行玩家查询，更新玩家经验及金币值
+        Player player = playerService.selectByPlayerId(playerId);
+        String experience = player.getExperience();
+        long totalExp = Long.parseLong(exp) + Long.parseLong(experience);
+        player.setExperience(String.valueOf(totalExp));
+        String playerGold = player.getGold();
+        long totalGold = Long.parseLong(gold) + Long.parseLong(playerGold);
+        player.setGold(String.valueOf(totalGold));
+        playerService.updateByIdSelective(player);
+        getSuccessResult(result);
+        return result;
     }
 
 }

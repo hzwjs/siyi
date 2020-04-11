@@ -76,4 +76,9 @@ public class PlayerMessionRelationServiceImpl implements PlayerMessionRelationSe
         }
         return targetList;
     }
+
+    @Override
+    public List<PlayerMessionRelation> selectListByBean(PlayerMessionRelation selectParam) {
+        return playerMessionRelationMapper.select(selectParam);
+    }
 }
