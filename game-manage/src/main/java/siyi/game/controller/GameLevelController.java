@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "idiom/gameLevel")
 public class GameLevelController extends BaseController{
     private final Logger logger = LoggerFactory.getLogger(GameLevelController.class);
-    private static final String SIGNTYPE = "HMACSHA256";
+    private static final String SIGNTYPE = "HmacSHA256";
     private static final String SUCCESS_CODE = "0";
 
     @Autowired

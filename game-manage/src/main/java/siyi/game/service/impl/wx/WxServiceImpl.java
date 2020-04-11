@@ -31,7 +31,7 @@ public class WxServiceImpl implements WxService {
             if ("MD5".equals(signType)) {
                 return EncryptUtil.MD5(sb.toString()).toUpperCase();
             }
-            else if ("HMACSHA256".equals(signType)) {
+            else if ("HmacSHA256".equals(signType)) {
                 return EncryptUtil.HMACSHA256(sb.toString(), key);
             }
             else {
