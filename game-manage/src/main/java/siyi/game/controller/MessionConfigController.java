@@ -279,6 +279,7 @@ public class MessionConfigController extends BaseController {
         long totalGold = Long.parseLong(gold) + Long.parseLong(playerGold);
         player.setGold(String.valueOf(totalGold));
         playerService.updateByIdSelective(player);
+        // TODO 开启定时任务，进行任务冷却
         getSuccessResult(result);
         return result;
     }
