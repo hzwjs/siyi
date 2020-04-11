@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.dao.entity.Player;
 import siyi.game.dao.entity.PlayerSign;
 import siyi.game.service.fuctionbtn.FunctionService;
+import siyi.game.utill.StringUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,13 +55,17 @@ public class FunctionController extends BaseController{
     public Map<String, Object> submitLottery(AwardInfo awardInfo) {
         log.info("玩家获取道具保存，方法入参：itemId：{}，num：{}，playerId：{}，gameCode：{}", awardInfo.getItemId(), awardInfo.getNum(), awardInfo.getPlayerId(), awardInfo.getGameCode());
         Map<String, Object> resultMap = new HashMap<>();
-        boolean flag = functionService.saveLotteryInfo(awardInfo.getPlayerId(), awardInfo.getItemId(), awardInfo.getNum(), awardInfo.getGameCode());
-        if (flag) {
-            resultMap.put("errCode", "000000");
-            resultMap.put("errMsg", "保存成功");
-        } else {
+        if (!StringUtils.isEmpty(awardInfo.getItemId()) && !StringUtils.isEmpty(awardInfo.getNum()) && !StringUtils.isEmpty(awardInfo.getPlayerId())){
+            boolean flag = functionService.saveLotteryInfo(awardInfo.getPlayerId(), awardInfo.getItemId(), awardInfo.getNum(), awardInfo.getGameCode());
+            if (flag) {
+                resultMap.put("errCode", "000000");
+                resultMap.put("errMsg", "保存成功");
+            }
             getFailResult(resultMap, "保存失败");
+        } else {
+            getFailResult(resultMap, "缺少必输参数");
         }
+
         return resultMap;
     }
 
