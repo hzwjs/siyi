@@ -34,5 +34,6 @@ public class WxScheduled {
         Map response = restTemplate.getForObject(url, HashMap.class);
         // 动态更新配置
         CacheClass.setCache("accessToken", (String) response.get("access_token"));
+        log.info("=== access_token:{} ===",(String) response.get("access_token"));
     }
 }

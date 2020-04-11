@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -43,6 +44,10 @@ public class GameLevelController extends BaseController{
     private final Logger logger = LoggerFactory.getLogger(GameLevelController.class);
     private static final String SIGNTYPE = "hmac_sha256";
     private static final String SUCCESS_CODE = "0";
+    @Value("${appid}")
+    private String appid;
+    @Value("${secret}")
+    private String secret;
 
     @Autowired
     GamelevelConfigMapper configMapper;
@@ -115,6 +120,13 @@ public class GameLevelController extends BaseController{
                 data.put("level", player.getGameLevel());
                 String signature = wxService.generateSignature(data, sessionKey, SIGNTYPE);
                 String accessToken = CacheClass.getCache("accessToken");
+                if (StringUtils.isEmpty(accessToken)) {
+                    logger.info("++++");
+                    String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
+                    Map response = restTemplate.getForObject(url, HashMap.class);
+                    // 动态更新配置
+                    CacheClass.setCache("accessToken", (String) response.get("access_token"));
+                }
                 String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature + "&openid=" + findPlayer.getPlatformId() + "&sig_method=" + SIGNTYPE;
                 logger.info("=== 微信接口url：{} ===", url);
                 Map response = restTemplate.postForObject(url, data, Map.class);
