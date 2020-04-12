@@ -6,6 +6,13 @@ import java.security.MessageDigest;
 
 public class EncryptUtil {
 
+    /**
+     *  HMACSHA256实现
+     * @param data
+     * @param key
+     * @return
+     * @throws Exception
+     */
     public static String HMACSHA256(String data, String key) throws Exception {
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
         SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
