@@ -87,4 +87,11 @@ public interface PlayerMessionRelationService {
      * @param relation
      */
     void insertSelective(PlayerMessionRelation relation);
+
+    /**
+     * 根据Id 删除任务关联信息
+     *
+     * @param id
+     */
+    void deleteById(Integer id);
 }

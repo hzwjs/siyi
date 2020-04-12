@@ -95,4 +95,9 @@ public class PlayerMessionRelationServiceImpl implements PlayerMessionRelationSe
     public void insertSelective(PlayerMessionRelation relation) {
         playerMessionRelationMapper.insertSelective(relation);
     }
+
+    @Override
+    public void deleteById(Integer id) {
+        playerMessionRelationMapper.deleteByPrimaryKey(id);
+    }
 }

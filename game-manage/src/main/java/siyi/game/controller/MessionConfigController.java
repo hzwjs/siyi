@@ -189,6 +189,8 @@ public class MessionConfigController extends BaseController {
         }
         // 该任务所属任务栏
         String blankId = relation.getBlankId();
+        // 删除原有任务
+        playerMessionRelationService.deleteById(relation.getId());
         // 获取新任务，指定任务栏
         PlayerMessionRelation feederMission = messionConfigService.createFeederMission(playerId, blankId);
         resultMap.put("newMission", feederMission);
