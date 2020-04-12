@@ -116,43 +116,49 @@ public class GameLevelController extends BaseController{
             findPlayer.setExperience(String.valueOf(finalExp));
             findPlayer.setGold(String.valueOf(finalGold));
             // 更新玩家的游戏等级
-            if ( Integer.parseInt(findPlayer.getGameLevel()) < Integer.parseInt(player.getGameLevel())) {
+            if ( Integer.parseInt(findPlayer.getGameLevel()) < Integer.parseInt(player.getGameLevel()))
+            {
                 findPlayer.setGameLevel(player.getGameLevel());
+                Map data = new HashMap();
+                data.put("level", player.getGameLevel());
+                boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, findPlayer.getPlatformId());
+                if (wx_request_flag) {
+                    playerService.updateByIdSelective(findPlayer);
+                }
                 // 将玩家等级上送微信
-                //todo 数据组装需要修改
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("key","1");
-                jsonObject.put("value","2");
-                JSONArray jsonArray = new JSONArray();
-                jsonArray.add(jsonObject);
-                JSONObject jsonObject2 = new JSONObject();
-                jsonObject2.put("kv_list", jsonArray);
-
-                String signature = wxService.generateSignature(jsonObject2.toJSONString(), sessionKey, SIGNTYPE);
-                String accessToken = CacheClass.getCache("accessToken");
-                if (StringUtils.isEmpty(accessToken)) {
-                    String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
-                    Map response = restTemplate.getForObject(url, HashMap.class);
-                    logger.info("=== accessToken:{} ===", (String) response.get("access_token"));
-                    // 动态更新配置
-                    CacheClass.setCache("accessToken", (String) response.get("access_token"));
-                    accessToken = (String) response.get("access_token");
-                }
-                String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature +
-                        "&openid=" + findPlayer.getPlatformId() + "&sig_method=" + SIGNTYPE;
-                logger.info("=== 微信接口url：{} ===", url);
-
-                Map response = restTemplate.postForObject(url, jsonObject2.toJSONString(), Map.class);
-                logger.info("=== 微信set_user_storage接口返回值：{} ===", JSON.toJSONString(response));
-
-                if (SUCCESS_CODE.equals(String.valueOf(response.get("errcode")))) {
-                    getSuccessResult(result);
-                } else {
-                    getFailResult(result, "=== 用户的关卡信息上送微信失败 ===");
-                    return result;
-                }
+//                //todo 数据组装需要修改
+//                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("key","1");
+//                jsonObject.put("value","2");
+//                JSONArray jsonArray = new JSONArray();
+//                jsonArray.add(jsonObject);
+//                JSONObject jsonObject2 = new JSONObject();
+//                jsonObject2.put("kv_list", jsonArray);
+//
+//                String signature = wxService.generateSignature(jsonObject2.toJSONString(), sessionKey, SIGNTYPE);
+//                String accessToken = CacheClass.getCache("accessToken");
+//                if (StringUtils.isEmpty(accessToken)) {
+//                    String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
+//                    Map response = restTemplate.getForObject(url, HashMap.class);
+//                    logger.info("=== accessToken:{} ===", (String) response.get("access_token"));
+//                    // 动态更新配置
+//                    CacheClass.setCache("accessToken", (String) response.get("access_token"));
+//                    accessToken = (String) response.get("access_token");
+//                }
+//                String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature +
+//                        "&openid=" + findPlayer.getPlatformId() + "&sig_method=" + SIGNTYPE;
+//                logger.info("=== 微信接口url：{} ===", url);
+//
+//                Map response = restTemplate.postForObject(url, jsonObject2.toJSONString(), Map.class);
+//                logger.info("=== 微信set_user_storage接口返回值：{} ===", JSON.toJSONString(response));
+//
+//                if (SUCCESS_CODE.equals(String.valueOf(response.get("errcode")))) {
+//                    getSuccessResult(result);
+//                } else {
+//                    getFailResult(result, "=== 用户的关卡信息上送微信失败 ===");
+//                    return result;
+//                }
             }
-            playerService.updateByIdSelective(findPlayer);
 
             // 更新道具关联关系
             List<ItemPlayerRelation> existRelations = new ArrayList<>();
