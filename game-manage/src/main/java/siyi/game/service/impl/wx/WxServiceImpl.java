@@ -19,7 +19,7 @@ public class WxServiceImpl implements WxService {
 //        String[] keyArray = keySet.toArray(new String[keySet.size()]);
 //        Arrays.sort(keyArray);
 //        StringBuilder sb = new StringBuilder();
-//
+// ==============
         try {
             if ("MD5".equals(signType)) {
                 //return EncryptUtil.MD5(sb.toString()).toUpperCase();

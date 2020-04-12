@@ -40,6 +40,7 @@ public class WxController extends BaseController{
         player.setPlayerId(playerId);
         player = playerMapper.selectOne(player);
         if (player != null) {
+            //=========
             String signature = wxService.generateSignature(data.toString(), sessionKey, SIGNTYPE);
             String accessToken = CacheClass.getCache("accessToken");
             String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature + "&openid=" + player.getPlatformId() + "&sig_method=" + SIGNTYPE;

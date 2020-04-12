@@ -123,6 +123,7 @@ public class GameLevelController extends BaseController{
             if ( Integer.parseInt(findPlayer.getGameLevel()) < Integer.parseInt(player.getGameLevel())) {
                 findPlayer.setGameLevel(player.getGameLevel());
                 // 将玩家等级上送微信
+                //todo 数据组装需要修改
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("key","1");
                 jsonObject.put("value","2");
