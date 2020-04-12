@@ -11,6 +11,7 @@ import siyi.game.dao.entity.PlayerMessionRecord;
 import siyi.game.dao.entity.PlayerMessionRelation;
 import siyi.game.service.mission.MessionConfigService;
 import siyi.game.utill.RandomUtil;
+import siyi.game.utill.ReflectOperate;
 import siyi.game.utill.StringUtil;
 import tk.mybatis.mapper.entity.Example;
 
@@ -78,23 +79,8 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         log.info("获取目标：{}", target);
         target = StringUtil.getCamelCase(target);
         log.info("转换后目标：{}", target);
-        Class<? extends MessionConfig> clazz = messionConfig.getClass();
-        Field[] fields = clazz.getFields();
-        String targetNum = "";
-        for (Field field : fields) {
-            field.setAccessible(true);
-            String name = field.getName();
-            log.info("字段名称：{}", name);
-            if (name.equals(target)) {
-                // 如果字段名与目标一致，则取出值赋值给目标数量
-                try {
-                    targetNum = (String) field.get(messionConfig);
-                } catch (IllegalAccessException e) {
-                    log.error("获取字段{}值异常：{}", field.getName(), e);
-                    return new ArrayList<>();
-                }
-            }
-        }
+        String getMethodValue = (String) ReflectOperate.getGetMethodValue(messionConfig, target);
+        log.info("获取目标字段值：{}", getMethodValue);
         // 奖励金币
         String jianglijinbi = messionConfig.getJianglijinbi();
         String[] jianglijinbiLimit = jianglijinbi.split(";");
@@ -104,7 +90,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         PlayerMessionRelation relation = new PlayerMessionRelation();
         relation.setMessionId(messionId);
         relation.setPlayerId(playerId);
-        relation.setTarget(targetNum);
+        relation.setTarget(getMethodValue);
         relation.setMessionTips(messionConfig.getTips());
         relation.setBlankId("three");
         // 经验需给确定值，金币确定值，道具是否存在
