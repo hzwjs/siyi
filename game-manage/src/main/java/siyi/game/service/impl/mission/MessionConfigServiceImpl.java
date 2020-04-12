@@ -168,6 +168,8 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         relation.setTarget(getMethodValue);
         relation.setMessionTips(messionConfig.getTips());
         relation.setBlankId(blankId);
+        relation.setCompleteStatus("0");
+        relation.setProcess("0");
         // 经验需给确定值，金币确定值，道具是否存在
         relation.setExp(exp);
         relation.setGold(jinbi);
