@@ -98,7 +98,8 @@ public class GameLevelController extends BaseController{
      */
     @PostMapping(value = "submitGame")
     @ResponseBody
-    public void submitGame(Player player, @RequestParam(value="itemPlayerRelations", required=false) List<ItemPlayerRelation> itemPlayerRelations, String sessionKey) {
+    public Map submitGame(Player player, @RequestParam(value="itemPlayerRelations", required=false) List<ItemPlayerRelation> itemPlayerRelations, String sessionKey) {
+        Map result = new HashMap();
         try {
             logger.info("提交游戏数据，开始更新数据库");
             logger.info("获取玩家信息：{}", player.toString());
@@ -120,28 +121,26 @@ public class GameLevelController extends BaseController{
                 data.put("level", player.getGameLevel());
                 Map param = new HashMap();
                 param.put("kv_list", JSON.toJSONString(data));
-                String signature = wxService.generateSignature(param, sessionKey, SIGNTYPE);
+                String signature = wxService.generateSignature(data, sessionKey, SIGNTYPE);
                 String accessToken = CacheClass.getCache("accessToken");
                 if (StringUtils.isEmpty(accessToken)) {
-                    logger.info("++++");
                     String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
-                    logger.info("=== url:{} ===", url);
                     Map response = restTemplate.getForObject(url, HashMap.class);
-                    logger.info("=== response:{} ===", response);
+                    logger.info("=== accessToken:{} ===", (String) response.get("access_token"));
                     // 动态更新配置
-
                     CacheClass.setCache("accessToken", (String) response.get("access_token"));
                     accessToken = (String) response.get("access_token");
                 }
                 String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature +
                         "&openid=" + findPlayer.getPlatformId() + "&sig_method=" + SIGNTYPE;
                 logger.info("=== 微信接口url：{} ===", url);
-                Map response = restTemplate.postForObject(url, JSON.toJSONString(param), Map.class);
+                Map response = restTemplate.postForObject(url, data, Map.class);
                 logger.info("=== 微信set_user_storage接口返回值：{} ===", JSON.toJSONString(response));
                 if (SUCCESS_CODE.equals(response.get("errcode"))) {
-                    getSuccessResult(new HashMap<>());
+                    getSuccessResult(result);
                 } else {
-                    getFailResult(new HashMap<>(), "=== 用户的关卡信息上送微信失败 ===");
+                    getFailResult(result, "=== 用户的关卡信息上送微信失败 ===");
+                    return result;
                 }
             }
             playerService.updateByIdSelective(findPlayer);
@@ -188,9 +187,12 @@ public class GameLevelController extends BaseController{
                 itemPlayerRelationService.updateQuantityListById(existRelations);
                 logger.info("更新结束");
             }
+            getSuccessResult(result);
         } catch (Exception e) {
             logger.error("提交游戏数据失败：{}", e);
+            getFailResult(result,"闯关信息提交失败");
         }
+        return result;
     }
 
     /**
