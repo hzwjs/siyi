@@ -116,6 +116,7 @@ public class PlayerController extends BaseController {
                 // 查询玩家任务信息
                 List<PlayerMessionRelation> messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
                 if (CollectionUtils.isEmpty(messionList)) {
+                    logger.info("玩家无任务信息，开始生成任务");
                     messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
                 }
                 resultMap.put("itemList", itemConfigs);

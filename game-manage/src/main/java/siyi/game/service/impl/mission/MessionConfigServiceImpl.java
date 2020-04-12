@@ -36,6 +36,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
 
     @Override
     public List<PlayerMessionRelation> createNewMession(String playerId, List<PlayerMessionRelation> relations) {
+        log.info("开始生成任务");
         // 获取所有支线任务id
         List<String> messionIds = getFeederIds();
         Example example = new Example(MessionConfig.class);
@@ -44,22 +45,10 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(relations)) {
             // TODO 如果任务关系为空 表示为第一次进入游戏，需在主线任务中选择第一条任务
-
+            createFeederMission(playerId);
         } else {
             // 如果存在关联关系，则需在支线任务中删除掉已完成过的任务（三次以内），保证三次内无重复支线任务
-            List<String> relationIds = new ArrayList<>();
-            for (PlayerMessionRelation relation : relations) {
-                relationIds.add(relation.getMessionId());
-            }
-
-            Iterator<MessionConfig> iterator = messionConfigs.iterator();
-            if (iterator.hasNext()) {
-                MessionConfig next = iterator.next();
-                String id = next.getId();
-                if (relationIds.contains(id)) {
-                    messionConfigs.remove(next);
-                }
-            }
+            createFeederMission(playerId);
         }
         return playerMessionRelationService.selectExecutingMission(playerId);
     }
@@ -72,6 +61,25 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("id", messionIds);
         List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
+        // 查询玩家最近三次任务信息
+        List<PlayerMessionRelation> messionList = playerMessionRelationService.selectLastThreeRelationByPlayerId(playerId);
+        // 查询玩家正在执行的任务信息
+        List<PlayerMessionRelation> executingMission = playerMessionRelationService.selectExecutingMission(playerId);
+        List<String> relationIds = new ArrayList<>();
+        for (PlayerMessionRelation relation : messionList) {
+            relationIds.add(relation.getMessionId());
+        }
+        for (PlayerMessionRelation playerMessionRelation : executingMission) {
+            relationIds.add(playerMessionRelation.getMessionId());
+        }
+        Iterator<MessionConfig> iterator = messionConfigs.iterator();
+        if (iterator.hasNext()) {
+            MessionConfig next = iterator.next();
+            String id = next.getId();
+            if (relationIds.contains(id)) {
+                messionConfigs.remove(next);
+            }
+        }
         // 选择支线任务中的一条支线任务
         Map<String, String> weightMap = new HashMap<>();
         for (MessionConfig messionConfig : messionConfigs) {
@@ -137,6 +145,25 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("id", messionIds);
         List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
+        // 查询玩家最近三次任务信息
+        List<PlayerMessionRelation> messionList = playerMessionRelationService.selectLastThreeRelationByPlayerId(playerId);
+        // 查询玩家正在执行的任务信息
+        List<PlayerMessionRelation> executingMission = playerMessionRelationService.selectExecutingMission(playerId);
+        List<String> relationIds = new ArrayList<>();
+        for (PlayerMessionRelation relation : messionList) {
+            relationIds.add(relation.getMessionId());
+        }
+        for (PlayerMessionRelation playerMessionRelation : executingMission) {
+            relationIds.add(playerMessionRelation.getMessionId());
+        }
+        Iterator<MessionConfig> iterator = messionConfigs.iterator();
+        if (iterator.hasNext()) {
+            MessionConfig next = iterator.next();
+            String id = next.getId();
+            if (relationIds.contains(id)) {
+                messionConfigs.remove(next);
+            }
+        }
         // 选择支线任务中的一条支线任务
         Map<String, String> weightMap = new HashMap<>();
         for (MessionConfig messionConfig : messionConfigs) {
