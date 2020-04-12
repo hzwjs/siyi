@@ -283,8 +283,33 @@ public class MessionConfigController extends BaseController {
         long totalGold = Long.parseLong(gold) + Long.parseLong(playerGold);
         player.setGold(String.valueOf(totalGold));
         playerService.updateByIdSelective(player);
+        // 更新玩家任务栏状态
+        String blankId = playerMessionRelation.getBlankId();
+        MessionBlank messionBlank = messionBlankService.selectByPlayerId(playerId);
+        switch (blankId) {
+            case "one":
+                messionBlank.setBlankOneStatus("2");
+                break;
+            case "two":
+                messionBlank.setBlankTwoStatus("2");
+                break;
+            case "three":
+                messionBlank.setBlankThreeStatus("2");
+                break;
+            case "four":
+                messionBlank.setBlankFourStatus("2");
+                break;
+            case "five":
+                messionBlank.setBlankFiveStatus("2");
+                break;
+            case "six":
+                messionBlank.setBlankSixStatus("2");
+                break;
+        }
+        messionBlankService.updateByIdSelective(messionBlank);
         // TODO 开启定时任务，进行任务冷却
         getSuccessResult(result);
+        result.put("missionBlank", messionBlank);
         return result;
     }
 
