@@ -180,6 +180,7 @@ public class MessionConfigController extends BaseController {
         PlayerMessionRelation selectRelation = new PlayerMessionRelation();
         selectRelation.setPlayerId(playerId);
         selectRelation.setMessionId(messionId);
+        selectRelation.setCompleteStatus("0");
         PlayerMessionRelation relation = playerMessionRelationService.selectByBean(selectRelation);
         if (relation == null) {
             resultMap.put("errCode", "000010");
@@ -188,8 +189,9 @@ public class MessionConfigController extends BaseController {
         }
         // 该任务所属任务栏
         String blankId = relation.getBlankId();
-        // TODO 获取新任务
-        // TODO 将新任务保存到任务记录表，新任务与玩家关联，并设置任务栏id为原所属任务栏id
+        // 获取新任务，指定任务栏
+        PlayerMessionRelation feederMission = messionConfigService.createFeederMission(playerId, blankId);
+        resultMap.put("newMission", feederMission);
         return resultMap;
     }
 

@@ -12,5 +12,27 @@ import java.util.List;
  */
 public interface MessionConfigService {
 
+    /**
+     * 玩家创建新任务
+     *
+     * @param playerId
+     * @param relations
+     * @return
+     */
     List<PlayerMessionRelation> createNewMession(String playerId, List<PlayerMessionRelation> relations);
+
+    /**
+     * 创建新支线任务
+     *
+     * @param playerId
+     */
+    void createFeederMission(String playerId);
+
+    /**
+     * 创建新支线任务，指定任务栏
+     *
+     * @param playerId
+     * @param blankId
+     */
+    PlayerMessionRelation createFeederMission(String playerId, String blankId);
 }
