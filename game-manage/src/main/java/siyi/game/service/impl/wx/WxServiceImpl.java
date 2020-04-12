@@ -23,7 +23,7 @@ import java.util.*;
 public class WxServiceImpl implements WxService {
 
     private static final String SIGNTYPE = "hmac_sha256";
-    private static final String SUCCESS_CODE = "0";
+    private static final int SUCCESS_CODE = 0;
     @Value("${appid}")
     private String appid;
     @Value("${secret}")
@@ -35,22 +35,13 @@ public class WxServiceImpl implements WxService {
     @Override
     public boolean setUserStorage(Map data, String sessionKey, String platformId) {
         boolean flag = false;
-//        List list = new ArrayList();
-//        list.add(data);
-//        Map param = new HashMap();
-//        param.put("kv_list", list);
-//        String paramStr = JSON.toJSONString(param);
-//        log.info("=== paramStr:{} ===", paramStr);
+        List list = new ArrayList();
+        list.add(data);
+        Map param = new HashMap();
+        param.put("kv_list", list);
+        String paramStr = JSON.toJSONString(param);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("key","1");
-        jsonObject.put("value","2");
-        JSONArray jsonArray = new JSONArray();
-        jsonArray.add(jsonObject);
-        JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("kv_list", jsonArray);
-
-        String signature = generateSignature(jsonObject2.toJSONString(), sessionKey, SIGNTYPE);
+        String signature = generateSignature(paramStr, sessionKey, SIGNTYPE);
         String accessToken = CacheClass.getCache("accessToken");
         if (StringUtils.isEmpty(accessToken)) {
             String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
@@ -63,10 +54,9 @@ public class WxServiceImpl implements WxService {
         String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature +
                 "&openid=" + platformId + "&sig_method=" + SIGNTYPE;
         log.info("=== 微信接口url：{} ===", url);
-        log.info("=== param:{} ===", jsonObject2.toJSONString());
-        Map response = restTemplate.postForObject(url, jsonObject2.toJSONString(), Map.class);
+        Map response = restTemplate.postForObject(url, paramStr, Map.class);
         log.info("=== 微信set_user_storage接口返回值：{} ===", JSON.toJSONString(response));
-        if (SUCCESS_CODE.equals(response.get("errcode"))) {
+        if ((int) response.get("errcode") == 0) {
             flag = true;
         } else {
             log.warn("==== 数据上送微信失败 ====");
