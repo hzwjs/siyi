@@ -140,6 +140,7 @@ public class PlayerController extends BaseController {
         }
         // 返回成功响应
         getSuccessResult(resultMap);
+        logger.info("=== 登录返回数据:{} ===", JSON.toJSONString(resultMap));
         return resultMap;
 
     }
