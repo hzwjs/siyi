@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import siyi.game.utill.CacheClass;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,5 +36,9 @@ public class WxScheduled {
         // 动态更新配置
         CacheClass.setCache("accessToken", (String) response.get("access_token"));
         log.info("=== access_token:{} ===",(String) response.get("access_token"));
+    }
+
+    public void testTask(){
+        log.info("=== 测试定时任务：{}", new Date());
     }
 }

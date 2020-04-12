@@ -11,7 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import tk.mybatis.spring.annotation.MapperScan;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+
 
 @EnableAutoConfiguration
 @ComponentScan
@@ -20,6 +26,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 public class GameManageApp {
 
     private static final Logger log = LoggerFactory.getLogger(GameManageApp.class);
+    public static Map<String, ScheduledFuture> map = new HashMap<>();
 
     public static void main(String[] args) {
         SpringApplication.run(GameManageApp.class, args);
@@ -37,6 +44,17 @@ public class GameManageApp {
                 objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             }
         };
+    }
+
+    // 创建线程
+    @Bean
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+        ThreadPoolTaskScheduler executor = new ThreadPoolTaskScheduler();
+        executor.setPoolSize(20);
+        executor.setThreadNamePrefix("taskExecutor-");
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(60);
+        return executor;
     }
 
 }
