@@ -27,7 +27,7 @@ public class WxScheduled {
     /**
      * 每隔2个小时去获取一次微信的AccessToken
      */
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0 0/1 * * *")
     private void getAccessToken() {
         log.info("=== 定时任务-getAccessToken start ===");
         String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
