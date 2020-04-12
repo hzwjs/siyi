@@ -1,10 +1,16 @@
 package siyi.game.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sun.javafx.tools.packager.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -117,11 +123,15 @@ public class GameLevelController extends BaseController{
             if ( Integer.parseInt(findPlayer.getGameLevel()) < Integer.parseInt(player.getGameLevel())) {
                 findPlayer.setGameLevel(player.getGameLevel());
                 // 将玩家等级上送微信
-                Map data = new HashMap();
-                data.put("level", player.getGameLevel());
-                Map param = new HashMap();
-                param.put("kv_list", JSON.toJSONString(data));
-                String signature = wxService.generateSignature(data, sessionKey, SIGNTYPE);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("key","1");
+                jsonObject.put("value","2");
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.add(jsonObject);
+                JSONObject jsonObject2 = new JSONObject();
+                jsonObject2.put("kv_list", jsonArray);
+
+                String signature = wxService.generateSignature(jsonObject2.toJSONString(), sessionKey, SIGNTYPE);
                 String accessToken = CacheClass.getCache("accessToken");
                 if (StringUtils.isEmpty(accessToken)) {
                     String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
@@ -134,9 +144,11 @@ public class GameLevelController extends BaseController{
                 String url = "https://api.weixin.qq.com/wxa/set_user_storage?access_token=" + accessToken + "&signature=" + signature +
                         "&openid=" + findPlayer.getPlatformId() + "&sig_method=" + SIGNTYPE;
                 logger.info("=== 微信接口url：{} ===", url);
-                Map response = restTemplate.postForObject(url, data, Map.class);
+
+                Map response = restTemplate.postForObject(url, jsonObject2.toJSONString(), Map.class);
                 logger.info("=== 微信set_user_storage接口返回值：{} ===", JSON.toJSONString(response));
-                if (SUCCESS_CODE.equals(response.get("errcode"))) {
+
+                if (SUCCESS_CODE.equals(String.valueOf(response.get("errcode")))) {
                     getSuccessResult(result);
                 } else {
                     getFailResult(result, "=== 用户的关卡信息上送微信失败 ===");

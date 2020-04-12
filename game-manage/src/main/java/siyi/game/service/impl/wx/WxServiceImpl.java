@@ -14,26 +14,19 @@ import java.util.Set;
 public class WxServiceImpl implements WxService {
 
     @Override
-    public String generateSignature(Map<String, String> data, String key, String signType) {
-        Set<String> keySet = data.keySet();
-        String[] keyArray = keySet.toArray(new String[keySet.size()]);
-        Arrays.sort(keyArray);
-        StringBuilder sb = new StringBuilder();
-        for (String k : keyArray) {
-            if (k.equals("sign")) {
-                continue;
-            }
-            if (data.get(k).trim().length() > 0) // 参数值为空，则不参与签名
-                sb.append(k).append("=").append(data.get(k).trim()).append("&");
-        }
-        sb.append("key=").append(key);
+    public String generateSignature(String data, String key, String signType) {
+//        Set<String> keySet = data.keySet();
+//        String[] keyArray = keySet.toArray(new String[keySet.size()]);
+//        Arrays.sort(keyArray);
+//        StringBuilder sb = new StringBuilder();
+//
         try {
             if ("MD5".equals(signType)) {
-                return EncryptUtil.MD5(sb.toString()).toUpperCase();
+                //return EncryptUtil.MD5(sb.toString()).toUpperCase();
             }
             else if ("hmac_sha256".equals(signType)) {
                 log.info("=== 开始生成微信的电子签名 ===");
-                return EncryptUtil.HMACSHA256(sb.toString(), key);
+                return EncryptUtil.HMACSHA256(data,key);
             }
             else {
                 throw new Exception(String.format("Invalid sign_type: %s", signType));

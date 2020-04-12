@@ -14,5 +14,5 @@ public interface WxService {
      * @param signType 加签方式
      * @return
      */
-    String generateSignature(final Map<String, String> data, String key, String signType);
+    String generateSignature(String data, String key, String signType);
 }
