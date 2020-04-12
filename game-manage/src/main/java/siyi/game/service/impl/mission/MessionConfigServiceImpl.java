@@ -7,15 +7,14 @@ import org.springframework.util.CollectionUtils;
 import siyi.game.dao.MessionConfigMapper;
 import siyi.game.dao.PlayerMessionRelationMapper;
 import siyi.game.dao.entity.MessionConfig;
-import siyi.game.dao.entity.PlayerMessionRecord;
 import siyi.game.dao.entity.PlayerMessionRelation;
 import siyi.game.service.mission.MessionConfigService;
+import siyi.game.service.mission.PlayerMessionRelationService;
 import siyi.game.utill.RandomUtil;
 import siyi.game.utill.ReflectOperate;
 import siyi.game.utill.StringUtil;
 import tk.mybatis.mapper.entity.Example;
 
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -33,7 +32,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
     private MessionConfigMapper messionConfigMapper;
 
     @Autowired
-    private PlayerMessionRelationMapper playerMessionRelationMapper;
+    private PlayerMessionRelationService playerMessionRelationService;
 
     @Override
     public List<PlayerMessionRelation> createNewMession(String playerId, List<PlayerMessionRelation> relations) {
@@ -62,6 +61,17 @@ public class MessionConfigServiceImpl implements MessionConfigService {
                 }
             }
         }
+        return playerMessionRelationService.selectExecutingMission(playerId);
+    }
+
+    @Override
+    public void createFeederMission(String playerId) {
+        // 获取所有支线任务id
+        List<String> messionIds = getFeederIds();
+        Example example = new Example(MessionConfig.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", messionIds);
+        List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
         // 选择支线任务中的一条支线任务
         Map<String, String> weightMap = new HashMap<>();
         for (MessionConfig messionConfig : messionConfigs) {
@@ -116,12 +126,73 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         } else {
             relation.setItemNum("0");
         }
-        playerMessionRelationMapper.insertSelective(relation);
-        Example example1 = new Example(PlayerMessionRelation.class);
-        Example.Criteria criteria1 = example1.createCriteria();
-        criteria1.andEqualTo("playerId", playerId);
-        criteria1.andEqualTo("completeStatus", "0");
-        return playerMessionRelationMapper.selectByExample(example1);
+        playerMessionRelationService.insertSelective(relation);
+    }
+
+    @Override
+    public PlayerMessionRelation createFeederMission(String playerId, String blankId) {
+        // 获取所有支线任务id
+        List<String> messionIds = getFeederIds();
+        Example example = new Example(MessionConfig.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", messionIds);
+        List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
+        // 选择支线任务中的一条支线任务
+        Map<String, String> weightMap = new HashMap<>();
+        for (MessionConfig messionConfig : messionConfigs) {
+            weightMap.put(messionConfig.getId(), messionConfig.getWeight());
+        }
+        String messionId = selectRuleByWeight(weightMap);
+        // 根据获取的任务id进行任务记录赋值，进行任务关联赋值
+        MessionConfig messionConfig = messionConfigMapper.selectByPrimaryKey(messionId);
+        // 奖励经验
+        String jiangliexp = messionConfig.getJiangliexp();
+        String[] jiangliexpLimit = jiangliexp.split(";");
+        int jiangliexpLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jiangliexpLimit[0]), Integer.parseInt(jiangliexpLimit[1]));
+        String exp = String.valueOf(jiangliexpLimitNum);
+        String target = messionConfig.getTarget();
+        log.info("获取目标：{}", target);
+        target = StringUtil.getCamelCase(target);
+        log.info("转换后目标：{}", target);
+        String getMethodValue = (String) ReflectOperate.getGetMethodValue(messionConfig, target);
+        log.info("获取目标字段值：{}", getMethodValue);
+        // 奖励金币
+        String jianglijinbi = messionConfig.getJianglijinbi();
+        String[] jianglijinbiLimit = jianglijinbi.split(";");
+        int jianglijinbiLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jianglijinbiLimit[0]), Integer.parseInt(jianglijinbiLimit[1]));
+        String jinbi = String.valueOf(jianglijinbiLimitNum);
+        // 赋值任务关联
+        PlayerMessionRelation relation = new PlayerMessionRelation();
+        relation.setMessionId(messionId);
+        relation.setPlayerId(playerId);
+        relation.setTarget(getMethodValue);
+        relation.setMessionTips(messionConfig.getTips());
+        relation.setBlankId(blankId);
+        // 经验需给确定值，金币确定值，道具是否存在
+        relation.setExp(exp);
+        relation.setGold(jinbi);
+        // 是否有奖励道具
+        // 道具奖励概率
+        String jiangligailv = messionConfig.getItemgailv();
+        boolean isHaveItem = RandomUtil.isHit(jiangligailv);
+        relation.setIsItem(isHaveItem ? "1" : "0");
+        if (isHaveItem) {
+            // 奖励道具数量
+            String itemnum = messionConfig.getItemnum();
+            String[] itemnumLimit = itemnum.split(";");
+            int itemnumLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(itemnumLimit[0]), Integer.parseInt(itemnumLimit[1]));
+            String num = String.valueOf(itemnumLimitNum);
+            relation.setItemNum(num);
+            // 奖励道具ID
+            String jiangliitemStr = messionConfig.getJiangliitem();
+            String[] itemArray = jiangliitemStr.split(";");
+            int i = RandomUtil.getRandomNumInTwoIntNum(0, itemArray.length - 1);
+            relation.setItemId(itemArray[i]);
+        } else {
+            relation.setItemNum("0");
+        }
+        playerMessionRelationService.insertSelective(relation);
+        return relation;
     }
 
     /**

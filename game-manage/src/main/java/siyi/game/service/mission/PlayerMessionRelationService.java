@@ -72,4 +72,19 @@ public interface PlayerMessionRelationService {
      * @return
      */
     List<PlayerMessionRelation> selectListByBean(PlayerMessionRelation selectParam);
+
+    /**
+     * 查询玩家执行中的任务
+     *
+     * @param playerId
+     * @return
+     */
+    List<PlayerMessionRelation> selectExecutingMission(String playerId);
+
+    /**
+     * 插入任务关联信息
+     *
+     * @param relation
+     */
+    void insertSelective(PlayerMessionRelation relation);
 }

@@ -81,4 +81,18 @@ public class PlayerMessionRelationServiceImpl implements PlayerMessionRelationSe
     public List<PlayerMessionRelation> selectListByBean(PlayerMessionRelation selectParam) {
         return playerMessionRelationMapper.select(selectParam);
     }
+
+    @Override
+    public List<PlayerMessionRelation> selectExecutingMission(String playerId) {
+        Example example1 = new Example(PlayerMessionRelation.class);
+        Example.Criteria criteria1 = example1.createCriteria();
+        criteria1.andEqualTo("playerId", playerId);
+        criteria1.andEqualTo("completeStatus", "0");
+        return playerMessionRelationMapper.selectByExample(example1);
+    }
+
+    @Override
+    public void insertSelective(PlayerMessionRelation relation) {
+        playerMessionRelationMapper.insertSelective(relation);
+    }
 }
