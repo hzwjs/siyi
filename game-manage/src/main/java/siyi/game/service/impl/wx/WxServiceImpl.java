@@ -40,7 +40,7 @@ public class WxServiceImpl implements WxService {
         Map param = new HashMap();
         param.put("kv_list", list);
         String paramStr = JSON.toJSONString(param);
-
+        log.info("===paramStr:{}===", paramStr);
         String signature = generateSignature(paramStr, sessionKey, SIGNTYPE);
         String accessToken = CacheClass.getCache("accessToken");
         if (StringUtils.isEmpty(accessToken)) {
