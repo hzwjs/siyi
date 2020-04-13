@@ -211,8 +211,9 @@ public class MessionConfigServiceImpl implements MessionConfigService {
             String[] itemArray = getMethodValue.split(";");
             String itemNum = itemArray[0];
             relation.setTarget(itemNum);
-            int i = RandomUtil.getRandomNumInTwoIntNum(1, itemArray.length - 1);
-            relation.setTargetItem(itemArray[i]);
+            String[] itemList = itemArray[1].split(",");
+            int i = RandomUtil.getRandomNumInTwoIntNum(0, itemList.length - 1);
+            relation.setTargetItem(itemList[i]);
         } else {
             relation.setTarget(getMethodValue);
         }
