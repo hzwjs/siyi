@@ -38,7 +38,9 @@ public class WxScheduled {
         log.info("=== access_token:{} ===",(String) response.get("access_token"));
     }
 
-    public void testTask(){
+    public void testTask(Map param ){
         log.info("=== 测试定时任务：{}", new Date());
+        log.info("=== name:{}", param.get("name"));
+        log.info("=== sex:{}", param.get("sex"));
     }
 }

@@ -30,12 +30,15 @@ public class WxController extends BaseController{
     @RequestMapping("addTask")
     @ResponseBody
     public void addTask() {
+        Map<String, String> param = new HashMap<>();
+        param.put("name", "hzw");
+        param.put("sex", "男");
         TaskInfo taskInfo = new TaskInfo();
         taskInfo.setTaskName("task1");
         taskInfo.setCron("0/15 * * * * ? ");
         taskInfo.setClassName("siyi.game.manager.scheduled.WxScheduled");
         taskInfo.setMethod("testTask");
-        dynamicTask.addTask(taskInfo);
+        dynamicTask.addTask(taskInfo, param);
     }
 
     @RequestMapping("deleteTask")

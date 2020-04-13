@@ -31,8 +31,22 @@ public class DynamicTask {
     @Autowired
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
+    /**
+     * 添加任务
+     * @param taskInfo
+     */
     public void addTask(TaskInfo taskInfo) {
         ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(getTask(taskInfo), getTrigger(taskInfo));
+        futuresMap.put(taskInfo.getTaskName(), future);
+    }
+
+    /**
+     * 添加任务
+     * @param taskInfo
+     * @param param 执行任务需要的参数
+     */
+    public void addTask(TaskInfo taskInfo, Map param) {
+        ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(getTask(taskInfo, param), getTrigger(taskInfo));
         futuresMap.put(taskInfo.getTaskName(), future);
     }
 
@@ -52,6 +66,30 @@ public class DynamicTask {
                     Object bean = (Object) ApplicationContextHelper.getBean(className);
                     Method method = ReflectionUtils.findMethod(bean.getClass(), taskInfo.getMethod());
                     ReflectionUtils.invokeMethod(method, bean);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    /**
+     * 获取需要执行的任务
+     * @param taskInfo
+     * @param param 执行任务需要的参数
+     * @return
+     */
+    private Runnable getTask(TaskInfo taskInfo, Map param){
+        return new Runnable() {
+            @Override
+            public void run() {
+                Class<?> clazz;
+                try {
+                    clazz = Class.forName(taskInfo.getClassName());
+                    String className = lowerFirstCapse(clazz.getSimpleName());
+                    Object bean = (Object) ApplicationContextHelper.getBean(className);
+                    Method method = ReflectionUtils.findMethod(bean.getClass(), taskInfo.getMethod(), Map.class);
+                    ReflectionUtils.invokeMethod(method, bean, param);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
