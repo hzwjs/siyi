@@ -78,6 +78,13 @@ public class PlayerMessionRelation implements Serializable {
      */
     @Column(name = "mession_tips")
     private String messionTips;
+
+    /**
+     * 目标道具
+     */
+    @Column(name = "target_item")
+    private String targetItem;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -312,5 +319,23 @@ public class PlayerMessionRelation implements Serializable {
      */
     public void setMessionTips(String messionTips) {
         this.messionTips = messionTips;
+    }
+
+    /**
+     * 获取目标道具
+     *
+     * @return targetItem 目标道具
+     */
+    public String getTargetItem() {
+        return targetItem;
+    }
+
+    /**
+     * 设置目标道具
+     *
+     * @param targetItem 目标道具
+     */
+    public void setTargetItem(String targetItem) {
+        this.targetItem = targetItem;
     }
 }

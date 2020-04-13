@@ -86,8 +86,10 @@ public class MessionConfigServiceImpl implements MessionConfigService {
             weightMap.put(messionConfig.getId(), messionConfig.getWeight());
         }
         String messionId = selectRuleByWeight(weightMap);
+
         // 根据获取的任务id进行任务记录赋值，进行任务关联赋值
         MessionConfig messionConfig = messionConfigMapper.selectByPrimaryKey(messionId);
+
         // 奖励经验
         String jiangliexp = messionConfig.getJiangliexp();
         String[] jiangliexpLimit = jiangliexp.split(";");
@@ -99,16 +101,28 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         log.info("转换后目标：{}", target);
         String getMethodValue = (String) ReflectOperate.getGetMethodValue(messionConfig, target);
         log.info("获取目标字段值：{}", getMethodValue);
+        PlayerMessionRelation relation = new PlayerMessionRelation();
+
         // 奖励金币
         String jianglijinbi = messionConfig.getJianglijinbi();
         String[] jianglijinbiLimit = jianglijinbi.split(";");
         int jianglijinbiLimitNum = RandomUtil.getRandomNumInTwoIntNum(Integer.parseInt(jianglijinbiLimit[0]), Integer.parseInt(jianglijinbiLimit[1]));
         String jinbi = String.valueOf(jianglijinbiLimitNum);
         // 赋值任务关联
-        PlayerMessionRelation relation = new PlayerMessionRelation();
+
         relation.setMessionId(messionId);
         relation.setPlayerId(playerId);
-        relation.setTarget(getMethodValue);
+        String[] messionIdArray = messionId.split("_");
+        if (Integer.parseInt(messionIdArray[1]) >= 257 && Integer.parseInt(messionIdArray[1]) <= 276) {
+            String[] itemArray = getMethodValue.split(";");
+            String itemNum = itemArray[0];
+            relation.setTarget(itemNum);
+            int i = RandomUtil.getRandomNumInTwoIntNum(1, itemArray.length - 1);
+            relation.setTargetItem(itemArray[i]);
+        } else {
+            relation.setTarget(getMethodValue);
+        }
+
         relation.setMessionTips(messionConfig.getTips());
         relation.setBlankId("three");
         // 经验需给确定值，金币确定值，道具是否存在
@@ -192,7 +206,16 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         PlayerMessionRelation relation = new PlayerMessionRelation();
         relation.setMessionId(messionId);
         relation.setPlayerId(playerId);
-        relation.setTarget(getMethodValue);
+        String[] messionIdArray = messionId.split("_");
+        if (Integer.parseInt(messionIdArray[1]) >= 257 && Integer.parseInt(messionIdArray[1]) <= 276) {
+            String[] itemArray = getMethodValue.split(";");
+            String itemNum = itemArray[0];
+            relation.setTarget(itemNum);
+            int i = RandomUtil.getRandomNumInTwoIntNum(1, itemArray.length - 1);
+            relation.setTargetItem(itemArray[i]);
+        } else {
+            relation.setTarget(getMethodValue);
+        }
         relation.setMessionTips(messionConfig.getTips());
         relation.setBlankId(blankId);
         relation.setCompleteStatus("0");

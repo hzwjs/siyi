@@ -18,5 +18,6 @@
     <result column="exp" jdbcType="VARCHAR" property="exp" />
     <result column="blank_id" jdbcType="VARCHAR" property="blankId" />
     <result column="mession_tips" jdbcType="VARCHAR" property="messionTips" />
+    <result column="target_item" jdbcType="VARCHAR" property="targetItem" />
   </resultMap>
 </mapper>
