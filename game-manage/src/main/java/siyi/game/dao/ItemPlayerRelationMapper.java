@@ -6,6 +6,7 @@ import siyi.game.dao.entity.ItemPlayerRelation;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ItemPlayerRelationMapper extends Mapper<ItemPlayerRelation> {
@@ -42,4 +43,12 @@ public interface ItemPlayerRelationMapper extends Mapper<ItemPlayerRelation> {
      * @return void
      */
     void updateQuantityListById(@Param("itemPlayerRelations") List<ItemPlayerRelation> itemPlayerRelations);
+
+    /**
+     * 查询玩家背包中生效的道具
+     * @param playId
+     * @param gameCode
+     * @return
+     */
+    List<Map> selectItemInfo(@Param("playId") String playId, @Param("gameCode") String gameCode);
 }

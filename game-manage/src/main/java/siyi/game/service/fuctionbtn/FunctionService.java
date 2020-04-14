@@ -1,8 +1,9 @@
 package siyi.game.service.fuctionbtn;
 
-import org.springframework.stereotype.Service;
+import siyi.game.bo.functionbtn.ItemBo;
 import siyi.game.dao.entity.PlayerSign;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +27,13 @@ public interface FunctionService {
      * @return
      */
     boolean saveLotteryInfo(String playerId, String itemId, int num, String gameCode);
+
+    /**
+     * 查询背包中的所有道具
+     * @param playerId
+     * @return
+     */
+    List<ItemBo> queryItemInPacksack(String playerId, String gameCode);
 
     /**
      * 查询玩家签到信息

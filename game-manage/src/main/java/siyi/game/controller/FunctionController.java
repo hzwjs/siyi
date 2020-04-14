@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import siyi.game.bo.functionbtn.AwardInfo;
+import siyi.game.bo.functionbtn.ItemBo;
 import siyi.game.dao.entity.ItemPlayerRelation;
 import siyi.game.dao.entity.Player;
 import siyi.game.dao.entity.PlayerSign;
@@ -17,6 +18,7 @@ import siyi.game.service.fuctionbtn.FunctionService;
 import siyi.game.utill.StringUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -69,9 +71,28 @@ public class FunctionController extends BaseController{
         return resultMap;
     }
 
+
+    /**
+     * 查询背包中的道具
+     * @param playerId
+     * @param gameCode
+     * @return
+     */
+    @RequestMapping(value = "queryItemInPack")
+    @ResponseBody
+    public List<ItemBo> queryItemInPack(String playerId, String gameCode) {
+        List<ItemBo> list = functionService.queryItemInPacksack(playerId, gameCode);
+        return list;
+    }
+
+    /**
+     * 查询签到信息，签到现在是由前端做的没有调用这个接口
+     * @param playerId
+     * @return
+     */
     @RequestMapping(value = "querySignInfo")
     @ResponseBody
-    public PlayerSign submitLottery(String playerId){
+    public PlayerSign queryLottery(String playerId){
         PlayerSign playerSign = functionService.querySignInfo(playerId);
         return playerSign;
     }

@@ -5,10 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import siyi.game.bo.functionbtn.ItemBo;
 import siyi.game.dao.ItemConfigMapper;
+import siyi.game.dao.ItemPlayerRelationMapper;
 import siyi.game.dao.PlayerMapper;
 import siyi.game.dao.PlayerSignMapper;
 import siyi.game.dao.entity.*;
+import siyi.game.manager.function.ItemAnalyze;
 import siyi.game.service.fuctionbtn.FunctionService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.utill.Constants;
@@ -17,6 +20,8 @@ import siyi.game.utill.ReflectOperate;
 import siyi.game.utill.UUIDUtil;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -37,6 +42,8 @@ public class FunctionServiceImpl implements FunctionService {
     private ItemPlayerRelationService itemPlayerRelationService;
     @Autowired
     private PlayerSignMapper playerSignMapper;
+    @Autowired
+    private ItemPlayerRelationMapper itemPlayerRelationMapper;
 
     @Override
     public Map getLotteryInfo(String playerId, boolean flag) {
@@ -92,6 +99,15 @@ public class FunctionServiceImpl implements FunctionService {
     }
 
     @Override
+    public List<ItemBo> queryItemInPacksack(String playerId, String gameCode) {
+        Player player = new Player();
+        player.setPlayerId(playerId);
+        player = playerMapper.selectOne(player);
+        List<Map> list = itemPlayerRelationMapper.selectItemInfo(playerId, gameCode);
+        return itemAnalyze(list, player);
+    }
+
+    @Override
     public PlayerSign querySignInfo(String playerId) {
         PlayerSign playerSign = new PlayerSign();
         playerSign.setPlayerId(playerId);
@@ -114,6 +130,29 @@ public class FunctionServiceImpl implements FunctionService {
     public boolean submitSignInfo(String playerId, String signDays) {
 
         return false;
+    }
+
+    public List<ItemBo> itemAnalyze(List<Map> list, Player player) {
+        List<ItemBo> resultList = new ArrayList<>();
+        for (Map item : list) {
+            try {
+                ItemBo itemBo = new ItemBo();
+                itemBo.setName((String) item.get("name"));
+                itemBo.setNum((String) item.get("quantity"));
+                itemBo.setId((String) item.get("id"));
+                itemBo.setTips((String) item.get("tips"));
+                // 从描述中提取道具使用限制条件，并判断是可以使用
+                String remark = (String) item.get("remark");
+                ItemAnalyze.analyzeLimitInfo(itemBo, remark, player);
+                // 提取道具类型和增幅
+                String tips = (String) item.get("tips");
+                ItemAnalyze.analyzeItemType(itemBo, tips);
+                resultList.add(itemBo);
+            } catch (Exception e) {
+                log.warn("=== 道具解析出错 ===", e);
+            }
+        }
+        return resultList;
     }
 
     /**

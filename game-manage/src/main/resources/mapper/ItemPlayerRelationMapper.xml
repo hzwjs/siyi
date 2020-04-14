@@ -12,6 +12,13 @@
         <result column="quantity" jdbcType="VARCHAR" property="quantity"/>
     </resultMap>
 
+    <select id="selectItemInfo" parameterType="String" resultType="Map">
+        select t.id, t.name, tt.quantity, t.onoff, t.remark,t.max,t.tips
+        from tb_item_player_relation tt
+        left join tb_item_config t on tt.item_no = t.id and t.onoff = '0'
+        where tt.player_id = #{playId} and tt.game_code = #{gameCode}
+    </select>
+
     <select id="selectByPlayerIdAndItemNoList" resultMap="BaseResultMap">
         SELECT
         id, player_id, item_no, quantity, game_code
