@@ -5,10 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import siyi.game.bo.gamelevel.MissionItem;
 import siyi.game.dao.MessionConfigMapper;
 import siyi.game.dao.entity.*;
 import siyi.game.manager.excel.read.MessionConfigDataListener;
@@ -113,45 +111,47 @@ public class MessionConfigController extends BaseController {
      * date: 2020/4/2 17:01 <br>
      * author: zhengzhiqiang <br>
      *
-     * @param playerId
-     * @param messionId
-     * @param processNum
+     * @param missionItems
      * @return java.util.Map<java.lang.String               ,               java.lang.Object>
      */
     @PostMapping("updateProcess")
-    public Map<String, Object> updateProcess(String playerId, String messionId, String processNum) {
+    public Map<String, Object> updateProcess(@RequestBody List<MissionItem> missionItems) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-
-            LOGGER.info("开始更新玩家任务进度，方法入参：玩家ID：{}，任务ID：{}，任务进度数量：{}", playerId, messionId, processNum);
-            PlayerMessionRelation selectRelation = new PlayerMessionRelation();
-            selectRelation.setPlayerId(playerId);
-            selectRelation.setMessionId(messionId);
-            PlayerMessionRelation relation = playerMessionRelationService.selectByBean(selectRelation);
-            if (relation == null) {
-                resultMap.put("errCode", "000010");
-                resultMap.put("errMsg", "该玩家无任务信息");
-                return resultMap;
+            LOGGER.info("开始更新玩家任务进度，方法入参：{}", missionItems.toString());
+            for (MissionItem missionItem : missionItems) {
+                String messionId = missionItem.getMessionId();
+                String playerId = missionItem.getPlayerId();
+                String processNum = missionItem.getProcessNum();
+                PlayerMessionRelation selectRelation = new PlayerMessionRelation();
+                selectRelation.setPlayerId(playerId);
+                selectRelation.setMessionId(messionId);
+                PlayerMessionRelation relation = playerMessionRelationService.selectByBean(selectRelation);
+                if (relation == null) {
+                    resultMap.put("errCode", "000010");
+                    resultMap.put("errMsg", "该玩家无任务信息");
+                    return resultMap;
+                }
+                LOGGER.info("获取玩家对应任务关系：{}", relation.toString());
+                String target = relation.getTarget();
+                String process = relation.getProcess();
+                Integer targetInt = Integer.valueOf(target);
+                Integer processInt = Integer.valueOf(process);
+                Integer addProcessInt = Integer.valueOf(processNum);
+                // 进度赋值，当总进度大于任务目标时，总进度等于任务目标数
+                if (processInt + addProcessInt > targetInt) {
+                    process = target;
+                } else {
+                    // 若总进度小于等于任务目标，则总进度为原进度数量 + 新进度数量
+                    process = String.valueOf(processInt + addProcessInt);
+                }
+                relation.setProcess(process);
+                // 如果任务进度等于任务目标，则完成状态为已完成
+                if (Integer.valueOf(process) == Integer.valueOf(target)) {
+                    relation.setCompleteStatus("1");
+                }
+                playerMessionRelationService.updateByIdSelective(relation);
             }
-            LOGGER.info("获取玩家对应任务关系：{}", relation.toString());
-            String target = relation.getTarget();
-            String process = relation.getProcess();
-            Integer targetInt = Integer.valueOf(target);
-            Integer processInt = Integer.valueOf(process);
-            Integer addProcessInt = Integer.valueOf(processNum);
-            // 进度赋值，当总进度大于任务目标时，总进度等于任务目标数
-            if (processInt + addProcessInt > targetInt) {
-                process = target;
-            } else {
-                // 若总进度小于等于任务目标，则总进度为原进度数量 + 新进度数量
-                process = String.valueOf(processInt + addProcessInt);
-            }
-            relation.setProcess(process);
-            // 如果任务进度等于任务目标，则完成状态为已完成
-            if (Integer.valueOf(process) == Integer.valueOf(target)) {
-                relation.setCompleteStatus("1");
-            }
-            playerMessionRelationService.updateByIdSelective(relation);
             resultMap.put("errCode", "000000");
             resultMap.put("errMsg", "更新成功");
             return resultMap;
