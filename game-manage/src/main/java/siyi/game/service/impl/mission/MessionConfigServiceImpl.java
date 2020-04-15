@@ -44,8 +44,10 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         criteria.andIn("id", messionIds);
         List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(relations)) {
-            // TODO 如果任务关系为空 表示为第一次进入游戏，需在主线任务中选择第一条任务
-            createFeederMission(playerId);
+            // 如果任务关系为空 表示为第一次进入游戏，需在主线任务中选择第一条任务
+            createFeederMission(playerId, "one");
+            createFeederMission(playerId, "two");
+            createFeederMission(playerId, "three");
         } else {
             // 如果存在关联关系，则需在支线任务中删除掉已完成过的任务（三次以内），保证三次内无重复支线任务
             createFeederMission(playerId);
@@ -154,11 +156,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
     @Override
     public PlayerMessionRelation createFeederMission(String playerId, String blankId) {
         // 获取所有支线任务id
-        List<String> messionIds = getFeederIds();
-        Example example = new Example(MessionConfig.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andIn("id", messionIds);
-        List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
+        List<MessionConfig> messionConfigs = messionConfigMapper.selectAll();
         // 查询玩家最近三次任务信息
         List<PlayerMessionRelation> messionList = playerMessionRelationService.selectLastThreeRelationByPlayerId(playerId);
         // 查询玩家正在执行的任务信息

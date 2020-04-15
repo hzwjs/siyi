@@ -121,8 +121,6 @@ public class MessionConfigController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             LOGGER.info("开始更新玩家任务进度，方法入参：{},{},{}", playerId, missionId, processNum);
-
-
             PlayerMessionRelation selectRelation = new PlayerMessionRelation();
             selectRelation.setPlayerId(playerId);
             selectRelation.setMessionId(missionId);
