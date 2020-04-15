@@ -205,7 +205,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         relation.setMessionId(messionId);
         relation.setPlayerId(playerId);
         String[] messionIdArray = messionId.split("_");
-        if (Integer.parseInt(messionIdArray[1]) >= 257 && Integer.parseInt(messionIdArray[1]) <= 276) {
+        if (Integer.parseInt(messionIdArray[1]) >= 58 && Integer.parseInt(messionIdArray[1]) <= 77) {
             String[] itemArray = getMethodValue.split(";");
             String itemNum = itemArray[0];
             relation.setTarget(itemNum);
