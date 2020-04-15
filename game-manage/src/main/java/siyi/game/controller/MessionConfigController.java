@@ -115,7 +115,7 @@ public class MessionConfigController extends BaseController {
      * @return java.util.Map<java.lang.String               ,               java.lang.Object>
      */
     @PostMapping("updateProcess")
-    public Map<String, Object> updateProcess(@RequestBody List<MissionItem> missionItems) {
+    public Map<String, Object> updateProcess(@RequestParam("missionList[]") List<MissionItem> missionItems) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             LOGGER.info("开始更新玩家任务进度，方法入参：{}", missionItems.toString());
