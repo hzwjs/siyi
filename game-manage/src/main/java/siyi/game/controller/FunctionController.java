@@ -5,17 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import siyi.game.bo.functionbtn.AwardInfo;
 import siyi.game.bo.functionbtn.ItemBo;
-import siyi.game.dao.entity.ItemPlayerRelation;
-import siyi.game.dao.entity.Player;
 import siyi.game.dao.entity.PlayerSign;
 import siyi.game.service.fuctionbtn.FunctionService;
-import siyi.game.utill.StringUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +76,7 @@ public class FunctionController extends BaseController{
     @RequestMapping(value = "queryItemInPack")
     @ResponseBody
     public List<ItemBo> queryItemInPack(String playerId, String gameCode) {
+        log.info("=== 背包查询参数 playerId:{} gameCode:{}", playerId, gameCode);
         List<ItemBo> list = functionService.queryItemInPacksack(playerId, gameCode);
         return list;
     }

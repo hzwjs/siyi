@@ -2,14 +2,12 @@ package siyi.game.manager.scheduled;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
-import siyi.game.GameManageApp;
 import siyi.game.bo.TaskInfo;
 import siyi.game.framework.ApplicationContextHelper;
 
