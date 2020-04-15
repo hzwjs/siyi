@@ -111,15 +111,15 @@ public class MessionConfigController extends BaseController {
      * date: 2020/4/2 17:01 <br>
      * author: zhengzhiqiang <br>
      *
-     * @param missionItems
+     * @param missionList
      * @return java.util.Map<java.lang.String               ,               java.lang.Object>
      */
     @PostMapping("updateProcess")
-    public Map<String, Object> updateProcess(@RequestParam("missionList[]") List<MissionItem> missionItems) {
+    public Map<String, Object> updateProcess(@RequestParam(value = "missionList[]") List<MissionItem> missionList) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            LOGGER.info("开始更新玩家任务进度，方法入参：{}", missionItems.toString());
-            for (MissionItem missionItem : missionItems) {
+            LOGGER.info("开始更新玩家任务进度，方法入参：{}", missionList.toString());
+            for (MissionItem missionItem : missionList) {
                 String messionId = missionItem.getMessionId();
                 String playerId = missionItem.getPlayerId();
                 String processNum = missionItem.getProcessNum();
