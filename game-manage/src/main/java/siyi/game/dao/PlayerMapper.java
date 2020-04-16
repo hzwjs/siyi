@@ -31,4 +31,9 @@ public interface PlayerMapper extends Mapper<Player> {
      * @return long
      */
     long selectCountByGameCode(String gameCode);
+
+    /**
+     * 晚间定时任务自动更新抽奖机会
+     */
+    void updateLotteryNumBatch();
 }
