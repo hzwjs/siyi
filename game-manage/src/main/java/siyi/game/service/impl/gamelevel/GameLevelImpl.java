@@ -74,7 +74,7 @@ public class GameLevelImpl implements GameLevelService {
                 Player player = new Player();
                 player.setPlayerId(userId);
                 player = playerMapper.selectOne(player);
-                int level = Integer.parseInt(player.getPlayerLevel());
+                int level = Integer.parseInt(player.getGameLevel());
                 if (level < 999) {
                     player.setGameLevel((level + 1) + "");
                     playerMapper.updateByPrimaryKey(player);
