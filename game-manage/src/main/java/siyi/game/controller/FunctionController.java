@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import siyi.game.bo.functionbtn.AwardInfo;
 import siyi.game.bo.functionbtn.ItemBo;
+import siyi.game.dao.entity.LevelClearRecord;
 import siyi.game.dao.entity.PlayerSign;
 import siyi.game.service.fuctionbtn.FunctionService;
 
@@ -28,6 +29,19 @@ public class FunctionController extends BaseController{
 
     @Autowired
     private FunctionService functionService;
+
+
+    /**
+     * 查询天梯信息：最高层数和挑战次数
+     * @param playerId 玩家ID
+     * @return
+     */
+    @RequestMapping("tianti")
+    @ResponseBody
+    public LevelClearRecord queryTiantiInfo(String playerId) {
+        LevelClearRecord result = functionService.getTiantiInfo(playerId);
+        return result;
+    }
 
     /**
      * 获取当前的可抽奖次数

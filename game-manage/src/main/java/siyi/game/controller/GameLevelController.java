@@ -1,8 +1,5 @@
 package siyi.game.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.GamelevelConfigMapper;
+import siyi.game.dao.LevelClearRecordMapper;
 import siyi.game.dao.entity.ItemPlayerRelation;
+import siyi.game.dao.entity.LevelClearRecord;
 import siyi.game.dao.entity.LevelUpConfig;
 import siyi.game.dao.entity.Player;
 import siyi.game.service.gamelevel.GameLevelService;
@@ -25,8 +24,9 @@ import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.service.wx.WxService;
-import siyi.game.utill.CacheClass;
 import siyi.game.utill.Constants;
+import siyi.game.utill.RandomUtil;
+import siyi.game.utill.UUIDUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,7 +64,7 @@ public class GameLevelController extends BaseController{
     @Autowired
     private WxService wxService;
     @Autowired
-    private RestTemplate restTemplate;
+    private LevelClearRecordMapper levelClearRecordMapper;
 
 
 
@@ -115,18 +115,8 @@ public class GameLevelController extends BaseController{
             int finalGold = Integer.valueOf(gold) + Integer.valueOf(findPlayer.getGold());
             findPlayer.setExperience(String.valueOf(finalExp));
             findPlayer.setGold(String.valueOf(finalGold));
-            // 更新玩家的游戏等级
-            if ( Integer.parseInt(findPlayer.getGameLevel()) < Integer.parseInt(player.getGameLevel()))
-            {
-                findPlayer.setGameLevel(player.getGameLevel());
-                Map data = new HashMap();
-                data.put("key", "level");
-                data.put("value", player.getGameLevel());
-                boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, findPlayer.getPlatformId());
-                if (wx_request_flag) {
-                    playerService.updateByIdSelective(findPlayer);
-                }
-            }
+            // 更新玩家的天梯信息并上送微信托管
+            updateTiantiInfo(player, sessionKey, findPlayer.getPlatformId());
 
             // 更新道具关联关系
             List<ItemPlayerRelation> existRelations = new ArrayList<>();
@@ -321,5 +311,40 @@ public class GameLevelController extends BaseController{
             resultMap.put("resMsg", "当前已是最高称号");
             return resultMap;
         }
+    }
+
+    /**
+     * 更新天梯信息
+     * @param player 这是前端传来的玩家对象
+     */
+    private void updateTiantiInfo(Player player, String sessionKey, String platformId) {
+        String playerId = player.getPlayerId();
+        String level = player.getGameLevel(); // 指玩家此次闯关的等级
+        LevelClearRecord levelClearRecord = new LevelClearRecord();
+        levelClearRecord.setPlayerId(playerId);
+        levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord);
+        if (levelClearRecord != null) {
+            if (Integer.parseInt(level) > Integer.parseInt(levelClearRecord.getBestScore())) {
+                Map data = new HashMap();
+                data.put("key", "level");
+                data.put("value", player.getGameLevel());
+                boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
+                if (wx_request_flag) {
+                    int oldNum = levelClearRecord.getBarrierCount();
+                    levelClearRecord.setBestScore(level);
+                    levelClearRecord.setBarrierCount(oldNum+1);
+                    levelClearRecordMapper.updateByPrimaryKey(levelClearRecord);
+                }
+            }
+        } else {
+            levelClearRecord = new LevelClearRecord();
+            levelClearRecord.setPlayerId(playerId);
+            levelClearRecord.setBestScore(level);
+            levelClearRecord.setBarrierCount(1);
+            levelClearRecord.setGameCode(Constants.GAME_CODE_WENWU);
+            levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));
+            levelClearRecordMapper.insert(levelClearRecord);
+        }
+
     }
 }

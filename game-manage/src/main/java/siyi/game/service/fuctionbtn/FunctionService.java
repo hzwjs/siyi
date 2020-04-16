@@ -1,6 +1,7 @@
 package siyi.game.service.fuctionbtn;
 
 import siyi.game.bo.functionbtn.ItemBo;
+import siyi.game.dao.entity.LevelClearRecord;
 import siyi.game.dao.entity.PlayerSign;
 
 import java.util.List;
@@ -10,6 +11,13 @@ import java.util.Map;
  * 功能按钮服务类
  */
 public interface FunctionService {
+
+    /**
+     * 查询玩家天梯信息
+     * @param playerId
+     * @return
+     */
+    LevelClearRecord getTiantiInfo(String playerId);
 
     /**
      * @param playerId 玩家id

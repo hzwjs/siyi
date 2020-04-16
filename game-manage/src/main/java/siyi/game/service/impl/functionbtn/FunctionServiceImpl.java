@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import siyi.game.bo.functionbtn.ItemBo;
-import siyi.game.dao.ItemConfigMapper;
-import siyi.game.dao.ItemPlayerRelationMapper;
-import siyi.game.dao.PlayerMapper;
-import siyi.game.dao.PlayerSignMapper;
+import siyi.game.dao.*;
 import siyi.game.dao.entity.*;
 import siyi.game.manager.function.ItemAnalyze;
 import siyi.game.service.fuctionbtn.FunctionService;
@@ -44,6 +41,16 @@ public class FunctionServiceImpl implements FunctionService {
     private PlayerSignMapper playerSignMapper;
     @Autowired
     private ItemPlayerRelationMapper itemPlayerRelationMapper;
+    @Autowired
+    private LevelClearRecordMapper levelClearRecordMapper;
+
+    @Override
+    public LevelClearRecord getTiantiInfo(String playerId) {
+        LevelClearRecord levelClearRecord = new LevelClearRecord();
+        levelClearRecord.setPlayerId(playerId);
+        levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord);
+        return levelClearRecord;
+    }
 
     @Override
     public Map getLotteryInfo(String playerId, boolean flag) {

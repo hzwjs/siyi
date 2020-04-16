@@ -1321,6 +1321,295 @@
             }
           ],
           "chnname": "玩家微信信息"
+        },
+        {
+          "title": "tb_player_sign",
+          "fields": [
+            {
+              "name": "player_id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "文武双全游戏ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "day1",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第一天:0-已签到；1-补签到；2-待签到；3-未开始"
+            },
+            {
+              "name": "day2",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第二天"
+            },
+            {
+              "name": "day3",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第三天"
+            },
+            {
+              "name": "day4",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day5",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day6",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day7",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day8",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day9",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day10",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day11",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day12",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day13",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day14",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day15",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day16",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day17",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day18",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day19",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day20",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day21",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day22",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day23",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day24",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day25",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day26",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day27",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day28",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day29",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "day30",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "start_date",
+              "type": "Date",
+              "remark": "",
+              "chnname": ""
+            },
+            {
+              "name": "accumulate_day_num",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "累计签到的天数"
+            },
+            {
+              "name": "accumulate_award_flag",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否可以获取累积签到奖励"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "玩家签到表"
         }
       ],
       "graphCanvas": {
