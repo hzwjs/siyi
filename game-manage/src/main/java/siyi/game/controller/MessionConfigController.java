@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import siyi.game.bo.TaskInfo;
 import siyi.game.bo.gamelevel.MissionItem;
 import siyi.game.dao.MessionConfigMapper;
 import siyi.game.dao.entity.*;
 import siyi.game.manager.excel.read.MessionConfigDataListener;
+import siyi.game.manager.scheduled.DynamicTask;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.mission.MessionBlankService;
 import siyi.game.service.mission.MessionConfigService;
@@ -49,6 +51,9 @@ public class MessionConfigController extends BaseController {
 
     @Autowired
     private ItemPlayerRelationService itemPlayerRelationService;
+
+    @Autowired
+    private DynamicTask dynamicTask;
 
     /**
      * description: 解析任务配置文件 <br>
@@ -216,6 +221,17 @@ public class MessionConfigController extends BaseController {
             messionBlank.setBlankSixStatus("1");
         }
         messionBlankService.updateByIdSelective(messionBlank);
+        // 定义定时任务，将对应任务栏置为锁定状态
+        Map<String, String> param = new HashMap<>();
+        param.put("playerId", playerId);
+        param.put("blankId", blankId);
+        TaskInfo taskInfo = new TaskInfo();
+        String taskName = playerId + blankId;
+        taskInfo.setTaskName(taskName);
+        taskInfo.setCron("0/15 * * * * ? ");
+        taskInfo.setClassName("siyi.game.manager.scheduled.MissionScheduled");
+        taskInfo.setMethod("unlockMissionBlank");
+        dynamicTask.addTask(taskInfo, param);
         PlayerMessionRelation feederMission = messionConfigService.createFeederMission(playerId, blankId);
         resultMap.put("errCode", "000000");
         resultMap.put("newMission", feederMission);
@@ -308,6 +324,15 @@ public class MessionConfigController extends BaseController {
         }
         messionBlankService.updateByIdSelective(messionBlank);
         // TODO 开启定时任务，进行任务冷却
+        Map<String, String> param = new HashMap<>();
+        param.put("playerId", playerId);
+        param.put("blankId", blankId);
+        TaskInfo taskInfo = new TaskInfo();
+        taskInfo.setTaskName(playerId + "complete" + blankId);
+        taskInfo.setCron("0/15 * * * * ? ");
+        taskInfo.setClassName("siyi.game.manager.scheduled.MissionScheduled");
+        taskInfo.setMethod("completeMission");
+        dynamicTask.addTask(taskInfo, param);
         getSuccessResult(result);
         result.put("missionBlank", messionBlank);
         return result;

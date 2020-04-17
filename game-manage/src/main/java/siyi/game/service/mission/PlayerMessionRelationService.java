@@ -94,4 +94,13 @@ public interface PlayerMessionRelationService {
      * @param id
      */
     void deleteById(Integer id);
+
+    /**
+     * 根据玩家id和任务栏id查询玩家该任务栏最后一次接受的任务
+     *
+     * @param playerId
+     * @param blankId
+     * @return
+     */
+    PlayerMessionRelation selectLastByPlayerIdAndBlankId(String playerId, String blankId);
 }

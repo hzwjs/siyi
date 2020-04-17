@@ -100,4 +100,19 @@ public class PlayerMessionRelationServiceImpl implements PlayerMessionRelationSe
     public void deleteById(Integer id) {
         playerMessionRelationMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public PlayerMessionRelation selectLastByPlayerIdAndBlankId(String playerId, String blankId) {
+        Example example = new Example(PlayerMessionRelation.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("playerId", playerId);
+        criteria.andEqualTo("blankId", blankId);
+        example.setOrderByClause("id desc");
+        List<PlayerMessionRelation> list = playerMessionRelationMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(list)) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+    }
 }
