@@ -331,7 +331,7 @@ public class MessionConfigController extends BaseController {
         param.put("blankId", blankId);
         TaskInfo taskInfo = new TaskInfo();
         taskInfo.setTaskName(playerId + "complete" + blankId);
-        taskInfo.setCron("0/15 * * * * ? ");
+        taskInfo.setCron("0/200 * * * * ? ");
         taskInfo.setClassName("siyi.game.manager.scheduled.MissionScheduled");
         taskInfo.setMethod("completeMission");
         dynamicTask.addTask(taskInfo, param);
