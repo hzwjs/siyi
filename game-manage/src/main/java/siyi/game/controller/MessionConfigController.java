@@ -337,6 +337,7 @@ public class MessionConfigController extends BaseController {
         dynamicTask.addTask(taskInfo, param);
         getSuccessResult(result);
         result.put("missionBlank", messionBlank);
+        result.put("blankId", blankId);
         return result;
     }
 
