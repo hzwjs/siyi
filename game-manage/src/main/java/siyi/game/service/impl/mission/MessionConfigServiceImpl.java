@@ -7,8 +7,10 @@ import org.springframework.util.CollectionUtils;
 import siyi.game.dao.MessionConfigMapper;
 import siyi.game.dao.PlayerMessionRelationMapper;
 import siyi.game.dao.entity.MessionConfig;
+import siyi.game.dao.entity.PlayerMessionRecord;
 import siyi.game.dao.entity.PlayerMessionRelation;
 import siyi.game.service.mission.MessionConfigService;
+import siyi.game.service.mission.PlayerMessionRecordService;
 import siyi.game.service.mission.PlayerMessionRelationService;
 import siyi.game.utill.RandomUtil;
 import siyi.game.utill.ReflectOperate;
@@ -34,6 +36,10 @@ public class MessionConfigServiceImpl implements MessionConfigService {
     @Autowired
     private PlayerMessionRelationService playerMessionRelationService;
 
+    @Autowired
+    private PlayerMessionRecordService playerMessionRecordService;
+
+
     @Override
     public List<PlayerMessionRelation> createNewMession(String playerId, List<PlayerMessionRelation> relations) {
         log.info("开始生成任务");
@@ -52,7 +58,7 @@ public class MessionConfigServiceImpl implements MessionConfigService {
             // 如果存在关联关系，则需在支线任务中删除掉已完成过的任务（三次以内），保证三次内无重复支线任务
             createFeederMission(playerId);
         }
-        return playerMessionRelationService.selectExecutingMission(playerId);
+        return playerMessionRelationService.selectByPlayerId(playerId);
     }
 
     @Override
@@ -64,12 +70,12 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         criteria.andIn("id", messionIds);
         List<MessionConfig> messionConfigs = messionConfigMapper.selectByExample(example);
         // 查询玩家最近三次任务信息
-        List<PlayerMessionRelation> messionList = playerMessionRelationService.selectLastThreeRelationByPlayerId(playerId);
+        List<PlayerMessionRecord> messionList = playerMessionRecordService.selectLastThreeRelationByPlayerId(playerId);
         // 查询玩家正在执行的任务信息
         List<PlayerMessionRelation> executingMission = playerMessionRelationService.selectExecutingMission(playerId);
         List<String> relationIds = new ArrayList<>();
-        for (PlayerMessionRelation relation : messionList) {
-            relationIds.add(relation.getMessionId());
+        for (PlayerMessionRecord record : messionList) {
+            relationIds.add(record.getMessionId());
         }
         for (PlayerMessionRelation playerMessionRelation : executingMission) {
             relationIds.add(playerMessionRelation.getMessionId());
@@ -158,12 +164,12 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         // 获取所有支线任务id
         List<MessionConfig> messionConfigs = messionConfigMapper.selectAll();
         // 查询玩家最近三次任务信息
-        List<PlayerMessionRelation> messionList = playerMessionRelationService.selectLastThreeRelationByPlayerId(playerId);
+        List<PlayerMessionRecord> messionList = playerMessionRecordService.selectLastThreeRelationByPlayerId(playerId);
         // 查询玩家正在执行的任务信息
         List<PlayerMessionRelation> executingMission = playerMessionRelationService.selectExecutingMission(playerId);
         List<String> relationIds = new ArrayList<>();
-        for (PlayerMessionRelation relation : messionList) {
-            relationIds.add(relation.getMessionId());
+        for (PlayerMessionRecord record : messionList) {
+            relationIds.add(record.getMessionId());
         }
         for (PlayerMessionRelation playerMessionRelation : executingMission) {
             relationIds.add(playerMessionRelation.getMessionId());
@@ -243,6 +249,10 @@ public class MessionConfigServiceImpl implements MessionConfigService {
             relation.setItemNum("0");
         }
         playerMessionRelationService.insertSelective(relation);
+        PlayerMessionRecord record = new PlayerMessionRecord();
+        record.setMessionId(messionId);
+        record.setPlayerId(playerId);
+        playerMessionRecordService.insertSelective(record);
         return relation;
     }
 

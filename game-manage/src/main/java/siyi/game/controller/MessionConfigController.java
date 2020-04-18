@@ -87,7 +87,7 @@ public class MessionConfigController extends BaseController {
      */
     @GetMapping("getPlayerMession")
     public List<PlayerMessionRelation> getPlayerMession(String playerId) {
-        return playerMessionRelationService.selectExecutingMission(playerId);
+        return playerMessionRelationService.selectByPlayerId(playerId);
     }
 
     /**
@@ -323,7 +323,9 @@ public class MessionConfigController extends BaseController {
                 break;
         }
         messionBlankService.updateByIdSelective(messionBlank);
-        // TODO 开启定时任务，进行任务冷却
+        // 删除任务
+        playerMessionRelationService.deleteById(playerMessionRelation.getId());
+        // 开启定时任务，进行任务冷却
         Map<String, String> param = new HashMap<>();
         param.put("playerId", playerId);
         param.put("blankId", blankId);
