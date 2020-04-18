@@ -87,7 +87,7 @@ public class MessionConfigController extends BaseController {
      */
     @GetMapping("getPlayerMession")
     public List<PlayerMessionRelation> getPlayerMession(String playerId) {
-        return playerMessionRelationService.selectByPlayerId(playerId);
+        return playerMessionRelationService.selectExecutingMission(playerId);
     }
 
     /**
