@@ -340,4 +340,37 @@ public class MessionConfigController extends BaseController {
         return result;
     }
 
+    @PostMapping("freshBlank")
+    public Map<String, Object> freshBlank(String playerId, String blankId) {
+        // 根据玩家id查询任务栏信息
+        MessionBlank messionBlank = messionBlankService.selectByPlayerId(playerId);
+        // 更新对应任务栏状态
+        switch (blankId) {
+            case "one":
+                messionBlank.setBlankOneStatus("1");
+                break;
+            case "two":
+                messionBlank.setBlankTwoStatus("1");
+                break;
+            case "three":
+                messionBlank.setBlankThreeStatus("1");
+                break;
+            case "four":
+                messionBlank.setBlankFourStatus("1");
+                break;
+            case "five":
+                messionBlank.setBlankFiveStatus("1");
+                break;
+            case "six":
+                messionBlank.setBlankSixStatus("1");
+                break;
+        }
+        messionBlankService.updateByIdSelective(messionBlank);
+        // 生成支线任务
+        messionConfigService.createFeederMission(playerId, blankId);
+        Map<String, Object> result = new HashMap<>();
+        getSuccessResult(result);
+        return result;
+    }
+
 }
