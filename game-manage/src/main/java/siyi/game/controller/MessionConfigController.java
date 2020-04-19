@@ -369,6 +369,8 @@ public class MessionConfigController extends BaseController {
         messionBlankService.updateByIdSelective(messionBlank);
         // 生成支线任务
         messionConfigService.createFeederMission(playerId, blankId);
+        // 删除对应定时任务
+        dynamicTask.deleteTask(playerId + "complete" + blankId);
         Map<String, Object> result = new HashMap<>();
         getSuccessResult(result);
         return result;
