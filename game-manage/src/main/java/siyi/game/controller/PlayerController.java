@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import siyi.game.bo.PlayerBo;
 import siyi.game.bo.WxLoginResponse;
+import siyi.game.bo.functionbtn.ItemBo;
 import siyi.game.dao.PlayerWxInfoMapper;
 import siyi.game.dao.entity.*;
+import siyi.game.service.fuctionbtn.FunctionService;
 import siyi.game.service.game.GameService;
 import siyi.game.service.gamelevel.LevelClearRecordService;
 import siyi.game.service.gamelevel.LevelUpService;
@@ -23,6 +25,7 @@ import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.loginLog.LoginLogService;
 import siyi.game.service.mission.PlayerMessionRelationService;
 import siyi.game.service.player.PlayerService;
+import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 import siyi.game.utill.UUIDUtil;
 
@@ -48,16 +51,7 @@ public class PlayerController extends BaseController {
     private LoginLogService loginLogService;
 
     @Autowired
-    private ItemPlayerRelationService itemPlayerRelationService;
-
-    @Autowired
-    private ItemConfigService itemConfigService;
-
-    @Autowired
-    private LevelUpService levelUpService;
-
-    @Autowired
-    private LevelClearRecordService levelClearRecordService;
+    private FunctionService functionService;
 
     @Value("${appid}")
     private String appid;
@@ -98,17 +92,7 @@ public class PlayerController extends BaseController {
             } else {
                 logger.info("获取登录玩家信息：{}", player);
                 // 查询玩家道具信息
-                List<ItemPlayerRelation> relations = itemPlayerRelationService.selectByPlayerIdAndGameCode(player.getPlayerId(), player.getGameCode());
-                List<String> itemNoList = new ArrayList<>();
-                if (!CollectionUtils.isEmpty(relations)) {
-                    for (ItemPlayerRelation relation : relations) {
-                        itemNoList.add(relation.getItemNo());
-                    }
-                }
-                List<ItemConfig> itemConfigs = new ArrayList<>();
-                if (itemNoList.size() != 0) {
-                    itemConfigs = itemConfigService.selectByItemNoList(itemNoList);
-                }
+                List<ItemBo> itemConfigs = functionService.queryItemInPacksack(player.getPlayerId(), Constants.GAME_CODE_WENWU);
 
                 // 查询玩家任务信息
                 List<PlayerMessionRelation> messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
