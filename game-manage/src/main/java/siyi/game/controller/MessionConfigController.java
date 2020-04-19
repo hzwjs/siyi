@@ -228,7 +228,8 @@ public class MessionConfigController extends BaseController {
         TaskInfo taskInfo = new TaskInfo();
         String taskName = playerId + blankId;
         taskInfo.setTaskName(taskName);
-        taskInfo.setCron("0/15 * * * * ? ");
+        taskInfo.setPeriod(5900L);
+        taskInfo.setCron("0/59 * * * * ? ");
         taskInfo.setClassName("siyi.game.manager.scheduled.MissionScheduled");
         taskInfo.setMethod("unlockMissionBlank");
         dynamicTask.addTask(taskInfo, param);
@@ -331,6 +332,7 @@ public class MessionConfigController extends BaseController {
         param.put("blankId", blankId);
         TaskInfo taskInfo = new TaskInfo();
         taskInfo.setTaskName(playerId + "complete" + blankId);
+        taskInfo.setPeriod(200000L);
         taskInfo.setCron("0/200 * * * * ? ");
         taskInfo.setClassName("siyi.game.manager.scheduled.MissionCompleteScheduled");
         taskInfo.setMethod("completeMission");
