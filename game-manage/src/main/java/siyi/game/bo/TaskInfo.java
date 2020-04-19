@@ -8,4 +8,5 @@ public class TaskInfo {
     private String cron;
     private String className;
     private String method;
+    Long period;
 }

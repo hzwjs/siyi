@@ -9,13 +9,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledFuture;
 
 
@@ -47,14 +50,28 @@ public class GameManageApp {
     }
 
     // 创建线程
-    @Bean
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
-        ThreadPoolTaskScheduler executor = new ThreadPoolTaskScheduler();
-        executor.setPoolSize(20);
-        executor.setThreadNamePrefix("taskExecutor-");
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(60);
-        return executor;
+    @EnableAsync
+    @Configuration
+    class TaskPoolConfig {
+
+        @Bean("taskExecutor")
+        public Executor taskExecutor() {
+            ThreadPoolTaskScheduler executor = new ThreadPoolTaskScheduler();
+            executor.setPoolSize(20);
+            executor.setThreadNamePrefix("taskExecutor-");
+            return executor;
+        }
+
     }
+
+//    @Bean
+//    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+//        ThreadPoolTaskScheduler executor = new ThreadPoolTaskScheduler();
+//        executor.setPoolSize(20);
+//        executor.setThreadNamePrefix("taskExecutor-");
+//        executor.setWaitForTasksToCompleteOnShutdown(true);
+//        executor.setAwaitTerminationSeconds(60);
+//        return executor;
+//    }
 
 }

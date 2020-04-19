@@ -44,7 +44,13 @@ public class DynamicTask {
      * @param param 执行任务需要的参数
      */
     public void addTask(TaskInfo taskInfo, Map param) {
-        ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(getTask(taskInfo, param), getTrigger(taskInfo));
+        Long period = taskInfo.getPeriod();
+        ScheduledFuture<?> future = null;
+        if (period != null) {
+            future = threadPoolTaskScheduler.scheduleAtFixedRate(getTask(taskInfo, param), period);
+        } else {
+            future = threadPoolTaskScheduler.schedule(getTask(taskInfo, param), getTrigger(taskInfo));
+        }
         futuresMap.put(taskInfo.getTaskName(), future);
     }
 
