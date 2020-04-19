@@ -82,7 +82,9 @@ public class FunctionServiceImpl implements FunctionService {
                 log.info("玩家已有该道具，开始更新道具记录");
                 String oldQuantity = itemPlayerRelation.getQuantity();
                 Long newQuantity = Long.valueOf(oldQuantity) + num;
-                itemPlayerRelation.setQuantity(String.valueOf(newQuantity));
+                if (newQuantity >= 0) {
+                    itemPlayerRelation.setQuantity(String.valueOf(newQuantity));
+                }
                 itemPlayerRelationService.updateByIdSelective(itemPlayerRelation);
                 flag = true;
             } else {
