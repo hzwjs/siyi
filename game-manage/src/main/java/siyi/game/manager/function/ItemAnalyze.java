@@ -21,7 +21,7 @@ public class ItemAnalyze {
      * @param
      */
     public static void analyzeItemType(ItemBo itemBo, String tips) {
-        String[] p = {"重新玩", "无限体力：持续\\d+分钟", "获得体力\\d+点", "使用后直接从第\\d+层开始", "获得金币：\\d+个", "使用后获得\\d+经验值",
+        String[] p = {"重新玩本关", "无限体力：持续\\d+分钟", "获得体力\\d+点", "使用后直接从第\\d+层开始", "获得金币：\\d+个", "使用后获得\\d+经验值",
                         "双倍金币收益\\d+分钟", "双倍经验收益\\d+分钟（仅限闯关经验）", "双倍攻击力收益\\d+分钟"};
         String pattern = "\\d+";
         for (int i = 0; i < p.length; i++) {
