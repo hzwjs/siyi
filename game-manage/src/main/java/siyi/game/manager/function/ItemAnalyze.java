@@ -1,5 +1,6 @@
 package siyi.game.manager.function;
 
+import org.springframework.util.StringUtils;
 import siyi.game.bo.functionbtn.ItemBo;
 import siyi.game.dao.entity.Player;
 import siyi.game.utill.Constants;
@@ -75,27 +76,33 @@ public class ItemAnalyze {
         String playerLevel = "";
         String gameLevel = "";
         Matcher m = Pattern.compile(p).matcher(remark);
-        if (Pattern.matches(limit1, remark)) {
-            if (m.find()) {
-                playerLevel = m.group();
-                itemBo.setPlayerLevel(playerLevel);
-            }
-            if (Integer.parseInt(player.getPlayerLevel()) >= Integer.parseInt(playerLevel)) {
-                itemBo.setStatus(Constants.COMMON_SUCCESS);
+        if (StringUtils.isEmpty(remark)) {
+            itemBo.setStatus(Constants.COMMON_SUCCESS);
+        } else {
+            if (Pattern.matches(limit1, remark)) {
+                if (m.find()) {
+                    playerLevel = m.group();
+                    itemBo.setPlayerLevel(playerLevel);
+                }
+                if (Integer.parseInt(player.getPlayerLevel()) >= Integer.parseInt(playerLevel)) {
+                    itemBo.setStatus(Constants.COMMON_SUCCESS);
+                } else {
+                    itemBo.setStatus(Constants.COMMON_FALSE);
+                }
+            } else if (Pattern.matches(limit2, remark)) {
+                if (m.find()) {
+                    gameLevel = m.group();
+                    itemBo.setGameLevel(gameLevel);
+                }
+                if (Integer.parseInt(player.getGameLevel()) >= Integer.parseInt(gameLevel)) {
+                    itemBo.setStatus(Constants.COMMON_SUCCESS);
+                } else {
+                    itemBo.setStatus(Constants.COMMON_FALSE);
+                }
             } else {
                 itemBo.setStatus(Constants.COMMON_FALSE);
             }
         }
-        if (Pattern.matches(limit2, remark)) {
-            if (m.find()) {
-                gameLevel = m.group();
-                itemBo.setGameLevel(gameLevel);
-            }
-            if (Integer.parseInt(player.getGameLevel()) >= Integer.parseInt(gameLevel)) {
-                itemBo.setStatus(Constants.COMMON_SUCCESS);
-            } else {
-                itemBo.setStatus(Constants.COMMON_FALSE);
-            }
-        }
+
     }
 }
