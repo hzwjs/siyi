@@ -9,4 +9,5 @@ public class TaskInfo {
     private String className;
     private String method;
     Long period;
+    Long delay;
 }
