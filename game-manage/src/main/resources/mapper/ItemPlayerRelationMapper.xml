@@ -16,7 +16,7 @@
         select t.id, t.name, tt.quantity, t.onoff, t.remark,t.max,t.tips
         from tb_item_player_relation tt
         left join tb_item_config t on tt.item_no = t.id and t.onoff = '0'
-        where tt.player_id = #{playId} and tt.game_code = #{gameCode}
+        where tt.player_id = #{playId} and tt.game_code = #{gameCode} and tt.quantity > '0'
     </select>
 
     <select id="selectByPlayerIdAndItemNoList" resultMap="BaseResultMap">
