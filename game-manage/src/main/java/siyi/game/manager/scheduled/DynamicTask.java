@@ -48,7 +48,7 @@ public class DynamicTask {
         Long delay = taskInfo.getDelay();
         ScheduledFuture<?> future = null;
         if (delay != null) {
-            future = threadPoolTaskScheduler.scheduleWithFixedDelay(getTask(taskInfo, param), delay);
+            future = threadPoolTaskScheduler.scheduleWithFixedDelay(getTask(taskInfo, param), new Date((new Date()).getTime() + delay), delay);
         } else if (period != null) {
             future = threadPoolTaskScheduler.scheduleAtFixedRate(getTask(taskInfo, param), period);
         } else {
