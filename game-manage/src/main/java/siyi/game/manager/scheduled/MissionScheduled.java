@@ -39,38 +39,44 @@ public class MissionScheduled {
         String blankId = param.get("blankId");
         log.info("=== playerId:{}", playerId);
         log.info("=== blankId:{}", blankId);
-        // 根据玩家id查询玩家任务栏信息
-        MessionBlank messionBlank = messionBlankService.selectByPlayerId(playerId);
-        // 将对应任务栏置为锁定状态
-        switch (blankId) {
-            case "one":
-                messionBlank.setBlankOneStatus("0");
-                break;
-            case "two":
-                messionBlank.setBlankTwoStatus("0");
-                break;
-            case "three":
-                messionBlank.setBlankThreeStatus("0");
-                break;
-            case "four":
-                messionBlank.setBlankFourStatus("0");
-                break;
-            case "five":
-                messionBlank.setBlankFiveStatus("0");
-                break;
-            case "six":
-                messionBlank.setBlankSixStatus("0");
-                break;
-            default:
-                break;
+        synchronized (this) {
+            // 根据玩家id查询玩家任务栏信息
+            MessionBlank messionBlank = messionBlankService.selectByPlayerId(playerId);
+            MessionBlank updateParam = new MessionBlank();
+            updateParam.setId(messionBlank.getId());
+            // 将对应任务栏置为锁定状态
+            switch (blankId) {
+                case "one":
+                    updateParam.setBlankOneStatus("0");
+                    break;
+                case "two":
+                    updateParam.setBlankTwoStatus("0");
+                    break;
+                case "three":
+                    updateParam.setBlankThreeStatus("0");
+                    break;
+                case "four":
+                    updateParam.setBlankFourStatus("0");
+                    break;
+                case "five":
+                    updateParam.setBlankFiveStatus("0");
+                    break;
+                case "six":
+                    updateParam.setBlankSixStatus("0");
+                    break;
+                default:
+                    break;
+            }
+            messionBlankService.updateByIdSelective(updateParam);
+            // 查询玩家最近的对应任务栏的任务信息
+            PlayerMessionRelation relation = playerMessionRelationService.selectLastByPlayerIdAndBlankId(playerId, blankId);
+            // 将对应任务删除
+            if (relation != null) {
+                log.info("删除任务" + blankId);
+                playerMessionRelationService.deleteById(relation.getId());
+            }
         }
-        messionBlankService.updateByIdSelective(messionBlank);
-        // 查询玩家最近的对应任务栏的任务信息
-        PlayerMessionRelation relation = playerMessionRelationService.selectLastByPlayerIdAndBlankId(playerId, blankId);
-        // 将对应任务删除
-        if (relation != null) {
-            playerMessionRelationService.deleteById(relation.getId());
-        }
+
         // 删除对应任务栏的定时任务
         dynamicTask.deleteTask(playerId + blankId);
     }
