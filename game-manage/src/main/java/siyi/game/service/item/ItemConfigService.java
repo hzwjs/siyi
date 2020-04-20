@@ -33,4 +33,12 @@ public interface ItemConfigService {
      * @return java.util.List<siyi.game.dao.entity.ItemConfig>
      */
     List<ItemConfig> selectAll();
+
+    /**
+     * 根据道具id查询道具信息
+     *
+     * @param itemId
+     * @return
+     */
+    ItemConfig selectByItemId(String itemId);
 }

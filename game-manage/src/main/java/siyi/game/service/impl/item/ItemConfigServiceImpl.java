@@ -33,4 +33,9 @@ public class ItemConfigServiceImpl implements ItemConfigService {
     public List<ItemConfig> selectAll() {
         return itemConfigMapper.selectAll();
     }
+
+    @Override
+    public ItemConfig selectByItemId(String itemId) {
+        return itemConfigMapper.selectByPrimaryKey(itemId);
+    }
 }
