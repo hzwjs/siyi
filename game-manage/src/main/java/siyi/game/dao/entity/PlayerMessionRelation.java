@@ -338,4 +338,24 @@ public class PlayerMessionRelation implements Serializable {
     public void setTargetItem(String targetItem) {
         this.targetItem = targetItem;
     }
+
+    @Override
+    public String toString() {
+        return "PlayerMessionRelation{" +
+                "id=" + id +
+                ", playerId='" + playerId + '\'' +
+                ", messionId='" + messionId + '\'' +
+                ", completeStatus='" + completeStatus + '\'' +
+                ", process='" + process + '\'' +
+                ", target='" + target + '\'' +
+                ", isItem='" + isItem + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", itemNum='" + itemNum + '\'' +
+                ", gold='" + gold + '\'' +
+                ", exp='" + exp + '\'' +
+                ", blankId='" + blankId + '\'' +
+                ", messionTips='" + messionTips + '\'' +
+                ", targetItem='" + targetItem + '\'' +
+                '}';
+    }
 }
