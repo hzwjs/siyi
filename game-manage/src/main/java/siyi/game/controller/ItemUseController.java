@@ -26,8 +26,39 @@ public class ItemUseController {
     @Autowired
     private ItemPlayerRelationService itemPlayerRelationService;
 
-    public Map<String, Object> useSkipLevel(String itemId, String playerId) {
-        return new HashMap<>();
+    /**
+     * 使用跳关卡道具
+     *
+     * @param itemId
+     * @param playerId
+     * @param addNum
+     * @return
+     */
+    @GetMapping("useSkipLevel")
+    public Map<String, Object> useSkipLevel(String itemId, String playerId, String addNum) {
+        Map<String, Object> resultMap = new HashMap<>();
+        // 玩家道具数量减一
+        ItemPlayerRelation selectRelation = new ItemPlayerRelation();
+        selectRelation.setPlayerId(playerId);
+        selectRelation.setItemNo(itemId);
+        ItemPlayerRelation itemPlayerRelation = itemPlayerRelationService.selectByBean(selectRelation);
+        String quantity = itemPlayerRelation.getQuantity();
+        if (Integer.parseInt(quantity) <= 0) {
+            resultMap.put("errCode", "000011");
+            resultMap.put("errMsg", "玩家道具数量不足");
+            return resultMap;
+        }
+        int finalQuantity = Integer.parseInt(quantity) - 1;
+        itemPlayerRelation.setQuantity(String.valueOf(finalQuantity));
+        itemPlayerRelationService.updateByIdSelective(itemPlayerRelation);
+        // 更新玩家游戏层数
+        Player player = playerService.selectByPlayerId(playerId);
+        player.setGameLevel(addNum);
+        playerService.updateByIdSelective(player);
+        // 返回结果
+        resultMap.put("errCode", "000000");
+        resultMap.put("errMsg", "使用道具成功");
+        return resultMap;
     }
 
     /**
