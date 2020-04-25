@@ -3,6 +3,7 @@ package siyi.game.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import net.sf.cglib.beans.BeanCopier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import siyi.game.bo.PlayerBo;
 import siyi.game.bo.WxLoginResponse;
 import siyi.game.bo.functionbtn.ItemBo;
+import siyi.game.dao.PhysicalPowerMapper;
 import siyi.game.dao.PlayerWxInfoMapper;
 import siyi.game.dao.entity.*;
 import siyi.game.service.fuctionbtn.FunctionService;
@@ -41,34 +43,35 @@ import java.util.*;
 @RequestMapping("idiom/player")
 public class PlayerController extends BaseController {
     private final Logger logger = LoggerFactory.getLogger(PlayerController.class);
-    @Autowired
-    private PlayerService playerService;
-
-    @Autowired
-    private GameService gameService;
-
-    @Autowired
-    private LoginLogService loginLogService;
-
-    @Autowired
-    private FunctionService functionService;
-
     @Value("${appid}")
     private String appid;
     @Value("${secret}")
     private String secret;
 
     @Autowired
+    private PlayerService playerService;
+    @Autowired
+    private GameService gameService;
+    @Autowired
+    private LoginLogService loginLogService;
+    @Autowired
+    private FunctionService functionService;
+    @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private PlayerWxInfoMapper playerWxInfoMapper;
     @Autowired
     private PlayerMessionRelationService playerMessionRelationService;
+    @Autowired
+    private PhysicalPowerMapper physicalPowerMapper;
 
     @RequestMapping("login")
     public Map<String, Object> login(@RequestBody PlayerBo playerBo) {
         logger.info("开始玩家登录，登录玩家：{}", JSON.toJSONString(playerBo));
         Map<String, Object> resultMap = new HashMap<>();
+        PhysicalPower physicalPower = null; // 玩家体力信息
+        List<ItemBo> itemConfigs = null; // 道具信息
+        List<PlayerMessionRelation> messionList = null; // 任务信息
         // 微信登录
         String jsCode = playerBo.getWxCode();
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" +secret + "&js_code=" + jsCode + "&grant_type=authorization_code";
@@ -84,30 +87,32 @@ public class PlayerController extends BaseController {
                 logger.info("该玩家为新玩家");
                 // 若没有玩家信息，则新增玩家
                 Player loginPlayer = new Player();
-                // 生成玩家编号
                 String playerId = RandomUtil.generate16();
                 loginPlayer.setPlayerId(playerId);
                 loginPlayer.setPlatformId(response.getOpenid());
                 loginPlayer.setGameLevel("1");
                 playerService.insertSelective(loginPlayer);
+                // 初始化玩家体力
+                physicalPower.setPlayerId(playerId);
+                physicalPower.setHp(5);
+                physicalPower.setMaxHp(5);
+                physicalPower.setPlayerLevel("1");
+                physicalPower.setUpdatedTime(new Date());
+                physicalPowerMapper.insert(physicalPower);
             } else {
                 logger.info("获取登录玩家信息：{}", player);
                 // 查询玩家道具信息
-                List<ItemBo> itemConfigs = functionService.queryItemInPacksack(player.getPlayerId(), Constants.GAME_CODE_WENWU);
-
+                itemConfigs = functionService.queryItemInPacksack(player.getPlayerId(), Constants.GAME_CODE_WENWU);
                 // 查询玩家任务信息
-                List<PlayerMessionRelation> messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
+                messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
                 if (CollectionUtils.isEmpty(messionList)) {
                     logger.info("玩家无任务信息，开始生成任务");
                     messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
                 }
-                resultMap.put("itemList", itemConfigs);
-                resultMap.put("messionList", messionList);
+                // 获取玩家体力信息
+                physicalPower.setPlayerId(playerBo.getPlayerId());
+                physicalPower = physicalPowerMapper.selectByPrimaryKey(physicalPower);
             }
-            // 返回数据组装
-            resultMap.put("player", player);
-            resultMap.put("openId", uuid32);
-            resultMap.put("session_key", response.getSession_key());
             // 插入玩家登录数据
             LoginLog loginLog = new LoginLog();
             loginLog.setGameCode(player.getGameCode());
@@ -115,6 +120,18 @@ public class PlayerController extends BaseController {
             loginLog.setPlayerId(player.getPlayerId());
             loginLog.setLoginTime(new Date());
             loginLogService.insertSelective(loginLog);
+            // 返回数据组装
+            BeanCopier copier = BeanCopier.create(Player.class, PlayerBo.class, false);
+            copier.copy(player, playerBo, null);
+            if (physicalPower != null) {
+                playerBo.setHp(physicalPower.getHp());
+                playerBo.setMaxHp(physicalPower.getMaxHp());
+            }
+            resultMap.put("player", playerBo);
+            resultMap.put("openId", uuid32);
+            resultMap.put("session_key", response.getSession_key());
+            resultMap.put("itemList", itemConfigs);
+            resultMap.put("messionList", messionList);
         } else {
             logger.info("=== 登录失败 ===");
             resultMap.put("errCode", response.getErrcode());

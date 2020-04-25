@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.PhysicalPowerMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.PhysicalPower">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="player_Id" jdbcType="VARCHAR" property="playerId" />
+    <result column="hp" jdbcType="INTEGER" property="hp" />
+    <result column="player_level" jdbcType="VARCHAR" property="playerLevel" />
+    <result column="max_hp" jdbcType="INTEGER" property="maxHp" />
+    <result column="REVISION" jdbcType="INTEGER" property="revision" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+</mapper>
