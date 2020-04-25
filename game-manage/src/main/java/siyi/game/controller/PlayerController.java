@@ -69,7 +69,7 @@ public class PlayerController extends BaseController {
     public Map<String, Object> login(@RequestBody PlayerBo playerBo) {
         logger.info("开始玩家登录，登录玩家：{}", JSON.toJSONString(playerBo));
         Map<String, Object> resultMap = new HashMap<>();
-        PhysicalPower physicalPower = null; // 玩家体力信息
+        PhysicalPower physicalPower = new PhysicalPower(); // 玩家体力信息
         List<ItemBo> itemConfigs = null; // 道具信息
         List<PlayerMessionRelation> messionList = null; // 任务信息
         // 微信登录
@@ -86,12 +86,13 @@ public class PlayerController extends BaseController {
             if (player == null) {
                 logger.info("该玩家为新玩家");
                 // 若没有玩家信息，则新增玩家
-                Player loginPlayer = new Player();
+                player = new Player();
                 String playerId = RandomUtil.generate16();
-                loginPlayer.setPlayerId(playerId);
-                loginPlayer.setPlatformId(response.getOpenid());
-                loginPlayer.setGameLevel("1");
-                playerService.insertSelective(loginPlayer);
+                player.setPlayerId(playerId);
+                player.setPlatformId(response.getOpenid());
+                player.setGameLevel("1");
+                player.setGameCode(playerBo.getGameCode());
+                playerService.insertSelective(player);
                 // 初始化玩家体力
                 physicalPower.setPlayerId(playerId);
                 physicalPower.setHp(5);
