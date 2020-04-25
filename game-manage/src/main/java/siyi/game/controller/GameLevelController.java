@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.GamelevelConfigMapper;
 import siyi.game.dao.LevelClearRecordMapper;
@@ -22,11 +21,11 @@ import siyi.game.dao.entity.Player;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
+import siyi.game.service.player.PhysicalPowerService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.service.wx.WxService;
 import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
-import siyi.game.utill.UUIDUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,16 +64,34 @@ public class GameLevelController extends BaseController{
     private WxService wxService;
     @Autowired
     private LevelClearRecordMapper levelClearRecordMapper;
+    @Autowired
+    private PhysicalPowerService physicalPowerService;
 
 
-
+    /**
+     * 查询关卡的配置信息，文关的题目信息等
+     * @param gameLevelType
+     * @param qType
+     * @param preQType
+     * @param userId
+     * @param preQID
+     * @param preStatus
+     * @return
+     */
     @RequestMapping(value = "queryGameLevelInfo")
     @ResponseBody
     public GameLevel queryGameLevelInfo(String gameLevelType,String qType, String preQType, String userId, String preQID, String preStatus) {
         GameLevel gameLevel = new GameLevel();
         try {
             if (Constants.GAME_LEVEL_TYPE_WEN.equals(gameLevelType)) {
-                gameLevel = gameLevelService.queryWenGameLevelInfo(userId, preQType, preQID, preStatus);
+                // 判断当前体力值是否够
+                int currentHp = physicalPowerService.calculateHp(userId);
+                if (currentHp >= 3) {
+                    gameLevel = gameLevelService.queryWenGameLevelInfo(userId, preQType, preQID, preStatus);
+                } else {
+                    gameLevel.setErrorMsg(Constants.GameLevelStaute.HP_ERR.getKey());
+                    gameLevel.setErrorCode(Constants.GameLevelStaute.HP_ERR.getValue());
+                }
             } else if (Constants.GAME_LEVEL_TYPE_WU.equals(gameLevelType)) {
                 gameLevel = gameLevelService.queryWuGameLevelInfo(preQID, userId);
             } else
@@ -346,5 +363,17 @@ public class GameLevelController extends BaseController{
             levelClearRecordMapper.insert(levelClearRecord);
         }
 
+    }
+
+
+    /**
+     * 消耗体力
+     * @param playerId
+     * @param num
+     */
+    @RequestMapping("deductHp")
+    @ResponseBody
+    public void deductHp(String playerId, int num) {
+        physicalPowerService.deduct(playerId, num);
     }
 }

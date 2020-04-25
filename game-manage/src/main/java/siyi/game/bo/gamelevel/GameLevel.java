@@ -35,4 +35,7 @@ public class GameLevel {
 
     // 武关配置信息
     private ConfigWu configWu;
+    // 错误码值，错误描述
+    private String errorMsg;
+    private String errorCode;
 }
