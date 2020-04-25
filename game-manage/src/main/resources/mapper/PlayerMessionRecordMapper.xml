@@ -7,6 +7,7 @@
     -->
     <id column="ID" jdbcType="BIGINT" property="id" />
     <result column="player_id" jdbcType="VARCHAR" property="playerId" />
+    <result column="blank_id" jdbcType="VARCHAR" property="blankId" />
     <result column="mession_id" jdbcType="VARCHAR" property="messionId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="complete_time" jdbcType="TIMESTAMP" property="completeTime" />

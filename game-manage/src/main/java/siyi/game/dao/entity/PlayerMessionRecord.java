@@ -20,6 +20,9 @@ public class PlayerMessionRecord implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String playerId;
 
+    @Column(name = "blank_id")
+    private String blankId;
+
     /**
      * 任务ID
      */
@@ -128,5 +131,23 @@ public class PlayerMessionRecord implements Serializable {
      */
     public void setCompleteTime(Date completeTime) {
         this.completeTime = completeTime;
+    }
+
+    /**
+     * 获取任务栏id
+     *
+     * @return complete_time - 任务栏id
+     */
+    public String getBlankId() {
+        return blankId;
+    }
+
+    /**
+     * 设置任务栏id
+     *
+     * @param blankId 任务栏id
+     */
+    public void setBlankId(String blankId) {
+        this.blankId = blankId;
     }
 }

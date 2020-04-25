@@ -157,6 +157,12 @@ public class MessionConfigServiceImpl implements MessionConfigService {
             relation.setItemNum("0");
         }
         playerMessionRelationService.insertSelective(relation);
+        PlayerMessionRecord record = new PlayerMessionRecord();
+        record.setMessionId(messionId);
+        record.setPlayerId(playerId);
+        record.setBlankId("three");
+        record.setCreateTime(new Date());
+        playerMessionRecordService.insertSelective(record);
     }
 
     @Override
@@ -252,6 +258,8 @@ public class MessionConfigServiceImpl implements MessionConfigService {
         PlayerMessionRecord record = new PlayerMessionRecord();
         record.setMessionId(messionId);
         record.setPlayerId(playerId);
+        record.setBlankId(blankId);
+        record.setCreateTime(new Date());
         playerMessionRecordService.insertSelective(record);
         return relation;
     }

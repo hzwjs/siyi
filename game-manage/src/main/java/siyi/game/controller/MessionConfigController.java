@@ -342,6 +342,7 @@ public class MessionConfigController extends BaseController {
         getSuccessResult(result);
         result.put("missionBlank", messionBlank);
         result.put("blankId", blankId);
+        result.put("cd", "59");
         return result;
     }
 
