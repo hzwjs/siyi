@@ -88,6 +88,7 @@ public class PlayerController extends BaseController {
                 String playerId = RandomUtil.generate16();
                 loginPlayer.setPlayerId(playerId);
                 loginPlayer.setPlatformId(response.getOpenid());
+                loginPlayer.setGameLevel("1");
                 playerService.insertSelective(loginPlayer);
             } else {
                 logger.info("获取登录玩家信息：{}", player);
