@@ -98,6 +98,7 @@ public class PlayerController extends BaseController {
                 physicalPower.setHp(5);
                 physicalPower.setMaxHp(5);
                 physicalPower.setPlayerLevel("1");
+                physicalPower.setCreatedTime(new Date());
                 physicalPower.setUpdatedTime(new Date());
                 physicalPowerMapper.insert(physicalPower);
             } else {
@@ -113,6 +114,8 @@ public class PlayerController extends BaseController {
                 // 获取玩家体力信息
                 physicalPower.setPlayerId(playerBo.getPlayerId());
                 physicalPower = physicalPowerMapper.selectByPrimaryKey(physicalPower);
+                resultMap.put("itemList", itemConfigs);
+                resultMap.put("messionList", messionList);
             }
             // 插入玩家登录数据
             LoginLog loginLog = new LoginLog();
@@ -131,8 +134,6 @@ public class PlayerController extends BaseController {
             resultMap.put("player", playerBo);
             resultMap.put("openId", uuid32);
             resultMap.put("session_key", response.getSession_key());
-            resultMap.put("itemList", itemConfigs);
-            resultMap.put("messionList", messionList);
         } else {
             logger.info("=== 登录失败 ===");
             resultMap.put("errCode", response.getErrcode());
