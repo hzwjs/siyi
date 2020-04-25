@@ -111,11 +111,11 @@ public class PlayerController extends BaseController {
                     logger.info("玩家无任务信息，开始生成任务");
                     messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
                 }
-                // 获取玩家体力信息
-                physicalPower.setPlayerId(playerBo.getPlayerId());
-                physicalPower = physicalPowerMapper.selectByPrimaryKey(physicalPower);
                 resultMap.put("itemList", itemConfigs);
                 resultMap.put("messionList", messionList);
+                // 获取玩家体力信息
+                physicalPower.setPlayerId(player.getPlayerId());
+                physicalPower = physicalPowerMapper.selectOne(physicalPower);
             }
             // 插入玩家登录数据
             LoginLog loginLog = new LoginLog();
