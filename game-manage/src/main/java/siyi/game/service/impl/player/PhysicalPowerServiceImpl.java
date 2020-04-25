@@ -1,6 +1,7 @@
 package siyi.game.service.impl.player;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import siyi.game.dao.PhysicalPowerMapper;
 import siyi.game.dao.entity.PhysicalPower;
 import siyi.game.service.player.PhysicalPowerService;
@@ -8,7 +9,7 @@ import siyi.game.service.player.PhysicalPowerService;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-
+@Service
 public class PhysicalPowerServiceImpl implements PhysicalPowerService {
     @Autowired
     PhysicalPowerMapper physicalPowerMapper;
