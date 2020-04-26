@@ -53,7 +53,7 @@ public class ExtractQuestion {
     public Map<String, Object> extractTianzi4() {
         // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
         Map weight = new HashMap();
-        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
+        weight.put(1, 1000); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
         int itemNum = selectNumByWeight(weight);
         // 获取题库的总题数
         int count = tianzi4Mapper.selectCount(new Tianzi4());
@@ -82,7 +82,7 @@ public class ExtractQuestion {
     public Map<String, Object> extractTianzi5() {
         // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
         Map weight = new HashMap();
-        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
+        weight.put(1, 1000); weight.put(2, 600); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
         int itemNum = selectNumByWeight(weight);
         // 获取题库的总题数
         int count = tianzi5Mapper.selectCount(new Tianzi5());
@@ -111,7 +111,7 @@ public class ExtractQuestion {
     public Map<String, Object> extractTianzi7() {
         // 根据权重判断出该题有几个项目（1;2;3;4;5）对应权重（100;60;30;15;5）
         Map weight = new HashMap();
-        weight.put(1, 100); weight.put(2, 60); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
+        weight.put(1, 1000); weight.put(2, 600); weight.put(3, 30); weight.put(4, 15); weight.put(5, 15);
         int itemNum = selectNumByWeight(weight);
         // 获取题库的总题数
         int count = tianzi7Mapper.selectCount(new Tianzi7());
