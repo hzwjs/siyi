@@ -29,4 +29,29 @@ public interface PlayerMessionRecordService {
      * @return
      */
     List<PlayerMessionRecord> selectByPlayerId(String playerId);
+
+    /**
+     * 根据玩家id、任务id查询任务记录信息，根据id倒序排列
+     *
+     * @param playerId
+     * @param messionId
+     * @return
+     */
+    List<PlayerMessionRecord> selectByPlayerIdAndMessionId(String playerId, String messionId);
+
+    /**
+     * 根据主键更新任务信息
+     *
+     * @param record
+     */
+    void updateByIdSelective(PlayerMessionRecord record);
+
+    /**
+     * 根据玩家id、任务栏id查询任务记录信息，id倒叙排列
+     *
+     * @param playerId
+     * @param blankId
+     * @return
+     */
+    List<PlayerMessionRecord> selectByPlayerIdAndBlankId(String playerId, String blankId);
 }

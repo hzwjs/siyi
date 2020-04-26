@@ -45,4 +45,29 @@ public class PlayerMessionRecordServiceImpl implements PlayerMessionRecordServic
         example.setOrderByClause("id desc");
         return playerMessionRecordMapper.selectByExample(example);
     }
+
+    @Override
+    public List<PlayerMessionRecord> selectByPlayerIdAndMessionId(String playerId, String messionId) {
+        Example example = new Example(PlayerMessionRecord.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("playerId", playerId);
+        criteria.andEqualTo("messionId", messionId);
+        example.setOrderByClause("id desc");
+        return playerMessionRecordMapper.selectByExample(example);
+    }
+
+    @Override
+    public void updateByIdSelective(PlayerMessionRecord record) {
+        playerMessionRecordMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public List<PlayerMessionRecord> selectByPlayerIdAndBlankId(String playerId, String blankId) {
+        Example example = new Example(PlayerMessionRecord.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("playerId", playerId);
+        criteria.andEqualTo("blankId", blankId);
+        example.setOrderByClause("id desc");
+        return playerMessionRecordMapper.selectByExample(example);
+    }
 }

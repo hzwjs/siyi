@@ -15,13 +15,14 @@ import siyi.game.manager.scheduled.DynamicTask;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.mission.MessionBlankService;
 import siyi.game.service.mission.MessionConfigService;
+import siyi.game.service.mission.PlayerMessionRecordService;
 import siyi.game.service.mission.PlayerMessionRelationService;
 import siyi.game.service.player.PlayerService;
 
 import java.io.File;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * description: MessionConfigController 任务相关接口服务 <br>
@@ -54,6 +55,9 @@ public class MessionConfigController extends BaseController {
 
     @Autowired
     private DynamicTask dynamicTask;
+
+    @Autowired
+    private PlayerMessionRecordService playerMessionRecordService;
 
     /**
      * description: 解析任务配置文件 <br>
@@ -327,6 +331,13 @@ public class MessionConfigController extends BaseController {
                 break;
         }
         messionBlankService.updateByIdSelective(messionBlank);
+        // 根据玩家id、任务id查询任务记录，获取最新任务记录，更新完成时间
+        List<PlayerMessionRecord> records = playerMessionRecordService.selectByPlayerIdAndMessionId(playerId, messionId);
+        if (!CollectionUtils.isEmpty(records)) {
+            PlayerMessionRecord record = records.get(0);
+            record.setCompleteTime(new Date());
+            playerMessionRecordService.updateByIdSelective(record);
+        }
         // 删除任务
         playerMessionRelationService.deleteById(playerMessionRelation.getId());
         // 开启定时任务，进行任务冷却
@@ -346,6 +357,13 @@ public class MessionConfigController extends BaseController {
         return result;
     }
 
+    /**
+     * 刷新任务栏
+     *
+     * @param playerId
+     * @param blankId
+     * @return
+     */
     @PostMapping("freshBlank")
     public Map<String, Object> freshBlank(String playerId, String blankId) {
         // 根据玩家id查询任务栏信息
@@ -378,6 +396,32 @@ public class MessionConfigController extends BaseController {
         dynamicTask.deleteTask(playerId + "complete" + blankId);
         Map<String, Object> result = new HashMap<>();
         getSuccessResult(result);
+        return result;
+    }
+
+    /**
+     * 获取任务栏cd时间，单位：秒
+     *
+     * @param playerId
+     * @param blankId
+     * @return
+     */
+    @GetMapping("getCd")
+    public Map<String, Object> getCd(String playerId, String blankId) {
+        Map<String, Object> result = new HashMap<>();
+        List<PlayerMessionRecord> records = playerMessionRecordService.selectByPlayerIdAndBlankId(playerId, blankId);
+        if (CollectionUtils.isEmpty(records)) {
+            result.put("errCode", "111111");
+            result.put("errMsg", "玩家无该任务栏记录");
+            return result;
+        }
+        PlayerMessionRecord record = records.get(0);
+        Date completeTime = record.getCompleteTime();
+        Date currentTime = new Date();
+        long timeSpace = currentTime.getTime() - completeTime.getTime();
+        long secondSpace = timeSpace / 1000;
+        result.put("cd", String.valueOf(secondSpace));
+        result.put("blankId", blankId);
         return result;
     }
 
