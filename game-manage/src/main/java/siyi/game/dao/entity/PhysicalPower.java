@@ -9,6 +9,7 @@ public class PhysicalPower implements Serializable {
     /**
      * 玩家id
      */
+    @Id
     @Column(name = "player_Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String playerId;

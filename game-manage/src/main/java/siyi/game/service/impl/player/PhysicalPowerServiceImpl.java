@@ -25,8 +25,10 @@ public class PhysicalPowerServiceImpl implements PhysicalPowerService {
         int hp = physicalPower.getHp() - hpNum;
         if (hp >= 0) {
             physicalPower.setHp(hp);
-            physicalPowerMapper.updateByPrimaryKey(physicalPower);
+        } else {
+            physicalPower.setHp(0);
         }
+        physicalPowerMapper.updateByPrimaryKeySelective(physicalPower);
 
     }
 

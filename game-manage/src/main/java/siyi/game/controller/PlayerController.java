@@ -130,6 +130,7 @@ public class PlayerController extends BaseController {
             if (physicalPower != null) {
                 playerBo.setHp(physicalPower.getHp());
                 playerBo.setMaxHp(physicalPower.getMaxHp());
+                playerBo.setStartTimeRecover(physicalPower.getUpdatedTime());
             }
             resultMap.put("player", playerBo);
             resultMap.put("openId", uuid32);
