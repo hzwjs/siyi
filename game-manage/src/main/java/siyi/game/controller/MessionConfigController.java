@@ -425,4 +425,20 @@ public class MessionConfigController extends BaseController {
         return result;
     }
 
+    /**
+     * 根据玩家id及任务栏id查询任务信息
+     *
+     * @param playerId
+     * @param blankId
+     * @return
+     */
+    @GetMapping("selectPlayerMission")
+    public Map<String, Object> selectPlayerMission(String playerId, String blankId) {
+        Map<String, Object> result = new HashMap<>();
+        PlayerMessionRelation relation = playerMessionRelationService.selectLastByPlayerIdAndBlankId(playerId, blankId);
+        result.put("mission", relation);
+        result.put("blankId", blankId);
+        return result;
+    }
+
 }
