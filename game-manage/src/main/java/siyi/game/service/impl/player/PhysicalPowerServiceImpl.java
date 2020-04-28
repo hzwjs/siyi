@@ -52,13 +52,15 @@ public class PhysicalPowerServiceImpl implements PhysicalPowerService {
             PhysicalPower physicalPower = new PhysicalPower();
             physicalPower.setPlayerId(playerId);
             physicalPower = physicalPowerMapper.selectOne(physicalPower);
-            int hp = physicalPower.getHp() + hpNum;
-            if (hp > physicalPower.getMaxHp()) {
-                hp = physicalPower.getMaxHp();
-                physicalPower.setUpdatedTime(null);
+            if (physicalPower != null) {
+                int hp = physicalPower.getHp() + hpNum;
+                if (hp > physicalPower.getMaxHp()) {
+                    hp = physicalPower.getMaxHp();
+                    physicalPower.setUpdatedTime(null);
+                }
+                physicalPower.setHp(hp);
+                physicalPowerMapper.updateByPrimaryKeySelective(physicalPower);
             }
-            physicalPower.setHp(hp);
-            physicalPowerMapper.insertSelective(physicalPower);
         }
     }
 }
