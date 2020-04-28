@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import siyi.game.bo.gamelevel.GameLevel;
 import siyi.game.dao.GamelevelConfigMapper;
 import siyi.game.dao.LevelClearRecordMapper;
-import siyi.game.dao.entity.ItemPlayerRelation;
-import siyi.game.dao.entity.LevelClearRecord;
-import siyi.game.dao.entity.LevelUpConfig;
-import siyi.game.dao.entity.Player;
+import siyi.game.dao.ScoreTodayMapper;
+import siyi.game.dao.entity.*;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
@@ -27,10 +25,9 @@ import siyi.game.service.wx.WxService;
 import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,6 +63,8 @@ public class GameLevelController extends BaseController{
     private LevelClearRecordMapper levelClearRecordMapper;
     @Autowired
     private PhysicalPowerService physicalPowerService;
+    @Autowired
+    private ScoreTodayMapper scoreTodayMapper;
 
 
     /**
@@ -112,12 +111,16 @@ public class GameLevelController extends BaseController{
      * author: zhengzhiqiang <br>
      *
      * @param player
+     * @param sessionKey
+     * @param guanqiaType 关卡类型：wen/wu
+     * @param status success/fail
      * @param itemPlayerRelations
      * @return void
      */
     @PostMapping(value = "submitGame")
     @ResponseBody
-    public Map submitGame(Player player, @RequestParam(value="itemPlayerRelations", required=false) List<ItemPlayerRelation> itemPlayerRelations, String sessionKey) {
+    public Map submitGame(Player player, String sessionKey, String guanqiaType, String status,
+                          @RequestParam(value="itemPlayerRelations", required=false) List<ItemPlayerRelation> itemPlayerRelations) {
         Map result = new HashMap();
         try {
             logger.info("提交游戏数据，开始更新数据库");
@@ -133,7 +136,7 @@ public class GameLevelController extends BaseController{
             findPlayer.setExperience(String.valueOf(finalExp));
             findPlayer.setGold(String.valueOf(finalGold));
             // 更新玩家的天梯信息并上送微信托管
-            updateTiantiInfo(player, sessionKey, findPlayer.getPlatformId());
+            updateTiantiInfo(player, sessionKey, findPlayer.getPlatformId(), guanqiaType, status);
 
             // 更新道具关联关系
             List<ItemPlayerRelation> existRelations = new ArrayList<>();
@@ -334,21 +337,25 @@ public class GameLevelController extends BaseController{
      * 更新天梯信息
      * @param player 这是前端传来的玩家对象
      */
-    private void updateTiantiInfo(Player player, String sessionKey, String platformId) {
+    private void updateTiantiInfo(Player player, String sessionKey, String platformId, String guanqiaType , String status) {
         String playerId = player.getPlayerId();
-        String level = player.getGameLevel(); // 指玩家此次闯关的等级
+        // 天梯
+        Integer level = Integer.parseInt(player.getGameLevel()); // 指玩家此次闯关的等级
+        if ("fail".equals(status)) {
+            level = (level -1)>1?(level -1) : 1;
+        }
         LevelClearRecord levelClearRecord = new LevelClearRecord();
         levelClearRecord.setPlayerId(playerId);
         levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord);
         if (levelClearRecord != null) {
-            if (Integer.parseInt(level) > Integer.parseInt(levelClearRecord.getBestScore())) {
+            if (level > Integer.parseInt(levelClearRecord.getBestScore())) {
                 Map data = new HashMap();
                 data.put("key", "level");
-                data.put("value", player.getGameLevel());
+                data.put("value", level);
                 boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
                 if (wx_request_flag) {
                     int oldNum = levelClearRecord.getBarrierCount();
-                    levelClearRecord.setBestScore(level);
+                    levelClearRecord.setBestScore(level + "");
                     levelClearRecord.setBarrierCount(oldNum+1);
                     levelClearRecordMapper.updateByPrimaryKey(levelClearRecord);
                 }
@@ -356,11 +363,30 @@ public class GameLevelController extends BaseController{
         } else {
             levelClearRecord = new LevelClearRecord();
             levelClearRecord.setPlayerId(playerId);
-            levelClearRecord.setBestScore(level);
+            levelClearRecord.setBestScore(level + "");
             levelClearRecord.setBarrierCount(1);
             levelClearRecord.setGameCode(Constants.GAME_CODE_WENWU);
             levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));
             levelClearRecordMapper.insert(levelClearRecord);
+        }
+        LocalDate today = LocalDate.now();
+        String todayStr = today.format(DateTimeFormatter.BASIC_ISO_DATE);
+        // 当日文关闯关次数
+        Map wenData = new HashMap();
+        wenData.put("key", "wen_" + wenData);
+        wenData.put("value", level);
+        boolean wx_request_flag1 = wxService.setUserStorage(wenData, sessionKey, platformId);
+        ScoreToday scoreToday = new ScoreToday();
+        scoreToday.setPlayerId(playerId);
+        scoreToday = scoreTodayMapper.selectOne(scoreToday);
+        if (scoreToday != null) {
+            int wenNum = scoreToday.getWenPassNum();
+            scoreToday.setWenPassNum(wenNum + level);
+        } else {
+            scoreToday.setPlayerId(playerId);
+            scoreToday.setWenPassNum(level);
+            scoreToday.setCreatedTime(new Date());
+            scoreToday.setUpdatedTime(new Date());
         }
 
     }
@@ -375,5 +401,16 @@ public class GameLevelController extends BaseController{
     @ResponseBody
     public void deductHp(String playerId, int num) {
         physicalPowerService.deduct(playerId, num);
+    }
+
+    /**
+     * 增加体力
+     * @param playerId
+     * @param num
+     */
+    @RequestMapping("addHp")
+    @ResponseBody
+    public void addHp(String playerId, int num) {
+        physicalPowerService.addHp(playerId, num);
     }
 }

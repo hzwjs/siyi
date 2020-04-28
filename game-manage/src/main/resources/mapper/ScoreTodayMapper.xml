@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siyi.game.dao.ScoreTodayMapper">
+  <resultMap id="BaseResultMap" type="siyi.game.dao.entity.ScoreToday">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="player_Id" jdbcType="VARCHAR" property="playerId" />
+    <result column="wen_pass_num" jdbcType="INTEGER" property="wenPassNum" />
+    <result column="wu_pass_num" jdbcType="INTEGER" property="wuPassNum" />
+    <result column="REVISION" jdbcType="INTEGER" property="revision" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_TIME" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+</mapper>
