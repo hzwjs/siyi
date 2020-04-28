@@ -411,6 +411,7 @@ public class GameLevelController extends BaseController{
     @RequestMapping("addHp")
     @ResponseBody
     public void addHp(String playerId, int num) {
+        logger.info("=== addHp playerId:{} num:{}", playerId, num);
         physicalPowerService.addHp(playerId, num);
     }
 }

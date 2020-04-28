@@ -58,6 +58,7 @@ public class PhysicalPowerServiceImpl implements PhysicalPowerService {
                 physicalPower.setUpdatedTime(null);
             }
             physicalPower.setHp(hp);
+            physicalPowerMapper.insertSelective(physicalPower);
         }
     }
 }
