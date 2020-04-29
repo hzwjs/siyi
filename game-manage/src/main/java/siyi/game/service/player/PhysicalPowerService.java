@@ -1,5 +1,7 @@
 package siyi.game.service.player;
 
+import siyi.game.dao.entity.PhysicalPower;
+
 /**
  * 体力服务类
  */
@@ -21,6 +23,6 @@ public interface PhysicalPowerService {
      * @param playerId
      * @param hpNum
      */
-    void addHp(String playerId, int hpNum);
+    PhysicalPower addHp(String playerId, int hpNum);
 
 }

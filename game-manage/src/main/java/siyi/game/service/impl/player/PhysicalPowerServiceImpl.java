@@ -38,18 +38,21 @@ public class PhysicalPowerServiceImpl implements PhysicalPowerService {
         physicalPower.setPlayerId(playerId);
         physicalPower = physicalPowerMapper.selectOne(physicalPower);
         Instant startTime = physicalPower.getUpdatedTime().toInstant();
-        Instant currentTime = Instant.now();
-        long minute = Duration.between(startTime, currentTime).toMinutes();
-        int addHpNum = (int) (minute/5); // 每五分钟恢复1点体力
-        addHp(playerId, addHpNum);
-        physicalPower = physicalPowerMapper.selectOne(physicalPower);
+        if (startTime == null) { // 表示当前是满体力
+            return physicalPower.getHp();
+        } else {
+            Instant currentTime = Instant.now();
+            long minute = Duration.between(startTime, currentTime).toMinutes();
+            int addHpNum = (int) (minute/5); // 每五分钟恢复1点体力
+            physicalPower = addHp(playerId, addHpNum);
+        }
         return physicalPower.getHp();
     }
 
     @Override
-    public void addHp(String playerId, int hpNum) {
+    public PhysicalPower addHp(String playerId, int hpNum) {
+        PhysicalPower physicalPower = new PhysicalPower();
         if (hpNum > 0) {
-            PhysicalPower physicalPower = new PhysicalPower();
             physicalPower.setPlayerId(playerId);
             physicalPower = physicalPowerMapper.selectOne(physicalPower);
             if (physicalPower != null) {
@@ -62,5 +65,6 @@ public class PhysicalPowerServiceImpl implements PhysicalPowerService {
                 physicalPowerMapper.updateByPrimaryKeySelective(physicalPower);
             }
         }
+        return physicalPower;
     }
 }

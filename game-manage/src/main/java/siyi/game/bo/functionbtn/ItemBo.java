@@ -10,7 +10,7 @@ public class ItemBo {
     String name;
     // 描述
     String tips;
-    // 道具状态，是否可用
+    // 道具状态，是否可用:0,不可用；1，可用
     String status;
     // 数量
     String num;
