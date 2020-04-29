@@ -29,9 +29,9 @@ public class ItemUseController {
     /**
      * 使用跳关卡道具
      *
-     * @param itemId
-     * @param playerId
-     * @param addNum
+     * @param itemId 道具id
+     * @param playerId 玩家id
+     * @param addNum 跳关数
      * @return
      */
     @GetMapping("useSkipLevel")
@@ -101,9 +101,9 @@ public class ItemUseController {
     /**
      * 使用经验卡道具
      *
-     * @param itemId
-     * @param playerId
-     * @param addNum
+     * @param itemId 道具id
+     * @param playerId 玩家id
+     * @param addNum 增加经验值
      * @return
      */
     @GetMapping("useAddExp")
@@ -123,11 +123,11 @@ public class ItemUseController {
         int finalQuantity = Integer.parseInt(quantity) - 1;
         itemPlayerRelation.setQuantity(String.valueOf(finalQuantity));
         itemPlayerRelationService.updateByIdSelective(itemPlayerRelation);
-        // 将道具的金币数累加至玩家处
+        // 道具经验累加至玩家经验处
         Player player = playerService.selectByPlayerId(playerId);
         String experience = player.getExperience();
         int finalExp = Integer.parseInt(experience) + Integer.parseInt(addNum);
-        player.setGold(String.valueOf(finalExp));
+        player.setExperience(String.valueOf(finalExp));
         playerService.updateByIdSelective(player);
         // 返回结果
         resultMap.put("errCode", "000000");
