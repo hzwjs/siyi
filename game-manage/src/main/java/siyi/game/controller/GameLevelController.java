@@ -16,6 +16,7 @@ import siyi.game.dao.GamelevelConfigMapper;
 import siyi.game.dao.LevelClearRecordMapper;
 import siyi.game.dao.ScoreTodayMapper;
 import siyi.game.dao.entity.*;
+import siyi.game.framework.annotation.WebLog;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
@@ -79,6 +80,7 @@ public class GameLevelController extends BaseController{
      */
     @RequestMapping(value = "queryGameLevelInfo")
     @ResponseBody
+    @WebLog(description = "查询关卡的配置信息，文关的题目信息等")
     public GameLevel queryGameLevelInfo(String gameLevelType,String qType, String preQType, String userId, String preQID, String preStatus) {
         GameLevel gameLevel = new GameLevel();
         try {

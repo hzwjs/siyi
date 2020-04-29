@@ -18,6 +18,7 @@ import siyi.game.bo.functionbtn.ItemBo;
 import siyi.game.dao.PhysicalPowerMapper;
 import siyi.game.dao.PlayerWxInfoMapper;
 import siyi.game.dao.entity.*;
+import siyi.game.framework.annotation.WebLog;
 import siyi.game.service.fuctionbtn.FunctionService;
 import siyi.game.service.game.GameService;
 import siyi.game.service.gamelevel.LevelClearRecordService;
@@ -66,8 +67,8 @@ public class PlayerController extends BaseController {
     private PhysicalPowerMapper physicalPowerMapper;
 
     @RequestMapping("login")
+    @WebLog(description = "玩家登录")
     public Map<String, Object> login(@RequestBody PlayerBo playerBo) {
-        logger.info("开始玩家登录，登录玩家：{}", JSON.toJSONString(playerBo));
         Map<String, Object> resultMap = new HashMap<>();
         PhysicalPower physicalPower = new PhysicalPower(); // 玩家体力信息
         List<ItemBo> itemConfigs = null; // 道具信息
