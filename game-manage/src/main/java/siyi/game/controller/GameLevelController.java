@@ -121,13 +121,11 @@ public class GameLevelController extends BaseController{
      */
     @PostMapping(value = "submitGame")
     @ResponseBody
+    @WebLog(description = "提交游戏数据，开始更新数据库")
     public Map submitGame(Player player, String sessionKey, String guanqiaType, String status,
                           @RequestParam(value="itemPlayerRelations", required=false) List<ItemPlayerRelation> itemPlayerRelations) {
         Map result = new HashMap();
         try {
-            logger.info("提交游戏数据，开始更新数据库");
-            logger.info("获取玩家信息：{}", player.toString());
-            logger.info("=== sessionKey:{} ===",sessionKey);
             String playerId = player.getPlayerId();
             Player findPlayer = playerService.selectByPlayerId(playerId);
             String experience = player.getExperience();
@@ -384,13 +382,15 @@ public class GameLevelController extends BaseController{
         if (scoreToday != null) {
             int wenNum = scoreToday.getWenPassNum();
             scoreToday.setWenPassNum(wenNum + level);
+            scoreTodayMapper.updateByPrimaryKeySelective(scoreToday);
         } else {
+            scoreToday = new ScoreToday();
             scoreToday.setPlayerId(playerId);
             scoreToday.setWenPassNum(level);
             scoreToday.setCreatedTime(new Date());
             scoreToday.setUpdatedTime(new Date());
+            scoreTodayMapper.insertSelective(scoreToday);
         }
-
     }
 
 
