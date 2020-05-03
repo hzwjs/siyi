@@ -34,7 +34,7 @@ public class WebLogAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String methodDescription = getMethodDescription(joinPoint);
-        log.info("============================================= start : {} ====================================", thread);
+        log.info("---------------------------------------- start : {} ----------------------------------------", thread);
         log.info("URL           :{}", request.getRequestURL().toString());
         log.info("description   :{}", methodDescription);
         log.info("Request Args  :{}", JSON.toJSONString(joinPoint.getArgs()));
@@ -52,7 +52,7 @@ public class WebLogAspect {
     @After("webLog()")
     public void doAfter() {
         String thread = Thread.currentThread().getName();
-        log.info("============================================= end : {} ====================================", thread);
+        log.info("---------------------------------------- end : {} ----------------------------------------", thread);
     }
 
     private String getMethodDescription(JoinPoint joinPoint) {

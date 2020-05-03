@@ -27,6 +27,7 @@ import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -346,7 +347,7 @@ public class GameLevelController extends BaseController{
         }
         LevelClearRecord levelClearRecord = new LevelClearRecord();
         levelClearRecord.setPlayerId(playerId);
-        levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord);
+        levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord); // 从玩家闯关记录表中查询信息
         if (levelClearRecord != null) {
             if (level > Integer.parseInt(levelClearRecord.getBestScore())) {
                 Map data = new HashMap();
@@ -369,28 +370,36 @@ public class GameLevelController extends BaseController{
             levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));
             levelClearRecordMapper.insert(levelClearRecord);
         }
+        DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDate today = LocalDate.now();
-        String todayStr = today.format(DateTimeFormatter.BASIC_ISO_DATE);
+        LocalDateTime todaytime = LocalDateTime.now();
+        String todayStr = today.format(dateFormatter);
+        String nowTime = todaytime.format(timeFormatter);
         // 当日文关闯关次数
-        Map wenData = new HashMap();
-        wenData.put("key", "wen_" + wenData);
-        wenData.put("value", level);
-        boolean wx_request_flag1 = wxService.setUserStorage(wenData, sessionKey, platformId);
+        int successNum = 1;
         ScoreToday scoreToday = new ScoreToday();
         scoreToday.setPlayerId(playerId);
+        scoreToday.setCreatedTime(todayStr);
         scoreToday = scoreTodayMapper.selectOne(scoreToday);
         if (scoreToday != null) {
             int wenNum = scoreToday.getWenPassNum();
-            scoreToday.setWenPassNum(wenNum + level);
+            successNum = wenNum + level;
+            scoreToday.setWenPassNum(successNum);
+            scoreToday.setUpdatedTime(nowTime);
             scoreTodayMapper.updateByPrimaryKeySelective(scoreToday);
         } else {
             scoreToday = new ScoreToday();
             scoreToday.setPlayerId(playerId);
-            scoreToday.setWenPassNum(level);
-            scoreToday.setCreatedTime(new Date());
-            scoreToday.setUpdatedTime(new Date());
+            scoreToday.setWenPassNum(successNum);
+            scoreToday.setCreatedTime(todayStr);
+            scoreToday.setUpdatedTime(nowTime);
             scoreTodayMapper.insertSelective(scoreToday);
         }
+        Map wenData = new HashMap();
+        wenData.put("key", "wen_" + todayStr);
+        wenData.put("value", successNum);
+        boolean wx_request_flag1 = wxService.setUserStorage(wenData, sessionKey, platformId);
     }
 
 

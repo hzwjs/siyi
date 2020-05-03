@@ -15,6 +15,13 @@ public class ScoreToday implements Serializable {
     private String playerId;
 
     /**
+     * 创建时间
+     */
+    @Id
+    @Column(name = "CREATED_TIME")
+    private String createdTime;
+
+    /**
      * 文关通关次数
      */
     @Column(name = "wen_pass_num")
@@ -39,12 +46,6 @@ public class ScoreToday implements Serializable {
     private String createdBy;
 
     /**
-     * 创建时间
-     */
-    @Column(name = "CREATED_TIME")
-    private Date createdTime;
-
-    /**
      * 更新人
      */
     @Column(name = "UPDATED_BY")
@@ -54,7 +55,7 @@ public class ScoreToday implements Serializable {
      * 更新时间
      */
     @Column(name = "UPDATED_TIME")
-    private Date updatedTime;
+    private String updatedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -74,6 +75,24 @@ public class ScoreToday implements Serializable {
      */
     public void setPlayerId(String playerId) {
         this.playerId = playerId == null ? null : playerId.trim();
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return CREATED_TIME - 创建时间
+     */
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param createdTime 创建时间
+     */
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     /**
@@ -149,24 +168,6 @@ public class ScoreToday implements Serializable {
     }
 
     /**
-     * 获取创建时间
-     *
-     * @return CREATED_TIME - 创建时间
-     */
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    /**
-     * 设置创建时间
-     *
-     * @param createdTime 创建时间
-     */
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    /**
      * 获取更新人
      *
      * @return UPDATED_BY - 更新人
@@ -189,7 +190,7 @@ public class ScoreToday implements Serializable {
      *
      * @return UPDATED_TIME - 更新时间
      */
-    public Date getUpdatedTime() {
+    public String getUpdatedTime() {
         return updatedTime;
     }
 
@@ -198,7 +199,7 @@ public class ScoreToday implements Serializable {
      *
      * @param updatedTime 更新时间
      */
-    public void setUpdatedTime(Date updatedTime) {
+    public void setUpdatedTime(String updatedTime) {
         this.updatedTime = updatedTime;
     }
 }
