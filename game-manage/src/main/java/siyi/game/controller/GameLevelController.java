@@ -339,7 +339,7 @@ public class GameLevelController extends BaseController{
      * 更新天梯信息
      * @param player 这是前端传来的玩家对象
      */
-    private void updateTiantiInfo(PlayerBo player, String sessionKey, String platformId) {
+    private void updateTiantiInfo(Player player, String sessionKey, String platformId) {
         String playerId = player.getPlayerId();
         DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -349,7 +349,7 @@ public class GameLevelController extends BaseController{
         String nowTime = todaytime.format(timeFormatter);
         int successNum = 1; // 当日闯关次数
         Integer level = Integer.parseInt(player.getGameLevel()); // 指玩家此次闯关的等级
-        Integer wuLevel = player.getWuLevel(); // 指玩家此次武关闯关成功的次数
+        Integer wuLevel = Integer.parseInt(player.getWuLevel()); // 指玩家此次武关闯关成功的次数
         // 查询当日玩家成绩记录
         ScoreToday scoreToday = new ScoreToday();
         scoreToday.setPlayerId(playerId);
