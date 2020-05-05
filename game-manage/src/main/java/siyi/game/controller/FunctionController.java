@@ -8,15 +8,16 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import siyi.game.bo.functionbtn.AwardInfo;
-import siyi.game.bo.functionbtn.ItemBo;
-import siyi.game.bo.functionbtn.TiantiRanking;
+import siyi.game.bo.functionbtn.*;
 import siyi.game.dao.LevelClearRecordMapper;
+import siyi.game.dao.ScoreTodayMapper;
 import siyi.game.dao.entity.LevelClearRecord;
 import siyi.game.dao.entity.PlayerSign;
 import siyi.game.framework.annotation.WebLog;
 import siyi.game.service.fuctionbtn.FunctionService;
+import siyi.game.utill.DateUtil;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class FunctionController extends BaseController{
     private FunctionService functionService;
     @Autowired
     private LevelClearRecordMapper levelClearRecordMapper;
+    @Autowired
+    private ScoreTodayMapper scoreTodayMapper;
 
 
     /**
@@ -119,10 +122,26 @@ public class FunctionController extends BaseController{
      */
     @RequestMapping(value = "queryTiantiRanking")
     @WebLog(description = "查询天梯世界排行榜")
-    public List<TiantiRanking> queryTiantiRankingList() {
+    public Map<String, Object> queryTiantiRankingList() {
+        Map<String, Object> result = new HashMap<>();
+        String nowDate = DateUtil.nowStringSimpleDate();
+
         PageHelper.startPage(1, 100);
-        List<TiantiRanking> list = levelClearRecordMapper.selectTiantiRanking(); // 查询排名前一百的玩家
-        return list;
+        List<TiantiRanking> tiantilist = levelClearRecordMapper.selectTiantiRanking(); // 查询排名前一百的玩家
+        if (tiantilist.size() > 0) {
+            result.put("tianti", tiantilist);
+        }
+        PageHelper.startPage(1, 100);
+        List<WenSuccessRecord> list2 = scoreTodayMapper.queryWenRanking(nowDate);
+        if (list2.size() > 0) {
+            result.put("wenRanking", list2);
+        }
+        PageHelper.startPage(1, 100);
+        List<WuSuccessRecord> list3 = scoreTodayMapper.queryWuRanking(nowDate);
+        if (list3.size() > 0) {
+            result.put("wuRanking", list3);
+        }
+        return result;
     }
 
 }

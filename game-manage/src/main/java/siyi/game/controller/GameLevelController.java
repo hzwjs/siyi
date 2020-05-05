@@ -138,6 +138,7 @@ public class GameLevelController extends BaseController{
             int finalGold = Integer.valueOf(gold) + Integer.valueOf(findPlayer.getGold());
             findPlayer.setExperience(String.valueOf(finalExp));
             findPlayer.setGold(String.valueOf(finalGold));
+            playerService.updateByIdSelective(findPlayer);
             // 更新玩家的天梯信息并上送微信托管
             updateTiantiInfo(player, sessionKey, findPlayer.getPlatformId());
 

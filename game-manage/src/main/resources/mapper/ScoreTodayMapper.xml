@@ -14,4 +14,17 @@
     <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
     <result column="UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
   </resultMap>
+  <select id="queryWenRanking" resultType="siyi.game.bo.functionbtn.WenSuccessRecord">
+    select t1.wen_pass_num as level, t2.avatar_url as avatarUrl, t2.nickName from tb_score_today t1
+    left join tb_player_wx_info t2
+    on t1.player_id = t2.player_id
+    where t1.wen_pass_num is not null and t1.CREATED_TIME = #{date} order by t1.wen_pass_num desc
+  </select>
+
+  <select id="queryWuRanking" parameterType="String" resultType="siyi.game.bo.functionbtn.WuSuccessRecord">
+    select t1.wu_pass_num as level, t2.avatar_url as avatarUrl, t2.nickName from tb_score_today t1
+    left join tb_player_wx_info t2
+    on t1.player_id = t2.player_id
+    where t1.wu_pass_num is not null and t1.CREATED_TIME = #{date} order by t1.wu_pass_num desc
+  </select>
 </mapper>
