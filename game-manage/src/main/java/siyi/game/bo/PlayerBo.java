@@ -14,5 +14,7 @@ public class PlayerBo extends Player {
     Integer maxHp;
     // 体力开始恢复的时间；
     Date startTimeRecover;
+    // 武关层数
+    Integer wuLevel;
 
 }
