@@ -366,7 +366,8 @@ public class GameLevelController extends BaseController{
                     levelClearRecord.setBestScore(level + "");
                 }
             }
-        } else {
+        }
+        if(levelClearRecord == null) {
             levelClearRecord = new LevelClearRecord();
             levelClearRecord.setPlayerId(playerId);
             levelClearRecord.setBestScore(level + "");
