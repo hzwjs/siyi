@@ -407,7 +407,7 @@ public class MessionConfigController extends BaseController {
      * @return
      */
     @GetMapping("getCd")
-    public Map<String, Object> getCd(String playerId, String blankId) {
+    public synchronized Map<String, Object> getCd(String playerId, String blankId) {
         Map<String, Object> result = new HashMap<>();
         List<PlayerMessionRecord> records = playerMessionRecordService.selectByPlayerIdAndBlankId(playerId, blankId);
         if (CollectionUtils.isEmpty(records)) {
@@ -419,7 +419,7 @@ public class MessionConfigController extends BaseController {
         Date completeTime = record.getCompleteTime();
         Date currentTime = new Date();
         long timeSpace = currentTime.getTime() - completeTime.getTime();
-        long secondSpace = timeSpace / 1000;
+        long secondSpace = 59 - timeSpace / 1000;
         result.put("cd", String.valueOf(secondSpace));
         result.put("blankId", blankId);
         return result;
