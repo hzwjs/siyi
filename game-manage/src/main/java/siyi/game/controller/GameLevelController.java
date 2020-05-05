@@ -137,7 +137,7 @@ public class GameLevelController extends BaseController{
             findPlayer.setExperience(String.valueOf(finalExp));
             findPlayer.setGold(String.valueOf(finalGold));
             // 更新玩家的天梯信息并上送微信托管
-            updateTiantiInfo(player, sessionKey, findPlayer.getPlatformId(), guanqiaType, status);
+            updateTiantiInfo(player, sessionKey, findPlayer.getPlatformId());
 
             // 更新道具关联关系
             List<ItemPlayerRelation> existRelations = new ArrayList<>();
@@ -338,68 +338,89 @@ public class GameLevelController extends BaseController{
      * 更新天梯信息
      * @param player 这是前端传来的玩家对象
      */
-    private void updateTiantiInfo(Player player, String sessionKey, String platformId, String guanqiaType , String status) {
+    private void updateTiantiInfo(Player player, String sessionKey, String platformId) {
         String playerId = player.getPlayerId();
-        // 天梯
-        Integer level = Integer.parseInt(player.getGameLevel()); // 指玩家此次闯关的等级
-        if ("fail".equals(status)) {
-            level = (level -1)>1?(level -1) : 1;
-        }
-        LevelClearRecord levelClearRecord = new LevelClearRecord();
-        levelClearRecord.setPlayerId(playerId);
-        levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord); // 从玩家闯关记录表中查询信息
-        if (levelClearRecord != null) {
-            if (level > Integer.parseInt(levelClearRecord.getBestScore())) {
-                Map data = new HashMap();
-                data.put("key", "level");
-                data.put("value", level);
-                boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
-                if (wx_request_flag) {
-                    int oldNum = levelClearRecord.getBarrierCount();
-                    levelClearRecord.setBestScore(level + "");
-                    levelClearRecord.setBarrierCount(oldNum+1);
-                    levelClearRecordMapper.updateByPrimaryKey(levelClearRecord);
-                }
-            }
-        } else {
-            levelClearRecord = new LevelClearRecord();
-            levelClearRecord.setPlayerId(playerId);
-            levelClearRecord.setBestScore(level + "");
-            levelClearRecord.setBarrierCount(1);
-            levelClearRecord.setGameCode(Constants.GAME_CODE_WENWU);
-            levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));
-            levelClearRecordMapper.insert(levelClearRecord);
-        }
         DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDate today = LocalDate.now();
         LocalDateTime todaytime = LocalDateTime.now();
         String todayStr = today.format(dateFormatter);
         String nowTime = todaytime.format(timeFormatter);
-        // 当日文关闯关次数
-        int successNum = 1;
+        int successNum = 1; // 当日闯关次数
+        Integer level = Integer.parseInt(player.getGameLevel()); // 指玩家此次闯关的等级
+        Integer wuLevel = Integer.parseInt(player.getGameLevel()); // 指玩家此次武关闯关成功的次数
+        // 查询当日玩家成绩记录
         ScoreToday scoreToday = new ScoreToday();
         scoreToday.setPlayerId(playerId);
         scoreToday.setCreatedTime(todayStr);
         scoreToday = scoreTodayMapper.selectOne(scoreToday);
-        if (scoreToday != null) {
-            int wenNum = scoreToday.getWenPassNum();
-            successNum = wenNum + level;
-            scoreToday.setWenPassNum(successNum);
-            scoreToday.setUpdatedTime(nowTime);
-            scoreTodayMapper.updateByPrimaryKeySelective(scoreToday);
-        } else {
-            scoreToday = new ScoreToday();
-            scoreToday.setPlayerId(playerId);
-            scoreToday.setWenPassNum(successNum);
-            scoreToday.setCreatedTime(todayStr);
-            scoreToday.setUpdatedTime(nowTime);
-            scoreTodayMapper.insertSelective(scoreToday);
+        if (level > 0 ) {
+            LevelClearRecord levelClearRecord = new LevelClearRecord();
+            levelClearRecord.setPlayerId(playerId);
+            levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord); // 从玩家闯关记录表中查询信息
+            if (levelClearRecord != null) {
+                if (level > Integer.parseInt(levelClearRecord.getBestScore())) {
+                    Map data = new HashMap();
+                    data.put("key", "level");
+                    data.put("value", level);
+                    boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
+                    if (wx_request_flag) {
+                        levelClearRecord.setBestScore(level + "");
+                    }
+                }
+                // 更新闯关次数
+                int oldNum = levelClearRecord.getBarrierCount();
+                levelClearRecord.setBarrierCount(oldNum+1);
+                levelClearRecordMapper.updateByPrimaryKey(levelClearRecord);
+            } else {
+                levelClearRecord = new LevelClearRecord();
+                levelClearRecord.setPlayerId(playerId);
+                levelClearRecord.setBestScore(level + "");
+                levelClearRecord.setBarrierCount(1);
+                levelClearRecord.setGameCode(Constants.GAME_CODE_WENWU);
+                levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));
+                levelClearRecordMapper.insert(levelClearRecord);
+            }
+
+            if (scoreToday != null) {
+                int wenNum = scoreToday.getWenPassNum();
+                successNum = wenNum + level;
+                scoreToday.setWenPassNum(successNum);
+                scoreToday.setUpdatedTime(nowTime);
+                scoreTodayMapper.updateByPrimaryKeySelective(scoreToday);
+            } else {
+                scoreToday = new ScoreToday();
+                scoreToday.setPlayerId(playerId);
+                scoreToday.setWenPassNum(successNum);
+                scoreToday.setCreatedTime(todayStr);
+                scoreToday.setUpdatedTime(nowTime);
+                scoreTodayMapper.insertSelective(scoreToday);
+            }
+            Map wenData = new HashMap();
+            wenData.put("key", "wen_" + todayStr);
+            wenData.put("value", successNum);
+            boolean wx_request_flag1 = wxService.setUserStorage(wenData, sessionKey, platformId);
         }
-        Map wenData = new HashMap();
-        wenData.put("key", "wen_" + todayStr);
-        wenData.put("value", successNum);
-        boolean wx_request_flag1 = wxService.setUserStorage(wenData, sessionKey, platformId);
+        if (wuLevel > 0) {
+            if (scoreToday != null) {
+                int wuNum = scoreToday.getWuPassNum();
+                successNum = wuNum + wuLevel;
+                scoreToday.setWuPassNum(successNum);
+                scoreToday.setUpdatedTime(nowTime);
+                scoreTodayMapper.updateByPrimaryKeySelective(scoreToday);
+            } else {
+                scoreToday = new ScoreToday();
+                scoreToday.setPlayerId(playerId);
+                scoreToday.setWuPassNum(successNum);
+                scoreToday.setCreatedTime(todayStr);
+                scoreToday.setUpdatedTime(nowTime);
+                scoreTodayMapper.insertSelective(scoreToday);
+            }
+            Map wenData = new HashMap();
+            wenData.put("key", "wu_" + todayStr);
+            wenData.put("value", successNum);
+            boolean wx_request_flag2 = wxService.setUserStorage(wenData, sessionKey, platformId);
+        }
     }
 
 
