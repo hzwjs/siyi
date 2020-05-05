@@ -25,6 +25,7 @@ import siyi.game.service.player.PhysicalPowerService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.service.wx.WxService;
 import siyi.game.utill.Constants;
+import siyi.game.utill.DateUtil;
 import siyi.game.utill.RandomUtil;
 
 import java.time.LocalDate;
@@ -341,15 +342,11 @@ public class GameLevelController extends BaseController{
      */
     private void updateTiantiInfo(Player player, String sessionKey, String platformId) {
         String playerId = player.getPlayerId();
-        DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDate today = LocalDate.now();
-        LocalDateTime todaytime = LocalDateTime.now();
-        String todayStr = today.format(dateFormatter);
-        String nowTime = todaytime.format(timeFormatter);
+        String todayStr = DateUtil.nowStringSimpleDate();
+        String nowTime = DateUtil.nowStringTime();
         int successNum = 1; // 当日闯关次数
         Integer level = Integer.parseInt(player.getGameLevel()); // 指玩家此次闯关的等级
-        Integer wuLevel = Integer.parseInt(player.getWuLevel()); // 指玩家此次武关闯关成功的次数
+        Integer wuLevel = Integer.parseInt(StringUtils.isEmpty(player.getWuLevel()) ? "0" : player.getWuLevel()); // 指玩家此次武关闯关成功的次数
         // 查询当日玩家成绩记录
         ScoreToday scoreToday = new ScoreToday();
         scoreToday.setPlayerId(playerId);
