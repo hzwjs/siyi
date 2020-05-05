@@ -352,34 +352,35 @@ public class GameLevelController extends BaseController{
         scoreToday.setPlayerId(playerId);
         scoreToday.setCreatedTime(todayStr);
         scoreToday = scoreTodayMapper.selectOne(scoreToday);
-        if (level > 0 ) {
-            LevelClearRecord levelClearRecord = new LevelClearRecord();
-            levelClearRecord.setPlayerId(playerId);
-            levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord); // 从玩家闯关记录表中查询信息
-            if (levelClearRecord != null) {
-                if (level > Integer.parseInt(levelClearRecord.getBestScore())) {
-                    Map data = new HashMap();
-                    data.put("key", "level");
-                    data.put("value", level);
-                    boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
-                    if (wx_request_flag) {
-                        levelClearRecord.setBestScore(level + "");
-                    }
-                }
-                // 更新闯关次数
-                int oldNum = levelClearRecord.getBarrierCount();
-                levelClearRecord.setBarrierCount(oldNum+1);
-                levelClearRecordMapper.updateByPrimaryKey(levelClearRecord);
-            } else {
-                levelClearRecord = new LevelClearRecord();
-                levelClearRecord.setPlayerId(playerId);
-                levelClearRecord.setBestScore(level + "");
-                levelClearRecord.setBarrierCount(1);
-                levelClearRecord.setGameCode(Constants.GAME_CODE_WENWU);
-                levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));
-                levelClearRecordMapper.insert(levelClearRecord);
-            }
+        LevelClearRecord levelClearRecord = new LevelClearRecord();
+        levelClearRecord.setPlayerId(playerId);
+        levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord); // 从玩家闯关记录表中查询信息
 
+        if (levelClearRecord != null && level > 0) {
+            if (level > Integer.parseInt(levelClearRecord.getBestScore())) {
+                Map data = new HashMap();
+                data.put("key", "level");
+                data.put("value", level);
+                boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
+                if (wx_request_flag) {
+                    levelClearRecord.setBestScore(level + "");
+                }
+            }
+        } else {
+            levelClearRecord = new LevelClearRecord();
+            levelClearRecord.setPlayerId(playerId);
+            levelClearRecord.setBestScore(level + "");
+            levelClearRecord.setBarrierCount(1);
+            levelClearRecord.setGameCode(Constants.GAME_CODE_WENWU);
+            levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));
+            levelClearRecordMapper.insert(levelClearRecord);
+        }
+        // 更新闯关次数
+        int oldNum = levelClearRecord.getBarrierCount();
+        levelClearRecord.setBarrierCount(oldNum+1);
+        levelClearRecordMapper.updateByPrimaryKey(levelClearRecord);
+
+        if (level > 0 ) {
             if (scoreToday != null) {
                 int wenNum = scoreToday.getWenPassNum();
                 successNum = wenNum + level;
@@ -399,6 +400,7 @@ public class GameLevelController extends BaseController{
             wenData.put("value", successNum);
             boolean wx_request_flag1 = wxService.setUserStorage(wenData, sessionKey, platformId);
         }
+
         if (wuLevel > 0) {
             if (scoreToday != null) {
                 int wuNum = scoreToday.getWuPassNum();
