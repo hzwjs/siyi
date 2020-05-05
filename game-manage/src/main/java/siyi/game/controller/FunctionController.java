@@ -1,16 +1,20 @@
 package siyi.game.controller;
 
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import siyi.game.bo.functionbtn.AwardInfo;
 import siyi.game.bo.functionbtn.ItemBo;
+import siyi.game.bo.functionbtn.TiantiRanking;
+import siyi.game.dao.LevelClearRecordMapper;
 import siyi.game.dao.entity.LevelClearRecord;
 import siyi.game.dao.entity.PlayerSign;
+import siyi.game.framework.annotation.WebLog;
 import siyi.game.service.fuctionbtn.FunctionService;
 
 import java.util.HashMap;
@@ -21,7 +25,7 @@ import java.util.Map;
 /**
  * 功能按钮对应的接口
  */
-@Controller
+@RestController
 @RequestMapping("idiom/function")
 public class FunctionController extends BaseController{
 
@@ -29,6 +33,8 @@ public class FunctionController extends BaseController{
 
     @Autowired
     private FunctionService functionService;
+    @Autowired
+    private LevelClearRecordMapper levelClearRecordMapper;
 
 
     /**
@@ -38,6 +44,7 @@ public class FunctionController extends BaseController{
      */
     @RequestMapping("tianti")
     @ResponseBody
+    @WebLog(description = "查询最高层数和挑战次数")
     public LevelClearRecord queryTiantiInfo(String playerId) {
         LevelClearRecord result = functionService.getTiantiInfo(playerId);
         return result;
@@ -76,7 +83,6 @@ public class FunctionController extends BaseController{
         } else {
             getFailResult(resultMap, "缺少必输参数");
         }
-
         return resultMap;
     }
 
@@ -105,6 +111,18 @@ public class FunctionController extends BaseController{
     public PlayerSign queryLottery(String playerId){
         PlayerSign playerSign = functionService.querySignInfo(playerId);
         return playerSign;
+    }
+
+    /**
+     * 查询天梯世界排行榜
+     * @return
+     */
+    @RequestMapping(value = "queryTiantiRanking")
+    @WebLog(description = "查询天梯世界排行榜")
+    public List<TiantiRanking> queryTiantiRankingList() {
+        PageHelper.startPage(1, 100);
+        List<TiantiRanking> list = levelClearRecordMapper.selectTiantiRanking(); // 查询排名前一百的玩家
+        return list;
     }
 
 }

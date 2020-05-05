@@ -357,20 +357,20 @@ public class GameLevelController extends BaseController{
         levelClearRecord = levelClearRecordMapper.selectOne(levelClearRecord); // 从玩家闯关记录表中查询信息
 
         if (levelClearRecord != null && level > 0) {
-            if (level > Integer.parseInt(levelClearRecord.getBestScore())) {
+            if (level > levelClearRecord.getBestScore()) {
                 Map data = new HashMap();
                 data.put("key", "level");
                 data.put("value", level);
                 boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
                 if (wx_request_flag) {
-                    levelClearRecord.setBestScore(level + "");
+                    levelClearRecord.setBestScore(level);
                 }
             }
         }
         if(levelClearRecord == null) {
             levelClearRecord = new LevelClearRecord();
             levelClearRecord.setPlayerId(playerId);
-            levelClearRecord.setBestScore(level + "");
+            levelClearRecord.setBestScore(level);
             levelClearRecord.setBarrierCount(1);
             levelClearRecord.setGameCode(Constants.GAME_CODE_WENWU);
             levelClearRecord.setId(Long.valueOf(RandomUtil.generate16()));

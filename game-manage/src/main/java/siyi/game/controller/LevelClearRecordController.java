@@ -55,16 +55,16 @@ public class LevelClearRecordController extends BaseController {
                 insertRecord.setGameCode(gameCode);
                 insertRecord.setPlayerId(playerId);
                 insertRecord.setBarrierCount(Integer.valueOf(barrierCount));
-                insertRecord.setBestScore(bestScore);
+                insertRecord.setBestScore(Integer.valueOf(bestScore));
                 levelClearRecordService.insertSelective(insertRecord);
             } else {
                 // 如果存在记录，则需更新记录信息，首先更新挑战次数
                 levelClearRecord.setBarrierCount(Integer.valueOf(barrierCount));
                 levelClearRecordService.updateByIdSelective(levelClearRecord);
                 // 比较当前该角色的挑战最好成绩与传入的最好成绩，若传入的最好成绩大于当前成绩，则更新
-                String oldScore = levelClearRecord.getBestScore();
+                Integer oldScore = levelClearRecord.getBestScore();
                 if (Integer.valueOf(oldScore) < Integer.valueOf(bestScore)) {
-                    levelClearRecord.setBestScore(bestScore);
+                    levelClearRecord.setBestScore(Integer.valueOf(bestScore));
                     levelClearRecordService.updateByIdSelective(levelClearRecord);
                 }
             }

@@ -33,7 +33,7 @@ public class LevelClearRecord implements Serializable {
      * 最高记录
      */
     @Column(name = "best_score")
-    private String bestScore;
+    private Integer bestScore;
 
     private static final long serialVersionUID = 1L;
 
@@ -114,7 +114,7 @@ public class LevelClearRecord implements Serializable {
      *
      * @return best_score - 最高记录
      */
-    public String getBestScore() {
+    public Integer getBestScore() {
         return bestScore;
     }
 
@@ -123,7 +123,7 @@ public class LevelClearRecord implements Serializable {
      *
      * @param bestScore 最高记录
      */
-    public void setBestScore(String bestScore) {
-        this.bestScore = bestScore == null ? null : bestScore.trim();
+    public void setBestScore(Integer bestScore) {
+        this.bestScore = bestScore == null ? null : bestScore;
     }
 }
