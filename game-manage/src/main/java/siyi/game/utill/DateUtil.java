@@ -2,6 +2,9 @@ package siyi.game.utill;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,6 +15,9 @@ import java.util.Date;
  * version: 1.0 <br>
  */
 public class DateUtil {
+    static final DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    static final DateTimeFormatter timeFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     /**
      * description: 获取时间差 <br>
@@ -49,4 +55,42 @@ public class DateUtil {
         calendar.setTime(date);
         return calendar;
     }
+
+    /**
+     * 获取当前日期字符串
+     * @return
+     */
+    public static String nowStringSimpleDate() {
+        LocalDate now = LocalDate.now();
+        String nowStr = now.format(dateFormatter);
+        return nowStr;
+    }
+
+    /**
+     * 获取当前日期
+     * @return
+     */
+    public static LocalDate nowSimpleDate() {
+        return LocalDate.now();
+    }
+
+    /**
+     * 获取当前时间字符串
+     * @return
+     */
+    public static String nowStringTime() {
+        LocalDateTime now = LocalDateTime.now();
+        String nowStr = now.format(timeFormatter);
+        return nowStr;
+    }
+
+    /**
+     * 获取当前时间
+     * @return
+     */
+    public static LocalDateTime nowTime() {
+        return LocalDateTime.now();
+    }
+
+
 }
