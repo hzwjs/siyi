@@ -7,6 +7,7 @@ import lombok.Data;
  */
 @Data
 public class WuSuccessRecord {
+    String openId;
     String avatarUrl;
     String nickName;
     Integer level;

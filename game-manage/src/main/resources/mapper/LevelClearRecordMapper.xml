@@ -13,7 +13,7 @@
   </resultMap>
 
   <select id="selectTiantiRanking" resultType="siyi.game.bo.functionbtn.TiantiRanking">
-          select t1.best_score as level, t2.avatar_url as avatarUrl, t2.nickName from tb_level_clear_record t1, tb_player_wx_info t2
+          select t1.best_score as level, t2.avatar_url as avatarUrl, t2.nickName, t2.wx_openid as openId from tb_level_clear_record t1, tb_player_wx_info t2
           where t1.player_id = t2.player_id order by t1.best_score desc
   </select>
 </mapper>
