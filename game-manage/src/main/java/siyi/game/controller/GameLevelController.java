@@ -18,6 +18,7 @@ import siyi.game.dao.LevelClearRecordMapper;
 import siyi.game.dao.ScoreTodayMapper;
 import siyi.game.dao.entity.*;
 import siyi.game.framework.annotation.WebLog;
+import siyi.game.manager.scheduled.WxScheduled;
 import siyi.game.service.gamelevel.GameLevelService;
 import siyi.game.service.gamelevel.LevelUpService;
 import siyi.game.service.item.ItemPlayerRelationService;
@@ -69,6 +70,8 @@ public class GameLevelController extends BaseController{
     private PhysicalPowerService physicalPowerService;
     @Autowired
     private ScoreTodayMapper scoreTodayMapper;
+    @Autowired
+    private WxScheduled wxScheduled;
 
 
     /**
@@ -363,6 +366,10 @@ public class GameLevelController extends BaseController{
                 data.put("key", "level");
                 data.put("value", level);
                 boolean wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
+                if (!wx_request_flag) {
+                    wxScheduled.getAccessToken();
+                    wx_request_flag = wxService.setUserStorage(data, sessionKey, platformId);
+                }
                 if (wx_request_flag) {
                     levelClearRecord.setBestScore(level);
                 }
