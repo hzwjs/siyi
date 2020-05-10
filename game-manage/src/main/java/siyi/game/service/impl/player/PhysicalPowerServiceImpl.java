@@ -44,14 +44,13 @@ public class PhysicalPowerServiceImpl implements PhysicalPowerService {
             Instant currentTime = Instant.now();
             long minute = Duration.between(startTime, currentTime).toMinutes();
             int addHpNum = (int) (minute/5); // 每五分钟恢复1点体力
-            physicalPower = addHp(playerId, addHpNum);
+            physicalPower = addHp(playerId, addHpNum, physicalPower);
         }
         return physicalPower.getHp();
     }
 
     @Override
-    public PhysicalPower addHp(String playerId, int hpNum) {
-        PhysicalPower physicalPower = new PhysicalPower();
+    public PhysicalPower addHp(String playerId, int hpNum, PhysicalPower physicalPower) {
         if (hpNum > 0) {
             physicalPower.setPlayerId(playerId);
             physicalPower = physicalPowerMapper.selectOne(physicalPower);

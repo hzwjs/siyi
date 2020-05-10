@@ -23,6 +23,6 @@ public interface PhysicalPowerService {
      * @param playerId
      * @param hpNum
      */
-    PhysicalPower addHp(String playerId, int hpNum);
+    PhysicalPower addHp(String playerId, int hpNum, PhysicalPower physicalPower);
 
 }

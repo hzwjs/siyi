@@ -29,10 +29,10 @@ import siyi.game.utill.Constants;
 import siyi.game.utill.DateUtil;
 import siyi.game.utill.RandomUtil;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -453,6 +453,7 @@ public class GameLevelController extends BaseController{
     @ResponseBody
     public void addHp(String playerId, int num) {
         logger.info("=== addHp playerId:{} num:{}", playerId, num);
-        physicalPowerService.addHp(playerId, num);
+        PhysicalPower physicalPower = new PhysicalPower();
+        physicalPowerService.addHp(playerId, num, physicalPower);
     }
 }
