@@ -96,8 +96,8 @@ public class GameLevelController extends BaseController{
                 if (currentHp >= 3) {
                     gameLevel = gameLevelService.queryWenGameLevelInfo(userId, preQType, preQID, preStatus);
                 } else {
-                    gameLevel.setErrorMsg(Constants.GameLevelStaute.HP_ERR.getKey());
-                    gameLevel.setErrorCode(Constants.GameLevelStaute.HP_ERR.getValue());
+                    gameLevel.setErrorMsg(Constants.GameLevelStaute.HP_ERR.getValue());
+                    gameLevel.setErrorCode(Constants.GameLevelStaute.HP_ERR.getKey());
                 }
             } else if (Constants.GAME_LEVEL_TYPE_WU.equals(gameLevelType)) {
                 gameLevel = gameLevelService.queryWuGameLevelInfo(preQID, userId);
