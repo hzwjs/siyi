@@ -15,6 +15,7 @@ import siyi.game.dao.entity.LevelClearRecord;
 import siyi.game.dao.entity.PlayerSign;
 import siyi.game.framework.annotation.WebLog;
 import siyi.game.service.fuctionbtn.FunctionService;
+import siyi.game.service.player.PhysicalPowerService;
 import siyi.game.utill.DateUtil;
 
 import java.time.LocalDate;
@@ -38,6 +39,8 @@ public class FunctionController extends BaseController{
     private LevelClearRecordMapper levelClearRecordMapper;
     @Autowired
     private ScoreTodayMapper scoreTodayMapper;
+    @Autowired
+    private PhysicalPowerService physicalPowerService;
 
 
     /**
@@ -52,6 +55,24 @@ public class FunctionController extends BaseController{
         LevelClearRecord result = functionService.getTiantiInfo(playerId);
         return result;
     }
+
+    /**
+     * 校验当前体力是否足够
+     * @param playerId 玩家ID
+     * @return
+     */
+    @RequestMapping("tianti/checkHp")
+    @WebLog(description = "校验体力是否足够")
+    public boolean checkHp(String playerId) {
+        boolean flag = false;
+        int currentHp = physicalPowerService.calculateHp(playerId);
+        if (currentHp >= 3) {
+            flag = true;
+        }
+        return flag;
+    }
+
+
 
     /**
      * 获取当前的可抽奖次数
@@ -117,7 +138,7 @@ public class FunctionController extends BaseController{
     }
 
     /**
-     * 查询天梯世界排行榜
+     * 查询世界排行榜
      * @return
      */
     @RequestMapping(value = "queryTiantiRanking")
