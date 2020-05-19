@@ -403,6 +403,7 @@ public class GameLevelController extends BaseController{
                 scoreToday = new ScoreToday();
                 scoreToday.setPlayerId(playerId);
                 scoreToday.setWenPassNum(successNum);
+                scoreToday.setWuPassNum(0);
                 scoreToday.setCreatedTime(todayStr);
                 scoreToday.setUpdatedTime(nowTime);
                 scoreTodayMapper.insertSelective(scoreToday);
