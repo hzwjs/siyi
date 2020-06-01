@@ -27,6 +27,7 @@ import siyi.game.service.item.ItemConfigService;
 import siyi.game.service.item.ItemPlayerRelationService;
 import siyi.game.service.loginLog.LoginLogService;
 import siyi.game.service.mission.PlayerMessionRelationService;
+import siyi.game.service.player.PhysicalPowerService;
 import siyi.game.service.player.PlayerService;
 import siyi.game.utill.Constants;
 import siyi.game.utill.RandomUtil;
@@ -39,6 +40,10 @@ import java.util.*;
  * date: 2020/2/26 22:09 <br>
  * author: zhengzhiqiang <br>
  * version: 1.0 <br>
+ *
+ * @author hzw
+ * @version 1.0
+ * @date 2020 -06-01
  */
 @RestController
 @RequestMapping("idiom/player")
@@ -65,7 +70,15 @@ public class PlayerController extends BaseController {
     private PlayerMessionRelationService playerMessionRelationService;
     @Autowired
     private PhysicalPowerMapper physicalPowerMapper;
+    @Autowired
+    private PhysicalPowerService physicalPowerService;
 
+    /**
+     * Login map.
+     *
+     * @param playerBo the player bo
+     * @return the map
+     */
     @RequestMapping("login")
     @WebLog(description = "玩家登录")
     public Map<String, Object> login(@RequestBody PlayerBo playerBo) {
@@ -155,7 +168,8 @@ public class PlayerController extends BaseController {
      * date: 2020/3/26 23:30 <br>
      * author: zhengzhiqiang <br>
      *
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @param wxInfo the wx info
+     * @return java.util.Map<java.lang.String, java.lang.Object> map
      */
     @PostMapping("authorize")
     public Map<String, Object> Authorize(@RequestBody PlayerWxInfo wxInfo) {
@@ -171,6 +185,13 @@ public class PlayerController extends BaseController {
     }
 
 
+    /**
+     * Log out map.
+     *
+     * @param playerId the player id
+     * @param openId   the open id
+     * @return the map
+     */
     @GetMapping("/logOut")
     public Map<String, Object> logOut(String playerId, String openId) {
         // TODO 更新玩家登录数据，计算登录时长
@@ -183,12 +204,12 @@ public class PlayerController extends BaseController {
      * date: 2020/2/26 23:15 <br>
      * author: zhengzhiqiang <br>
      *
-     * @param playerName
-     * @param playerId
-     * @param gameCode
-     * @param pageNum
-     * @param pageSize
-     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
+     * @param playerName the player name
+     * @param playerId   the player id
+     * @param gameCode   the game code
+     * @param pageNum    the page num
+     * @param pageSize   the page size
+     * @return java.util.Map<java.lang.String, java.lang.Object> player list
      */
     @GetMapping("/getAll")
     public Map<String, Object> getPlayerList(@RequestParam(name = "playerName", required = false, defaultValue = "") String playerName,
@@ -208,5 +229,24 @@ public class PlayerController extends BaseController {
         List<Game> gameList = gameService.selectAllGame();
         resultMap.put("gameList", gameList);
         return resultMap;
+    }
+
+    /**
+     * Query player info .
+     * 查询玩家信息
+     *
+     * @param playerId the player id
+     * @return the playerbo
+     */
+    @RequestMapping("/queryPlayerInfo")
+    public PlayerBo queryPlayerInfo(String playerId) {
+        Player player = playerService.selectByPlayerId(playerId);
+        PlayerBo playerBo = new PlayerBo();
+        // 基本信息：等级、经验、金币等
+        BeanCopier copier = BeanCopier.create(Player.class, PlayerBo.class, false);
+        copier.copy(player, playerBo, null);
+        // 体力信息
+        playerBo.setHp(physicalPowerService.calculateHp(playerId));
+        return playerBo;
     }
 }
