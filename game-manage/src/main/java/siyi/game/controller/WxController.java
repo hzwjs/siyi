@@ -35,6 +35,7 @@ public class WxController extends BaseController{
         param.put("sex", "男");
         TaskInfo taskInfo = new TaskInfo();
         taskInfo.setTaskName(taskname);
+        taskInfo.setDelay(25000L);
         taskInfo.setPeriod((long) 25000);
         taskInfo.setCron("0/20 * * * * ? ");
         taskInfo.setClassName("siyi.game.manager.scheduled.WxScheduled");

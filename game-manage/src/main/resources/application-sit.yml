@@ -7,7 +7,6 @@ spring:
   datasource:
           type: com.zaxxer.hikari.HikariDataSource
           url: jdbc:mysql://47.52.201.42:3306/scf?useUnicode=true&characterEncoding=utf8&useSSL=false
-          name:
           username: scf
           password: scfisc
           hikari:
