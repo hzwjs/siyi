@@ -119,14 +119,14 @@ public class PlayerController extends BaseController {
                 logger.info("获取登录玩家信息：{}", player);
                 // 查询玩家道具信息
                 itemConfigs = functionService.queryItemInPacksack(player.getPlayerId(), Constants.GAME_CODE_WENWU);
-                // 查询玩家任务信息
-                messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
-                if (CollectionUtils.isEmpty(messionList)) {
-                    logger.info("玩家无任务信息，开始生成任务");
-                    messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
-                }
                 resultMap.put("itemList", itemConfigs);
-                resultMap.put("messionList", messionList);
+                // 查询玩家任务信息
+//                messionList = playerMessionRelationService.selectByPlayerId(player.getPlayerId());
+//                if (CollectionUtils.isEmpty(messionList)) {
+//                    logger.info("玩家无任务信息，开始生成任务");
+//                    messionList = playerMessionRelationService.createNewMession(player.getPlayerId(), null);
+//                }
+//                resultMap.put("messionList", messionList);
                 // 获取玩家体力信息
                 physicalPower.setPlayerId(player.getPlayerId());
                 physicalPower = physicalPowerMapper.selectOne(physicalPower);
